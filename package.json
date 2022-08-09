@@ -1,0 +1,41 @@
+{
+  "name": "vv301",
+  "version": "1.0.0",
+  "description": "start build from 0",
+  "main": "content.js",
+  "scripts": {
+    "start": "webpack-dev-server --open",
+    "build": "webpack --mode=production --node-env=production",
+    "watch": "webpack --watch",
+    "serve": "webpack serve"
+  },
+  "keywords": [
+    "xzz2022"
+  ],
+  "author": "xzz2022",
+  "license": "ISC",
+  "dependencies": {
+    "core-js": "^3.8.3",
+    "element-plus": "^2.2.12",
+    "vue": "^3.2.13",
+    "vuex": "^4.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.15.8",
+    "@babel/preset-env": "^7.15.8",
+    "babel-loader": "^8.2.2",
+    "clean-webpack-plugin": "^4.0.0",
+    "copy-webpack-plugin": "^9.0.1",
+    "css-loader": "^6.4.0",
+    "html-webpack-plugin": "^5.3.2",
+    "sass": "^1.54.3",
+    "sass-loader": "^12.1.0",
+    "style-loader": "^3.3.0",
+    "unplugin-auto-import": "^0.11.1",
+    "unplugin-vue-components": "^0.22.3",
+    "vue-loader": "^17.0.0",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0",
+    "webpack-dev-server": "^4.3.1"
+  }
+}
