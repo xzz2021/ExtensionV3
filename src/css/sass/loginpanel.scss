@@ -1,0 +1,135 @@
+.jclLogin {
+    position: fixed;
+    z-index: 100001;
+    left: 500px;
+    top: 100px;
+    .el-dialog {
+      // background: ;
+      border-radius: 5px;
+      // opacity: 0;
+      width: 380px;
+      .el-dialog__header {
+        border-radius: 5px;
+        margin: 0;
+        padding: 26px 0 12px 0;
+        background: linear-gradient(#ffebd6, #fff9f3);
+  
+  
+        // border-radius: 20px;
+        .el-dialog__headerbtn {
+          top: 29px;
+          right: 41px;
+        }
+  
+        .el-dialog__title {
+          height: 26px;
+          font-size: 20px;
+          line-height: 30px;
+          color: #000000;
+        }
+      }
+  
+  
+      .el-form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+  
+        .el-form-item {
+          margin-bottom: 40px;
+          width: 320px;
+          height: 50px !important;
+  
+          .el-form-item__content {
+            .el-input {
+              height: 100%;
+              font-size: 16px;
+              color: #000000;
+              background: rgba(248, 248, 248, 0.226);
+            }
+  
+            .el-form-item__error {
+              height: 19px;
+              font-size: 14px;
+              line-height: 24px;
+              color: #ff4040;
+              margin-top: 8px;
+              left: 15px;
+            }
+          }
+        }
+  
+  
+        .submititem {
+          // margin: 20px 0 20px 0;
+          margin-bottom: 5px;
+  
+          .submitbtn {
+            width: 320px;
+            height: 40px;
+            background: rgba(255, 152, 18, 0.932);
+            border-radius: 4px;
+            font-size: 20px;
+            line-height: 40px;
+            color: #ffffff;
+            text-align: center;
+            cursor: pointer;
+            
+          }
+        }
+      }
+  
+  
+      .el-dialog__body {
+        background: linear-gradient(#fff9f3, #fffbf8);
+        border-radius: 5px;
+  
+      }
+  
+      .getcode {
+        position: absolute;
+        top: 185px;
+        left: 248px;
+        text-align: center;
+        height: 37px;
+        width: 110px;
+        // height: 21px;
+        // font-size: 16px;
+        // line-height: 30px;
+        border: none;
+        color: #ff9712;
+        &:hover{
+          color: #ff9712;
+          background-color: transparent;
+        }
+        &:actived{
+          color: #ff9712;
+          background-color: transparent;
+        }
+      }
+      .el-button--warning.is-link {
+        --el-button-text-color: #ff9712;
+      }
+      .loginFail{
+        position: absolute;
+        top: 227px;
+        left: 55px;
+        font-size: 14px;
+        line-height: 30px;
+        color: #ff0000;
+      }
+    }
+    .changeAccount {
+      margin: 0 auto;
+      width: 320px;
+      height: 40px;
+      background: rgba(255, 152, 18, 0.932);
+      border-radius: 4px;
+      font-size: 20px;
+      line-height: 40px;
+      color: #ffffff;
+      text-align: center;
+      cursor: pointer;
+    }
+  }
+  

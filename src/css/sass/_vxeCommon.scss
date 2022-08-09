@@ -1,0 +1,82 @@
+// 此处定义公共的vxe-modal样式
+@import 'variable.scss';
+// @use 'variable';
+
+@mixin lh34 {
+  line-height: 34px;
+}
+@mixin curpoi {
+  cursor: pointer;
+}
+
+@mixin vxeTitle {
+  height: 40px;
+  // margin: 0 auto;
+  background: $jclbg;
+  border-radius: 6px 6px 0px 0px;
+  color: $white;
+  text-align: center;
+  line-height: 40px;
+  font-size: 18px;
+
+}
+
+@mixin flexColCen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+// 混入会重复编译   混入更适合带自定义变量传参使用
+// @mixin myBtn {
+//   width: 88px;
+//   height: 34px;
+//   cursor: pointer;
+//   background: $jclbg;
+//   border-radius: 4px;
+//   font-family: MicrosoftYaHei;
+//   color: #ffffff;
+//   text-align: center;
+//   font-size: 16px;
+//   &:active {
+//     background: rgba(255, 151, 18, 0.39);
+//   }
+// }
+
+// 继承会将拥有共同样式的类放一起编译一次
+%myBtn {
+  width: 88px;
+  height: 34px;
+  cursor: pointer;
+  background: $jclbg;
+  border-radius: 4px;
+  font-family: MicrosoftYaHei;
+  color: #ffffff;
+  text-align: center;
+  font-size: 16px;
+  &:active {
+    background: rgba(255, 151, 18, 0.39);
+  }
+}
+@mixin vxeHeaderA {
+      text-decoration: none;
+      height: 26px;
+      font-size: 17px;
+      font-weight: bold;
+      line-height: 40px;
+      color: $white;
+  }
+::v-deep .vxe-modal--header {
+    background: $jclbg;
+    padding: 0 !important;
+  }
+  ::v-deep .vxe-modal--box {
+    border: none !important;
+}
+
+::v-deep .vxe-modal--close-btn{
+  top: 12px ;
+  color: $white;
+  &:hover{
+    color: $white;
+  }
+}

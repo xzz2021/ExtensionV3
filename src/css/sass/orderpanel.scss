@@ -1,0 +1,219 @@
+// @use 'vxeCommon';
+@import 'vxeCommon';
+
+.ordermodal{
+
+
+.headerSec {
+  height: 40px;
+  margin: 0 auto;
+}
+.mytitle {
+  background: $jclbg;
+  border-radius: 6px 6px 0px 0px;
+  color: $white;
+  text-align: center;
+  a {
+    @include vxeHeaderA;
+  }
+}
+.myorder {
+  position: absolute;
+  top: 6px;
+  left: 13px;
+  color: $white;
+  font-size: 18px;
+  font-family: MicrosoftYaHei;
+  line-height: 28px;
+}
+
+.container {
+  width: 1300px;
+  margin-left: 6px;
+  .topSec {
+    // height: 62px;
+    display: flex;
+    .help {
+      // display: flex;
+      // align-items: center;
+      width: 100px;
+      @include curpoi;
+      font-size: 18px;
+      font-family: MicrosoftYaHei;
+      // line-height: 28px;
+      color: $jclbg;
+      margin-left: 60px;
+      // > div {
+        @include lh34;
+        margin-right: 6px;
+        > img{
+          vertical-align: -9%;
+
+        }
+      // }
+    }
+    .filterNum {
+      width: 190px;
+      font-size: 18px;
+      font-family: MicrosoftYaHei;
+      @include lh34;
+      color: #000000;
+      margin-left: 100px;
+    }
+    .orderNum {
+      width: 190px;
+      font-size: 18px;
+      font-family: MicrosoftYaHei;
+      @include lh34;
+      color: #000000;
+      margin-left: 10px;
+    }
+    .orderBtn {
+      @extend %myBtn;
+      @include lh34;
+      width: 98px;
+      margin-left: 660px;
+    }
+  }
+  //中间主体部分
+  .mainSec {
+    // width: 1300px;
+    margin-top: 10px;
+    display: flex;
+    // background-color: rgba(65, 219, 65, 0.568);
+    .matchArea {
+      width: 200px;
+      height: 600px;
+      margin-right: 10px;
+      @include flexColCen;
+      border: 1px solid #e8eaec;
+      .textbox {
+        background: rgba(255, 255, 255, 0.39);
+        border: 1px solid #e8eaec;
+        resize: none;
+        border-radius: 4px;
+        width: 153px;
+        height: 526px;
+        margin: 10px auto 10px 10px;
+        outline-color: #e8eaec;
+        &:valid {
+          border: 1px solid #e8eaec;
+        }
+      }
+      .listBox{
+        height: 548px;
+        overflow:auto;
+        @include flexColCen;
+        .eachList{
+          display: flex;
+          justify-content: space-between;
+          width: 180px;
+          .eachOrder{
+            width: 153px;
+            height: 16px;
+            font-size: 12px;
+            font-family: MicrosoftYaHei;
+            line-height: 22px;
+            color: #555555;
+          }
+        }
+      }
+
+      .matchBtn {
+        // @include myBtn;
+        @extend %myBtn;
+        line-height: 40px;
+        width: 112px;
+        height: 40px;
+      }
+    }
+    .orderTable{
+      width: 1088px;
+    }
+  }
+}
+}
+// 备注成功弹窗
+.successmodal{
+  .mytitle{
+    @include vxeTitle;
+}
+.mainSec{
+  @include flexColCen;
+  .context{
+    margin: 55px auto;
+    text-align: left;
+  }
+  .myBtn{
+    @extend %myBtn;
+    @include lh34;
+  }
+}
+}
+
+
+// 帮助文档弹窗
+.helpmodal{
+  .mytitle{
+    @include vxeTitle;
+}
+.mainSec{
+  @include flexColCen;
+  .context{
+    width: 353px;
+    text-align: left;
+    font-size: 16px;
+    font-family: MicrosoftYaHei;
+    line-height: 30px;
+    color: #000000;
+    p:first-child{
+      font-weight: bold;
+    }
+  }
+  .myBtn{
+    @extend %myBtn;
+    @include lh34;
+    margin-top: 20px;
+  }
+}
+}
+
+// 备注弹窗
+.markmodal{
+  .mytitle{
+    @include vxeTitle;
+}
+.mainSec{
+  @include flexColCen;
+  width: 410px;
+  // .markCheck{
+  // }
+  .markArea{
+    .markText{
+      width: 400px;
+      height: 100px;
+    }
+  }
+  .markBtn{
+    display: flex;
+    float: right;
+    .myBtn{
+      @extend %myBtn;
+      @include lh34;
+  }
+  .cancel{
+    background: rgb(165, 165, 165);
+    margin-right: 20px;
+  }
+    
+  }
+}
+}
+::v-deep .el-radio__input.is-checked .el-radio__inner {
+  border-color: $jclbg;
+  background: $jclbg;
+}
+::v-deep .el-radio__input {
+  cursor: pointer;
+  vertical-align: -6%;
+}
