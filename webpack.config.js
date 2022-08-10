@@ -14,6 +14,10 @@ const AutoImport = require('unplugin-auto-import/webpack')
 const Components = require('unplugin-vue-components/webpack')
 const { ElementPlusResolver } = require('unplugin-vue-components/resolvers')
 
+
+// 引入webpack-dev-server middleware
+const middleware = require("webpack-dev-middleware");
+
 // const isProduction = process.env.NODE_ENV == 'development';
 
 
@@ -166,10 +170,10 @@ module.exports = () => {
     
     if (true) {
         let config = {...comconfig, ...devconfig }
-        const compiler = webpack(config);
-middleware(compiler, {
-  writeToDisk: true
-});
+        const compiler = webpack(config)
+        middleware(compiler, {
+            writeToDisk: true
+          });
         return config;
       
     }else{
