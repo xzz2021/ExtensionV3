@@ -15,7 +15,7 @@ const Components = require('unplugin-vue-components/webpack')
 const { ElementPlusResolver } = require('unplugin-vue-components/resolvers')
 
 
-// 引入webpack-dev-server middleware
+// 引入webpack-dev-server middleware,主要作用调用钩子函数将内存映射文件写入磁盘
 const middleware = require("webpack-dev-middleware");
 
 // const isProduction = process.env.NODE_ENV == 'development';
@@ -46,7 +46,7 @@ const comconfig = {
     plugins: [
         new HtmlWebpackPlugin({    // 可以实现自动生成新的html并自动导入js
             template: './src/popup/index.html',  // 指定元html文件的位置
-            filename: 'index.html',   // 指定输出的名称
+            filename: 'popup.html',   // 指定输出的名称
             chunks: ['popup'],          //指定自定义需要注入的js
             inject: 'body',
             // scriptLoading: 'defer'
@@ -73,7 +73,12 @@ const comconfig = {
 		// // jQuery: 'jquery',
 		// // 'window.jQuery': 'jquery',
 		// // 'window.$': 'jquery'
-        // })
+        // }),
+        // 此处解决vue未定义extension大量报错问题
+        new webpack.DefinePlugin({
+            __VUE_OPTIONS_API__: true,
+            __VUE_PROD_DEVTOOLS__: false,
+          }),
         
     ],
     // devtool: 'eval-source-map',

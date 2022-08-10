@@ -17,7 +17,7 @@
       </div>
     </div>
     <div class="footer">
-      <div class="version">080111</div>
+      <div class="version">0801</div>
     </div>
   </div>
 </template>
@@ -141,9 +141,9 @@ export default {
         ElMessage.success({message: `功能正在开发中...敬请期待`, duration: 2500, offset: 450, position: 'top-right'})
         console.log("999")
         // event.preventDefault()  //阻止跳转
-        event.preventDefault()  //阻止跳转
+       return event.preventDefault()  //阻止跳转
         // console.log($(".container"))
-        return false
+        // return false
       }
     },
   },

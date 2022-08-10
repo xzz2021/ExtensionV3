@@ -73,3 +73,11 @@ if(url.indexOf('tmall.com/')>1){
 }
 
 
+
+
+    console.log('--------content-------自动执行!---------')
+    
+    // 发送信息给background.js
+    chrome.runtime.sendMessage('get-user-data', (response) => {
+          console.log('received user data', response);
+        });

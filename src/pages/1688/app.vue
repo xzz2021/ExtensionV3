@@ -109,7 +109,7 @@
       </main>
       <footer>
         <!-- <div class="version">{{ BUS.SHOW.version }}</div> -->
-        <div class="version">6699</div>
+        <div class="version">0801666</div>
       </footer>
 
     </div>
