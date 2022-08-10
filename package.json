@@ -4,7 +4,7 @@
   "description": "start build from 0",
   "main": "content.js",
   "scripts": {
-    "start": "webpack-dev-server --open",
+    "start": "webpack server --open",
     "build": "webpack --mode=production --node-env=production",
     "watch": "webpack --watch",
     "serve": "webpack serve"
@@ -36,6 +36,7 @@
     "vue-loader": "^17.0.0",
     "webpack": "^5.74.0",
     "webpack-cli": "^4.10.0",
+    "webpack-dev-middleware": "^5.3.3",
     "webpack-dev-server": "^4.3.1"
   }
 }

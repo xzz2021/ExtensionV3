@@ -1,5 +1,6 @@
 // Generated using webpack-cli https://github.com/webpack/webpack-cli
-// const proconfig = require('./webpack.pro.config.js')
+const proconfig = require('./webpack.pro.config.js')
+const devconfig = require('./webpack.dev.config.js')
 const path = require('path');
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -41,7 +42,7 @@ const comconfig = {
     plugins: [
         new HtmlWebpackPlugin({    // 可以实现自动生成新的html并自动导入js
             template: './src/popup/index.html',  // 指定元html文件的位置
-            filename: 'popup.html',   // 指定输出的名称
+            filename: 'index.html',   // 指定输出的名称
             chunks: ['popup'],          //指定自定义需要注入的js
             inject: 'body',
             // scriptLoading: 'defer'
@@ -164,7 +165,11 @@ const comconfig = {
 module.exports = () => {
     
     if (true) {
-        let config = {...comconfig }
+        let config = {...comconfig, ...devconfig }
+        const compiler = webpack(config);
+middleware(compiler, {
+  writeToDisk: true
+});
         return config;
       
     }else{

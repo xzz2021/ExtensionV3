@@ -17,7 +17,7 @@
       </div>
     </div>
     <div class="footer">
-      <div class="version">0630</div>
+      <div class="version">080111</div>
     </div>
   </div>
 </template>
