@@ -1,6 +1,6 @@
 <template>
     <div class="mytmall" @click="haha">
-66666tmalltmalltmalltt
+66666tmalltmalltmall
 </div>
 </template>
 

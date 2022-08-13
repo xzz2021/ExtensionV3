@@ -1,31 +1,22 @@
 
-// let myTab = 0
-//----------------------------
-// 获取当前页面 方法一
-async function getCurrentTab() {
-  let queryOptions = { active: true, lastFocusedWindow: true };
-  // `tab` will either be a `tabs.Tab` instance or `undefined`.
-  let [tab] = await chrome.tabs.query(queryOptions);
-  return myTab = tab.id;
-  // console.log(tab)
-}
-getCurrentTab()
-//-----------------------------------
-
-//--------------------------------
-// 获取当前页面 方法二    废弃 无法使用
-// chrome.tabs.getSelected(null, function (tab) { // 先获取当前页面的tabID
-//     return myTab = tab.id;
-// });
-//------------------------------------
 
 
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  // 2. A page requested user data, respond with a copy of `user`
-  if (message === 'get-user-data') {
-    chrome.runtime.reload();
-    sendResponse('--------welcome,reload successful!');
-    //当未传参数时,默认刷新当前tab页面
-    chrome.tabs.reload(myTab)
-  }
-});
+
+//-------------1111挂载好之后监听网页更新------此网页为webdevserver监听的网页-------
+//-------------2222--网页跟新后拿到更新的页面--即111的页面----因为如果是其他页面则不采取任何行动-----
+// ------------33333每次dev页面刷新-----同时----查询当前聚焦的tab页或者说活动的当前tab页-----------
+//-----------------4444如果不是dev页面--(???是否需要判断--扩展程序---页面)-------则执行刷新-------------------
+
+
+// chrome.runtime.onInstalled.addListener(() => {   //-----不能等待加载---否则首次启动浏览器必须手动点击chrome.runtime.reload()才能执行
+  chrome.tabs.onUpdated.addListener(
+    (tabId, changeInfo, tab) => {
+     if(tab.title == "xzz2022" && tab.status == "complete") {
+      // console.log('---------tab.title: ------判定成功------')
+    chrome.tabs.query({active: true},
+    ([tab]) => {
+    if(tab.title != "xzz2022"){
+          chrome.runtime.reload()
+          chrome.tabs.reload()
+        }})}})
+      // })

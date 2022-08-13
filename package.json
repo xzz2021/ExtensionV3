@@ -4,7 +4,7 @@
   "description": "start build from 0",
   "main": "content.js",
   "scripts": {
-    "start": "webpack server --open",
+    "start": "webpack server",
     "build": "webpack --mode=production --node-env=production",
     "watch": "webpack --watch",
     "serve": "webpack serve"
@@ -17,6 +17,7 @@
   "dependencies": {
     "core-js": "^3.8.3",
     "element-plus": "^2.2.12",
+    "ssestream": "^1.1.0",
     "vue": "^3.2.13",
     "vuex": "^4.0.0"
   },

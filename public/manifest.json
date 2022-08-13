@@ -15,7 +15,7 @@
   "icons": { "16": "logo.png", "48": "logo.png", "128": "logo.png" },
   "content_scripts": [
     {
-      "matches": ["https://*.1688.com/*", "https://*.tmall.com/*","http://localhost:8888/"],
+      "matches": ["https://*.1688.com/*", "https://*.tmall.com/*"],
       "js": ["content.js"]
     }
   ]
