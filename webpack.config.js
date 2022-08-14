@@ -1,10 +1,11 @@
 // Generated using webpack-cli https://github.com/webpack/webpack-cli
-// const proconfig = require('./webpack.pro.config.js')
+const proconfig = require('./webpack.pro.config.js')
+const devconfig = require('./webpack.dev.config.js')
 const path = require('path');
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+// const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const VueLoaderPlugin = require('vue-loader').VueLoaderPlugin
 
@@ -12,6 +13,10 @@ const VueLoaderPlugin = require('vue-loader').VueLoaderPlugin
 const AutoImport = require('unplugin-auto-import/webpack')
 const Components = require('unplugin-vue-components/webpack')
 const { ElementPlusResolver } = require('unplugin-vue-components/resolvers')
+
+
+// 引入webpack-dev-server middleware,主要作用调用钩子函数将内存映射文件写入磁盘  //22222-----devserver自带中间件可以直接在配置里定义----不需要写这些
+// const middleware = require("webpack-dev-middleware");
 
 // const isProduction = process.env.NODE_ENV == 'development';
 
@@ -49,7 +54,7 @@ const comconfig = {
 
         new MiniCssExtractPlugin(),    // 实现css文件打包
         
-        new CleanWebpackPlugin(),   // 自动清除之前的打包目录  插件
+        // new CleanWebpackPlugin(),   // 自动清除之前的打包目录  插件
 
         new VueLoaderPlugin(),   // 引入vue解析插件
         new CopyWebpackPlugin({  //实现静态文件的直接复制
@@ -68,7 +73,12 @@ const comconfig = {
 		// // jQuery: 'jquery',
 		// // 'window.jQuery': 'jquery',
 		// // 'window.$': 'jquery'
-        // })
+        // }),
+        // 此处解决vue未定义extension大量报错问题
+        new webpack.DefinePlugin({
+            __VUE_OPTIONS_API__: true,
+            __VUE_PROD_DEVTOOLS__: false,
+          }),
         
     ],
     // devtool: 'eval-source-map',
@@ -122,51 +132,20 @@ const comconfig = {
             },
         ],
     },
-    // devServer: {
-    //     // contentBase: path.join(__dirname, 'xzz2022'),   // 告诉服务器从哪里提供内容(默认当前工作目录)
-    //     static: {
-    //         directory: path.join(__dirname, 'xzz2022'), 
-    //       },  // 告诉服务器从哪里提供内容(默认当前工作目录)
-    //     // contentBase: 'public',   // 指定额外的静态资源目录
-    //     // openPage: 'xzz2022/index.html',  // 指定默认启动浏览器时打开的页面
-    //     host: 'localhost', // 默认localhost,想外部可访问用'0.0.0.0'
-    //     port: 8888, // 默认8080
-    //     inline: false, // 可以监控js变化
-    //     hot: false, // 热启动
-    //     open: false, // 启动时自动打开浏览器（指定打开chrome，open: 'Google Chrome'）
-    //     compress: true, // 一切服务都启用gzip 压缩
-    //      // 将 bundle 写到磁盘而不是内存
-    //      writeToDisk: true,
-    //     //  clientLogLevel: 'none',  // 不显示启动服务日志信息
-    //     //  quite: true,   //控制台只显示基本信息
-    //     //  before(app,server,compiler) {reloadServer(app,compiler)} //监听文件改动
-    //     // stats: { // 设置控制台的提示信息
-    //     //   chunks: false,
-    //     //   children: false,
-    //     //   modules: false,
-    //     //   entrypoints: false, // 是否输出入口信息
-    //     //   warnings: false,
-    //     //   performance: false, // 是否输出webpack建议（如文件体积大小）
-    //     // }
-    //     // proxy: { // 本地地址和上线地址api不一致,则可以设置重写,接口代理（这段配置更推荐：写到package.json，再引入到这里）
-    //     //   "/api-dev": {
-    //     //     "target": "http://api.test.xxx.com",
-    //     //     "secure": false,
-    //     //     "changeOrigin": true,
-    //     //     "pathRewrite": { // 将url上的某段重写（例如此处是将 api-dev 替换成了空）
-    //     //       "^/api-dev": ""
-    //     //     }
-    //     //   }
-    //     // }
-    //   }
 };
+
 
 module.exports = () => {
     
     if (true) {
-        let config = {...comconfig }
+        let config = {...comconfig, ...devconfig }
+        // devserver自带中间件可以直接在配置里定义----不需要写这些
+        // const compiler = webpack(config)
+        // middleware(compiler, {
+        //     writeToDisk: true
+        // })
         return config;
-      
+    
     }else{
         let config = {...comconfig, ...proconfig}
         return config;
