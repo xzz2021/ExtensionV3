@@ -27,7 +27,7 @@ const comconfig = {
     // mode: 'production',
     // entry: ['./main.js','./content.js','./inject.js'],    //数组形式会被整合打包到一个输出文件//单独导出需要使用对象
     entry: {
-        popup: './src/popup/pop.js',
+        // popup: './src/popup/pop.js',
         background: './src/background.js',
         content: './src/content.js'
     },
@@ -47,7 +47,7 @@ const comconfig = {
         new HtmlWebpackPlugin({    // 可以实现自动生成新的html并自动导入js
             template: './src/popup/index.html',  // 指定元html文件的位置
             filename: 'popup.html',   // 指定输出的名称
-            chunks: ['popup'],          //指定自定义需要注入的js
+            chunks: ['content'],          //指定自定义需要注入的js
             inject: 'body',
             // scriptLoading: 'defer'
         }), 
@@ -68,12 +68,12 @@ const comconfig = {
           Components({
             resolvers: [ElementPlusResolver()],
           }),
-        // new webpack.ProvidePlugin({  // 在全局环境中注入jquery
-        // $: 'jquery',
-		// // jQuery: 'jquery',
-		// // 'window.jQuery': 'jquery',
-		// // 'window.$': 'jquery'
-        // }),
+        new webpack.ProvidePlugin({  // 在全局环境中注入jquery
+        $: 'jquery',
+		// jQuery: 'jquery',
+		// 'window.jQuery': 'jquery',
+		// 'window.$': 'jquery'
+        }),
         // 此处解决vue未定义extension大量报错问题
         new webpack.DefinePlugin({
             __VUE_OPTIONS_API__: true,
@@ -108,10 +108,10 @@ const comconfig = {
                         test: /\.s[ac]ss$/i,
                         use: ["style-loader", 'css-loader','sass-loader'],  //实现样式代码整合在单独一个文件里  //添加sassloader
                     },
-                    // {
-                    //     test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
-                    //     type: 'asset',
-                    // },
+                    {
+                        test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
+                        type: 'asset',
+                    },
                     
                 ]
             },
@@ -139,15 +139,10 @@ module.exports = () => {
     
     if (true) {
         let config = {...comconfig, ...devconfig }
-        // devserver自带中间件可以直接在配置里定义----不需要写这些
-        // const compiler = webpack(config)
-        // middleware(compiler, {
-        //     writeToDisk: true
-        // })
         return config;
     
     }else{
-        let config = {...comconfig, ...proconfig}
+        let config = Object.assign(comconfig, proconfig, {plugins:[...comconfig.plugins,...proconfig.plugins]})
         return config;
     }
 };

@@ -17,8 +17,9 @@
       </div>
     </div>
     <div class="footer">
-      <div class="version">0801</div>
+      <div class="version">0817</div>
     </div>
+    <!-- <el-input v-model="myin"></el-input> -->
   </div>
 </template>
 

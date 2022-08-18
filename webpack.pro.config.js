@@ -65,24 +65,13 @@ const proconfig = {
 
         new VueLoaderPlugin(),   // 引入vue解析插件
         // new RemoveConsolePlugin()
-        // new CopyWebpackPlugin({  //实现静态文件的直接复制
-        //     patterns: [        
-        //     // {from: 'public', to: './' },       // 需要拷贝的目录或者路径
-        //     {from: 'public', to: './'}
-        // ]}),
-        // new ChromeconstExtensionReloader(),
+
         // new webpack.DefinePlugin({    // 可以内部注入全局任意变量
         //     //    值要求是一个代码片段
         //     API: '"字符串"'   
         //     // API: JSON.stringify("字符串")   //或者使用转换
         // }),
-        //实现elementplus自动按需加载
-        AutoImport({
-            resolvers: [ElementPlusResolver()],
-          }),
-          Components({
-            resolvers: [ElementPlusResolver()],
-          }),
+
         // new webpack.ProvidePlugin({  // 在全局环境中注入jquery
         // $: 'jquery',
 		// // jQuery: 'jquery',
@@ -93,87 +82,9 @@ const proconfig = {
     ],
     // externals: {}, 忽略指定的模块不进行打包
     module: {   //oneOf配置可以优化性能,,,文件只会选择一个loader,,如果没有oneOf则会轮询
-        rules: [
-            {
-                test: /\.(js|jsx)$/i,
-                loader: 'babel-loader',
-                exclude: /node_modules/,  ////打包时间神奇的少了2秒
-                options: {
-                    // presenrts: []
-                    // 开启babel缓存,第二次构建时,只构建改动的文件,其余直接读取缓存
-                    cacheDirectory: true
-                }
-            },
-            {
-                test: /\.css$/i,
-                // use: ["style-loader", stylesHandler,'css-loader'],  //实现样式代码整合在单独一个文件里, 可以取代style-loader
-                use: ["style-loader", 'css-loader'],  //实现样式代码整合在单独一个文件里
-            },
-            {
-                test: /\.s[ac]ss$/i,
-                use: ["style-loader", 'css-loader','sass-loader'],  //实现样式代码整合在单独一个文件里  //添加sassloader
-            },
-            // {
-            //     test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
-            //     type: 'asset',
-            // },
-            {
-                test: /.vue$/,
-                use: 'vue-loader'
-            },
-            // 解决引入element-plus打包报错问题
-            {
-                test: /\.(t|j|mj)s$/,
-                include: path.resolve(
-                    __dirname,
-                    '../node_modules/element-plus'
-                ),
-                resolve: {
-                    fullySpecified: false,
-                },
-            },
-
-            // Add your rules for custom modules here
-            // Learn more about loaders from https://webpack.js.org/loaders/
-        ],
-    },
-    devServer: {
-        // contentBase: path.join(__dirname, 'xzz2022'),   // 告诉服务器从哪里提供内容(默认当前工作目录)
-        static: {
-            directory: path.join(__dirname, 'xzz2022'), 
-          },  // 告诉服务器从哪里提供内容(默认当前工作目录)
-        // contentBase: 'public',   // 指定额外的静态资源目录
-        // openPage: 'xzz2022/index.html',  // 指定默认启动浏览器时打开的页面
-        host: 'localhost', // 默认localhost,想外部可访问用'0.0.0.0'
-        port: 8888, // 默认8080
-        inline: false, // 可以监控js变化
-        hot: false, // 热启动
-        open: false, // 启动时自动打开浏览器（指定打开chrome，open: 'Google Chrome'）
-        compress: true, // 一切服务都启用gzip 压缩
-         // 将 bundle 写到磁盘而不是内存
-         writeToDisk: true,
-        //  clientLogLevel: 'none',  // 不显示启动服务日志信息
-        //  quite: true,   //控制台只显示基本信息
-        //  before(app,server,compiler) {reloadServer(app,compiler)} //监听文件改动
-        // stats: { // 设置控制台的提示信息
-        //   chunks: false,
-        //   children: false,
-        //   modules: false,
-        //   entrypoints: false, // 是否输出入口信息
-        //   warnings: false,
-        //   performance: false, // 是否输出webpack建议（如文件体积大小）
-        // }
-        // proxy: { // 本地地址和上线地址api不一致,则可以设置重写,接口代理（这段配置更推荐：写到package.json，再引入到这里）
-        //   "/api-dev": {
-        //     "target": "http://api.test.xxx.com",
-        //     "secure": false,
-        //     "changeOrigin": true,
-        //     "pathRewrite": { // 将url上的某段重写（例如此处是将 api-dev 替换成了空）
-        //       "^/api-dev": ""
-        //     }
-        //   }
-        // }
-      }
+        
+    }
+    
 };
 
 module.exports = proconfig

@@ -88,7 +88,6 @@
     footer {
       margin: 12px 0;
       padding-bottom: 10px;
-  
       .version {
         margin: 0 auto;
         width: 74px;
@@ -102,10 +101,9 @@
     }
   }
   
-  .el-dropdown-menu__item:hover {
+  ::v-deep .el-dropdown-menu__item:hover {
     background-color: #ffa9391f;
     color: $jclbg;
-  
   }
 
 //   ::v-deep .el-dropdown [disabled] {

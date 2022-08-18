@@ -1,5 +1,7 @@
 import { createApp } from 'vue'
 
+//引入自定义的所有css入口文件
+import './css/style'
 //   已实现自动按需引入  不需要再全局引入
 
 // import ElementPlus from 'element-plus'
@@ -8,7 +10,8 @@ import { createApp } from 'vue'
 import app1688 from './pages/1688/app.vue'
 import apptmall from './pages/tmall/app.vue'
 // import store from './store'
-
+import popup from './popup/app.vue'
+createApp(popup).mount('#pop')
 
 function create1688(){
     const el = document.querySelector('body');
