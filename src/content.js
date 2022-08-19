@@ -7,11 +7,19 @@ import './css/style'
 // import ElementPlus from 'element-plus'
 // import 'element-plus/dist/index.css'
 // import $ from 'jquery'
+//--------------------------------
+
+//-----------------挂载公共组件----------------------
+// import LoginPanel from './components/LoginPanel.vue'
+// createApp(LoginPanel).component('login-panel', LoginPanel);
+//--------------------------------------------------
+
+
 import app1688 from './pages/1688/app.vue'
 import apptmall from './pages/tmall/app.vue'
 // import store from './store'
-import popup from './popup/app.vue'
-createApp(popup).mount('#pop')
+// import popup from './popup/app.vue'
+// createApp(popup).mount('#pop')
 
 function create1688(){
     const el = document.querySelector('body');

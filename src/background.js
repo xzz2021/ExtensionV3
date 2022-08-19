@@ -15,8 +15,10 @@
       // console.log('---------tab.title: ------判定成功------')
     chrome.tabs.query({active: true},
     ([tab]) => {
-    if(tab.title != "xzz2022"){
+      // console.log('---------------------tab: ', tab);
+    if(tab.title != "xzz2022" && tab.url != "chrome://newtab/"){
           chrome.runtime.reload()
           chrome.tabs.reload()
+      // console.log('---------tab.title: ------不应该刷新!!!!!!!!!!!------')
         }})}})
       // })
