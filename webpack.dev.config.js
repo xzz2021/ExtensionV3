@@ -24,7 +24,9 @@ const devconfig = {
         //   // target: ['index.html', 'https://tmall.com'],//启动后打开指定页面
         // },
         compress: true, // 一切服务都启用gzip 压缩
-        allowedHosts: "localhost.com", //必须加上此行,不然webpack安全策略在非监听页面会一直报错
+        // allowedHosts: ["localhost.com", '.tmall.com'], //加上tmall会刷新2遍//必须加上此行,不然webpack安全策略在非监听页面会一直报错
+        // allowedHosts: ["localhost.com"], //必须加上此行,不然webpack安全策略在非监听页面会一直报错
+        allowedHosts: 'auto', //必须加上此行,不然webpack安全策略在非监听页面会一直报错
         client: {
           reconnect: false,   //不会尝试重新连接
         },

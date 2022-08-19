@@ -131,24 +131,20 @@
       </main>
       <footer>
         <!-- <div class="version">{{ BUS.SHOW.version }}</div> -->
-        <div class="version">0817</div>
+        <div class="version">0818000</div>
       </footer>
-      <el-button type="primary" @click="console">jquery</el-button>
+      <el-button type="primary" @click="con">jquery</el-button>
+      <!-- <MyDoc /> -->
     </div>
 </template>
 
-<script>
-
-export default {
-  methods:{
-    console(){
-      console.log('---jquery: ------', $);
+<script setup>
+   const con = () =>{
+      console.log('---jquery: ------',$)
     }
-  },
-  mounted() {},
-}
 </script>
 
 <style lang="scss" scoped>
 @import '../../css/sass/jclpanel.scss';
+
 </style>

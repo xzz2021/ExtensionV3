@@ -5,7 +5,7 @@ const path = require('path');
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-// const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const VueLoaderPlugin = require('vue-loader').VueLoaderPlugin
 
@@ -54,7 +54,7 @@ const comconfig = {
 
         new MiniCssExtractPlugin(),    // 实现css文件打包
         
-        // new CleanWebpackPlugin(),   // 自动清除之前的打包目录  插件
+        new CleanWebpackPlugin(),   // 自动清除之前的打包目录  插件
 
         new VueLoaderPlugin(),   // 引入vue解析插件
         new CopyWebpackPlugin({  //实现静态文件的直接复制
@@ -65,9 +65,9 @@ const comconfig = {
         AutoImport({
             resolvers: [ElementPlusResolver()],
           }),
-          Components({
-            resolvers: [ElementPlusResolver()],
-          }),
+        Components({ dirs:['src'],
+          resolvers: [ElementPlusResolver() ],
+        }),
         new webpack.ProvidePlugin({  // 在全局环境中注入jquery
         $: 'jquery',
 		// jQuery: 'jquery',
@@ -79,8 +79,9 @@ const comconfig = {
             __VUE_OPTIONS_API__: true,
             __VUE_PROD_DEVTOOLS__: false,
           }),
-        
+        //   new webpack.HotModuleReplacementPlugin()
     ],
+    // globals: {'$': true},
     // devtool: 'eval-source-map',
     devtool: 'cheap-source-map',
     // externals: {}, 忽略指定的模块不进行打包
