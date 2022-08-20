@@ -65,15 +65,15 @@
       line-height: 40px;
       color: $white;
   }
-::v-deep .vxe-modal--header {
+:deep(.vxe-modal--header) {
     background: $jclbg;
     padding: 0 !important;
   }
-  ::v-deep .vxe-modal--box {
+  :deep(.vxe-modal--box) {
     border: none !important;
 }
 
-::v-deep .vxe-modal--close-btn{
+:deep(.vxe-modal--close-btn){
   top: 12px ;
   color: $white;
   &:hover{

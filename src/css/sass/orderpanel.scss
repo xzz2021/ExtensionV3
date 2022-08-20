@@ -209,11 +209,11 @@
   }
 }
 }
-::v-deep .el-radio__input.is-checked .el-radio__inner {
+:deep(.el-radio__input.is-checked .el-radio__inner) {
   border-color: $jclbg;
   background: $jclbg;
 }
-::v-deep .el-radio__input {
+:deep(.el-radio__input) {
   cursor: pointer;
   vertical-align: -6%;
 }

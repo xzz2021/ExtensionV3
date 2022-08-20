@@ -101,14 +101,10 @@
     }
   }
   
-  ::v-deep .el-dropdown-menu__item:hover {
+  :deep(.el-dropdown-menu__item:hover) {
     background-color: #ffa9391f;
     color: $jclbg;
   }
-
-//   ::v-deep .el-dropdown [disabled] {
-//     color: #606266;
-// }
 
 .el-dropdown.is-disabled{
   color: #606266;

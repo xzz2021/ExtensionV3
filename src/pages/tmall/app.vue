@@ -131,10 +131,10 @@
       </main>
       <footer>
         <!-- <div class="version">{{ BUS.SHOW.version }}</div> -->
-        <div class="version">0818000</div>
+        <div class="version">0818</div>
       </footer>
       <el-button type="primary" @click="con">jquery</el-button>
-      <!-- <MyDoc /> -->
+      <PagesTmallMyDoc />
     </div>
 </template>
 

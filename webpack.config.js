@@ -15,8 +15,6 @@ const Components = require('unplugin-vue-components/webpack')
 const { ElementPlusResolver } = require('unplugin-vue-components/resolvers')
 
 
-// 引入webpack-dev-server middleware,主要作用调用钩子函数将内存映射文件写入磁盘  //22222-----devserver自带中间件可以直接在配置里定义----不需要写这些
-// const middleware = require("webpack-dev-middleware");
 
 // const isProduction = process.env.NODE_ENV == 'development';
 
@@ -24,7 +22,6 @@ const { ElementPlusResolver } = require('unplugin-vue-components/resolvers')
 
 const comconfig = {
     mode: 'development',
-    // mode: 'production',
     // entry: ['./main.js','./content.js','./inject.js'],    //数组形式会被整合打包到一个输出文件//单独导出需要使用对象
     entry: {
         // popup: './src/popup/pop.js',
@@ -65,8 +62,10 @@ const comconfig = {
         AutoImport({
             resolvers: [ElementPlusResolver()],
           }),
-        Components({ dirs:['src'],
-          resolvers: [ElementPlusResolver() ],
+        Components({ 
+            dirs:['src'],
+            directoryAsNamespace: true,
+            resolvers: [ElementPlusResolver() ],
         }),
         new webpack.ProvidePlugin({  // 在全局环境中注入jquery
         $: 'jquery',
@@ -85,10 +84,9 @@ const comconfig = {
     // devtool: 'eval-source-map',
     devtool: 'cheap-source-map',
     // externals: {}, 忽略指定的模块不进行打包
-    module: {   //oneOf配置可以优化性能,,,文件只会选择一个loader,,如果没有oneOf则会轮询
+    module: {  
         rules: [
             {
-                // oneOf不同文件只加载一个对应loader,而不是轮询
                 oneOf:[
                     {
                         test: /\.(js|jsx)$/i,
@@ -110,7 +108,7 @@ const comconfig = {
                         use: ["style-loader", 'css-loader','sass-loader'],  //实现样式代码整合在单独一个文件里  //添加sassloader
                     },
                     {
-                        test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
+                        test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,   //实现其他文件类型整合在js里而不是带hash输出独立文件
                         type: 'asset',
                     },
                     
