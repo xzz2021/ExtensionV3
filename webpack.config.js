@@ -25,8 +25,8 @@ const comconfig = {
     // entry: ['./main.js','./content.js','./inject.js'],    //数组形式会被整合打包到一个输出文件//单独导出需要使用对象
     entry: {
         // popup: './src/popup/pop.js',
-        background: './src/background.js',
-        content: './src/content.js'
+        background: './src/bgc/background.js',
+        content: './src/content/content.js'
     },
     output: {
         filename: './[name].js',

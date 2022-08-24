@@ -1,12 +1,17 @@
 <template>
     <div class="">
-66666666666666666666
+666666666tmall
     </div>
 </template>
 
 <script>
 
 export default {
+  methods: {
+      doc(){
+        console.log('mydoc')
+      }
+  },
   
   mounted() {},
 }
