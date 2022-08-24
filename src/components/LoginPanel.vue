@@ -72,7 +72,7 @@ export default {
         },
         data: data,
       };
-      let res = await 浏览器_跨域axios(config);
+      // let res = await 浏览器_跨域axios(config); //-------------------------------------------------------------------
       // console.log(res)
       // if(res.indexOf('后端服务器错误') != -1) { return Message.error({message: '服务器错误,请联系后端api管理员', duration: 1000, showClose: true})}
       // console.log(res.data)

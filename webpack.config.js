@@ -95,7 +95,11 @@ const comconfig = {
                         options: {
                             // presenrts: []
                             // 开启babel缓存,第二次构建时,只构建改动的文件,其余直接读取缓存
-                            cacheDirectory: true
+                            cacheDirectory: true,
+                            // plugins: [["import", {
+                            //     "libraryName": "vxe-table",
+                            //     "style": true,   // or 'css'
+                            //   }]]
                         }
                     },
                     {
