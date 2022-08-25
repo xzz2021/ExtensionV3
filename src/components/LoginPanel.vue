@@ -21,18 +21,15 @@
     </el-dialog>
   </div>
 </template>
-<script>
-export default {
-  name: 'LoginPanel',
-//   components: {HasLogin},
-  data() {
-    return {
-      ruleFormRef: '',
-      dialogVisible: false,
-      loginError: false,
-      codetitle: '获取验证码',
-      loginForm: {phone: '', code: ''},
-      rules: {
+<script setup>
+import {ref, reactive, onMounted  } from 'vue'
+import emitter from '../content/content'
+const ruleFormRef = ref('')
+const dialogVisible = ref(false)
+const hasLogin = ref(true)
+const codetitle = ref('获取验证码')
+const userAccount = ref('')
+const rules = reactive({
         phone: [
           {required: true, message: '请输入手机号', trigger: 'blur'},
           {type: 'number', message: '手机号必须是数字'},
@@ -45,155 +42,153 @@ export default {
         // { type: 'number', message: '验证码必须是数字' },
         // { pattern: /^\d{6}$/, message: '请输入正确的验证码', trigger: 'blur' }
         // ],
-      },
-    };
-  },
-  methods: {
-    async getCode(codeForm) {
-      this.codetitle = 30;
-      let codeInterval = setInterval(() => {
-        this.codetitle--;
-        if (this.codetitle == 0) {
-          clearInterval(codeInterval);
-          this.codetitle = '获取验证码';
-        }
-      }, 1000);
-      let phone = this.loginForm.phone + '';
-      var qs = require('qs');
-      var data = qs.stringify({
-        phone: phone,
-      });
-      var config = {
-        method: 'post',
-        url: 'http://pddzd.junchenlun.com/?s=Home.Account.sendCode',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          Cookie: 'PHPSESSID=m711i68ebmfcsqav4mrtfi9jg2',
-        },
-        data: data,
-      };
-      // let res = await 浏览器_跨域axios(config); //-------------------------------------------------------------------
-      // console.log(res)
-      // if(res.indexOf('后端服务器错误') != -1) { return Message.error({message: '服务器错误,请联系后端api管理员', duration: 1000, showClose: true})}
-      // console.log(res.data)
-      if ((res.data.ret = 200)) {
-        console.log('发送成功');
-      } else {
-        console.log('发送失败');
-      }
-      // if(res.data.msg = "非法请求：请输入正确手机号格式"){}
-    },
-    submitForm(ruleFormRef) {
-      this.$refs.ruleFormRef.validate((valid) => {
-        if (valid) {
-          let that = this;
-          this.login(that);
-          // console.log('前端表单校验通过submit!');
-        } else {
-          console.log('submit error!');
+      })
+const loginForm = reactive({phone: '', code: ''})
+const openDialog = () => {
+      dialogVisible.value = true;
+}
+  // methods: {
+  //   async getCode(codeForm) {
+  //     this.codetitle = 30;
+  //     let codeInterval = setInterval(() => {
+  //       this.codetitle--;
+  //       if (this.codetitle == 0) {
+  //         clearInterval(codeInterval);
+  //         this.codetitle = '获取验证码';
+  //       }
+  //     }, 1000);
+  //     let phone = this.loginForm.phone + '';
+  //     var qs = require('qs');
+  //     var data = qs.stringify({
+  //       phone: phone,
+  //     });
+  //     var config = {
+  //       method: 'post',
+  //       url: 'http://pddzd.junchenlun.com/?s=Home.Account.sendCode',
+  //       headers: {
+  //         'Content-Type': 'application/x-www-form-urlencoded',
+  //         Cookie: 'PHPSESSID=m711i68ebmfcsqav4mrtfi9jg2',
+  //       },
+  //       data: data,
+  //     };
+  //     // let res = await 浏览器_跨域axios(config); //-------------------------------------------------------------------
+  //     // console.log(res)
+  //     // if(res.indexOf('后端服务器错误') != -1) { return Message.error({message: '服务器错误,请联系后端api管理员', duration: 1000, showClose: true})}
+  //     // console.log(res.data)
+  //     if ((res.data.ret = 200)) {
+  //       console.log('发送成功');
+  //     } else {
+  //       console.log('发送失败');
+  //     }
+  //     // if(res.data.msg = "非法请求：请输入正确手机号格式"){}
+  //   },
+  //   submitForm(ruleFormRef) {
+  //     this.$refs.ruleFormRef.validate((valid) => {
+  //       if (valid) {
+  //         let that = this;
+  //         this.login(that);
+  //         // console.log('前端表单校验通过submit!');
+  //       } else {
+  //         console.log('submit error!');
 
-          return false;
-        }
-      });
-    },
-    reset() {
-      // this.loginForm = {}
-      this.$refs.ruleFormRef.resetFields();
-      // this.$myBus.$off('iwantlogin')
-      // Message.error({
-      //     showClose: true,
-      //     message: '您当前为普通用户,只能使用部分功能,登录后可以解锁全部VIP功能!',
-      //     duration: 3000,
-      //   })
-    },
-    async login(that) {
-      let phone = this.loginForm.phone + '';
-      let code = this.loginForm.code;
-      // console.log('data>222:', data);
-      let qs = require('qs');
-      let data = qs.stringify({
-        phone: phone,
-        code: code,
-      });
-      var config = {
-        method: 'post',
-        url: 'http://pddzd.junchenlun.com//?s=Home.Account.codelogin',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          Cookie: 'PHPSESSID=m711i68ebmfcsqav4mrtfi9jg2',
-        },
-        data: data,
-      };
+  //         return false;
+  //       }
+  //     });
+  //   },
+  //   reset() {
+  //     // this.loginForm = {}
+  //     this.$refs.ruleFormRef.resetFields();
+  //     // this.$myBus.$off('iwantlogin')
+  //     // Message.error({
+  //     //     showClose: true,
+  //     //     message: '您当前为普通用户,只能使用部分功能,登录后可以解锁全部VIP功能!',
+  //     //     duration: 3000,
+  //     //   })
+  //   },
+  //   async login(that) {
+  //     let phone = this.loginForm.phone + '';
+  //     let code = this.loginForm.code;
+  //     // console.log('data>222:', data);
+  //     let qs = require('qs');
+  //     let data = qs.stringify({
+  //       phone: phone,
+  //       code: code,
+  //     });
+  //     var config = {
+  //       method: 'post',
+  //       url: 'http://pddzd.junchenlun.com//?s=Home.Account.codelogin',
+  //       headers: {
+  //         'Content-Type': 'application/x-www-form-urlencoded',
+  //         Cookie: 'PHPSESSID=m711i68ebmfcsqav4mrtfi9jg2',
+  //       },
+  //       data: data,
+  //     };
 
-      let res = await 浏览器_跨域axios(config);
+  //     let res = await 浏览器_跨域axios(config);
 
-      console.log(...color1, '短信接口>res:', res);
-      // if(res.indexOf('后端服务器错误') != -1) { return Message.error({message: '服务器错误,请联系后端api管理员', duration: 1000, showClose: true})}
-      if (res.data.data.user_id) {
-        // await 浏览器_set_storage("user_id", res.data.user_id)
-        // window.user_id = res.data.user_id
-        // await localStorage.setItem('user_id', res.data.user_id);
-        await 浏览器_set_storage('user_id', res.data.data.user_id);
-        Message.success({message: `成功:登录成功:${res.data.data.user_id}`, duration: 1000, showClose: true});
-        //设定此次登录时间戳
-        let currentStamp = Date.parse(new Date());
-        await 浏览器_set_storage('loginStamp', currentStamp);
-        await 浏览器_set_storage('userPhone', phone);
-        location.reload();
-        // let userID = localStorage.getItem('user_id');
-        // window.user_id = userID;
-        //  let userID = res.data.user_id
+  //     console.log(...color1, '短信接口>res:', res);
+  //     // if(res.indexOf('后端服务器错误') != -1) { return Message.error({message: '服务器错误,请联系后端api管理员', duration: 1000, showClose: true})}
+  //     if (res.data.data.user_id) {
+  //       // await 浏览器_set_storage("user_id", res.data.user_id)
+  //       // window.user_id = res.data.user_id
+  //       // await localStorage.setItem('user_id', res.data.user_id);
+  //       await 浏览器_set_storage('user_id', res.data.data.user_id);
+  //       Message.success({message: `成功:登录成功:${res.data.data.user_id}`, duration: 1000, showClose: true});
+  //       //设定此次登录时间戳
+  //       let currentStamp = Date.parse(new Date());
+  //       await 浏览器_set_storage('loginStamp', currentStamp);
+  //       await 浏览器_set_storage('userPhone', phone);
+  //       location.reload();
+  //       // let userID = localStorage.getItem('user_id');
+  //       // window.user_id = userID;
+  //       //  let userID = res.data.user_id
 
-        //     window.user_id = userID+"66666"
+  //       //     window.user_id = userID+"66666"
 
-        that.dialogVisible = false;
-      } else {
-        that.loginError = true;
-        setTimeout(() => {
-          that.loginError = false;
-        }, 4500);
-        Message.error({message: `失败:登陆失败:${res.data.msg}`, duration: 1000, showClose: true});
-      }
-    },
-    async getID() {
-      // 全局获取user_id并赋值window.user_id
-      let userID = await 浏览器_get_storage('user_id');
-      if (userID == undefined || userID == '' || userID == null) {
-        await 浏览器_set_storage('user_id', '');
-        console.log(...color1, 'contentcontentcontent--置空后--userID', userID);
-      }
-      window.user_id = userID;
-      console.log(...color1, '2contentcontentcontent--最新--window.user_id', window.user_id);
-    },
-    async isExpired() {
-      //定义限定登录有效期函数,失效则置空user_id
-      // 设定时间戳有效期
-      //  let timeStamp = 3 * 24 *3600
-      let timeStamp = 3 * 24 * 3600 * 1000;
-      // 获取当前时间戳,精确到秒
-      let currentStamp = Date.parse(new Date());
-      // 获取上次登录时间
-      let loginStamp = await 浏览器_get_storage('loginStamp');
-      if (loginStamp == undefined || loginStamp == null) {
-        浏览器_set_storage('loginStamp', currentStamp);
-      } else {
-        currentStamp - loginStamp < timeStamp || 浏览器_set_storage('user_id', '');
-      }
-      this.getID();
-    },
-  },
-  created() {
-    this.isExpired();
-  },
+  //       that.dialogVisible = false;
+  //     } else {
+  //       that.loginError = true;
+  //       setTimeout(() => {
+  //         that.loginError = false;
+  //       }, 4500);
+  //       Message.error({message: `失败:登陆失败:${res.data.msg}`, duration: 1000, showClose: true});
+  //     }
+  //   },
+  //   async getID() {
+  //     // 全局获取user_id并赋值window.user_id
+  //     let userID = await 浏览器_get_storage('user_id');
+  //     if (userID == undefined || userID == '' || userID == null) {
+  //       await 浏览器_set_storage('user_id', '');
+  //       console.log(...color1, 'contentcontentcontent--置空后--userID', userID);
+  //     }
+  //     window.user_id = userID;
+  //     console.log(...color1, '2contentcontentcontent--最新--window.user_id', window.user_id);
+  //   },
+  //   async isExpired() {
+  //     //定义限定登录有效期函数,失效则置空user_id
+  //     // 设定时间戳有效期
+  //     //  let timeStamp = 3 * 24 *3600
+  //     let timeStamp = 3 * 24 * 3600 * 1000;
+  //     // 获取当前时间戳,精确到秒
+  //     let currentStamp = Date.parse(new Date());
+  //     // 获取上次登录时间
+  //     let loginStamp = await 浏览器_get_storage('loginStamp');
+  //     if (loginStamp == undefined || loginStamp == null) {
+  //       浏览器_set_storage('loginStamp', currentStamp);
+  //     } else {
+  //       currentStamp - loginStamp < timeStamp || 浏览器_set_storage('user_id', '');
+  //     }
+  //     this.getID();
+  //   },
+  // },
+  // created() {
+  //   this.isExpired();
+  // },
   // async created() {
 
   // },
-  mounted() {
-    this.$myBus.$on('iwantlogin', () => {
-      this.dialogVisible = true;
-    });
-  },
-};
+  onMounted(() => {
+    emitter.on('iwantlogin', openDialog)})
 </script>
 <style lang="scss">
 @import '../css/sass/loginpanel.scss';

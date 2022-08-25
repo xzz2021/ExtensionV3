@@ -95,7 +95,7 @@
         <el-dropdown>
           <span class="el-dropdown-link">
             <div class="meicon-logo"><i class="xzzicon-shouye"></i></div>
-            <div class="title">回到首页</div>
+            <div class="title" @click="goTOLogin">回到首页</div>
             <div class="arrow-right-czp"><i class="meIconfont"></i></div>
           </span>
           <template #dropdown>
@@ -138,9 +138,14 @@
 </template>
 
 <script setup>
+import emitter from '../../content/content'
+
 const con = () => {
-  console.log("---jquery: ------", $);
-};
+  console.log("---jquery: ------", $)
+}
+const goTOLogin = () => {
+      emitter.emit('iwantlogin')
+    }
 </script>
 
 <style lang="scss" scoped>
