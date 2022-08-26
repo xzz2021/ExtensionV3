@@ -22,6 +22,7 @@ const { ElementPlusResolver } = require('unplugin-vue-components/resolvers')
 
 const comconfig = {
     mode: 'development',
+    // target: 'node',
     // entry: ['./main.js','./content.js','./inject.js'],    //数组形式会被整合打包到一个输出文件//单独导出需要使用对象
     entry: {
         // popup: './src/popup/pop.js',

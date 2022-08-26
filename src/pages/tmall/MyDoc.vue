@@ -2,7 +2,7 @@
     <div class="">
 <div v-html="rawHtml"></div>
     </div>
-    <vxe-button status="primary" content="主要颜色"></vxe-button>
+    <!-- <vxe-button status="primary" content="主要颜色"></vxe-button> -->
 </template>
 
 <script>

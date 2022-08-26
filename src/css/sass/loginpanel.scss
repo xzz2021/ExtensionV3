@@ -13,12 +13,10 @@
         margin: 0;
         padding: 26px 0 12px 0;
         background: linear-gradient(#ffebd6, #fff9f3);
-  
-  
-        // border-radius: 20px;
+
         .el-dialog__headerbtn {
-          top: 29px;
-          right: 41px;
+          top: 18px;
+          right: 10px;
         }
   
         .el-dialog__title {
@@ -38,12 +36,12 @@
         .el-form-item {
           margin-bottom: 40px;
           width: 320px;
-          height: 50px !important;
+          // height: 50px !important;
   
           .el-form-item__content {
             .el-input {
               height: 100%;
-              font-size: 16px;
+              font-size: 14px;
               color: #000000;
               background: rgba(248, 248, 248, 0.226);
             }
@@ -88,7 +86,7 @@
   
       .getcode {
         position: absolute;
-        top: 185px;
+        top: 176px;
         left: 248px;
         text-align: center;
         height: 37px;

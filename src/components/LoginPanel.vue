@@ -2,13 +2,17 @@
   <div class="jclLogin">
     <!-- <HasLogin /> -->
     <el-dialog v-model="dialogVisible" title="手机号登录/注册" width="400px" @closed="reset" :close-on-click-modal="false" center>
+    <!-- <template #header="{  }">
+      <div class="my-header">
+      </div>
+    </template> -->
       <span>
         <el-form label-width="300" :model="loginForm" ref="ruleFormRef" :rules="rules">
           <el-form-item prop="phone">
-            <el-input v-model.number="loginForm.phone" placeholder="+86" maxlength="11" />
+            <el-input v-model.number="loginForm.phone" placeholder="+86" size="large" maxlength="11" />
           </el-form-item>
           <el-form-item prop="code">
-            <el-input v-model="loginForm.code" placeholder="请输入验证码" maxlength="6" />
+            <el-input v-model="loginForm.code" placeholder="请输入验证码" size="large" maxlength="6" />
           </el-form-item>
           <el-form-item class="submititem">
             <div class="submitbtn" @click="submitForm(ruleFormRef)">登录</div>
@@ -23,20 +27,19 @@
 </template>
 <script setup>
 import {ref, reactive, onMounted  } from 'vue'
-import emitter from '../content/content'
+// import emitter from '../content/content'
 const ruleFormRef = ref('')
 const dialogVisible = ref(false)
-const hasLogin = ref(true)
+const loginError = ref(false)
+// const hasLogin = ref(true)
 const codetitle = ref('获取验证码')
-const userAccount = ref('')
+// const userAccount = ref('')
 const rules = reactive({
         phone: [
           {required: true, message: '请输入手机号', trigger: 'blur'},
           {type: 'number', message: '手机号必须是数字'},
           {pattern: /^1[345678]\d{9}$/, message: '请输入正确的手机号', trigger: 'blur'},
         ],
-        hasLogin: true,
-        userAccount: '',
         // pwd: [
         //   { required: true, message: '密码不能为空', trigger: 'blur' },
         // { type: 'number', message: '验证码必须是数字' },
@@ -47,41 +50,41 @@ const loginForm = reactive({phone: '', code: ''})
 const openDialog = () => {
       dialogVisible.value = true;
 }
+const reset = () => {
+      loginForm.value = {}
+      ruleFormRef.resetFields();
+      API.emitter.off('iwantlogin')
+      // Message.error({
+      //     showClose: true,
+      //     message: '您当前为普通用户,只能使用部分功能,登录后可以解锁全部VIP功能!',
+      //     duration: 3000,
+      //   })
+    }
   // methods: {
-  //   async getCode(codeForm) {
-  //     this.codetitle = 30;
-  //     let codeInterval = setInterval(() => {
-  //       this.codetitle--;
-  //       if (this.codetitle == 0) {
-  //         clearInterval(codeInterval);
-  //         this.codetitle = '获取验证码';
-  //       }
-  //     }, 1000);
-  //     let phone = this.loginForm.phone + '';
-  //     var qs = require('qs');
-  //     var data = qs.stringify({
-  //       phone: phone,
-  //     });
-  //     var config = {
-  //       method: 'post',
-  //       url: 'http://pddzd.junchenlun.com/?s=Home.Account.sendCode',
-  //       headers: {
-  //         'Content-Type': 'application/x-www-form-urlencoded',
-  //         Cookie: 'PHPSESSID=m711i68ebmfcsqav4mrtfi9jg2',
-  //       },
-  //       data: data,
-  //     };
-  //     // let res = await 浏览器_跨域axios(config); //-------------------------------------------------------------------
-  //     // console.log(res)
-  //     // if(res.indexOf('后端服务器错误') != -1) { return Message.error({message: '服务器错误,请联系后端api管理员', duration: 1000, showClose: true})}
-  //     // console.log(res.data)
-  //     if ((res.data.ret = 200)) {
-  //       console.log('发送成功');
-  //     } else {
-  //       console.log('发送失败');
-  //     }
-  //     // if(res.data.msg = "非法请求：请输入正确手机号格式"){}
-  //   },
+    const getCode = (codeForm) => {
+      codetitle.value = 30;
+      let codeInterval = setInterval(() => {
+        codetitle.value--;
+        if (codetitle.value == 0) {
+          clearInterval(codeInterval);
+          codetitle.value = '获取验证码';
+        }
+      }, 1000);
+      const urlencoded = new URLSearchParams()
+      urlencoded.append('phone', loginForm.phone)
+      const  url = 'http://pddzd.junchenlun.com/?s=Home.Account.sendCode'
+      let config = {
+        method: 'post',
+        body: urlencoded,
+      };
+      // let res = await 浏览器_跨域axios(config); //-------------------------------------------------------------------
+      // console.log(res)
+      // if(res.indexOf('后端服务器错误') != -1) { return Message.error({message: '服务器错误,请联系后端api管理员', duration: 1000, showClose: true})}
+      // console.log(res.data)
+      fetch(url, config).then((res) => res.json()).then((res) => console.log('成功发送获取验证码请求', res))
+
+      // if(res.data.msg = "非法请求：请输入正确手机号格式"){}
+    }
   //   submitForm(ruleFormRef) {
   //     this.$refs.ruleFormRef.validate((valid) => {
   //       if (valid) {
@@ -94,16 +97,6 @@ const openDialog = () => {
   //         return false;
   //       }
   //     });
-  //   },
-  //   reset() {
-  //     // this.loginForm = {}
-  //     this.$refs.ruleFormRef.resetFields();
-  //     // this.$myBus.$off('iwantlogin')
-  //     // Message.error({
-  //     //     showClose: true,
-  //     //     message: '您当前为普通用户,只能使用部分功能,登录后可以解锁全部VIP功能!',
-  //     //     duration: 3000,
-  //     //   })
   //   },
   //   async login(that) {
   //     let phone = this.loginForm.phone + '';
@@ -188,7 +181,8 @@ const openDialog = () => {
 
   // },
   onMounted(() => {
-    emitter.on('iwantlogin', openDialog)})
+    API.emitter.on('iwantlogin', openDialog)
+    })
 </script>
 <style lang="scss">
 @import '../css/sass/loginpanel.scss';

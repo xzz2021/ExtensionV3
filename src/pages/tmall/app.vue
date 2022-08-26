@@ -138,14 +138,27 @@
 </template>
 
 <script setup>
-import emitter from '../../content/content'
-
+// import emitter from '../../content/content'
+import {ref, reactive, onMounted, onBeforeMount  } from 'vue'
 const con = () => {
   console.log("---jquery: ------", $)
 }
 const goTOLogin = () => {
-      emitter.emit('iwantlogin')
+      // emitter.emit('iwantlogin')
+      // console.log('emitter1: ', emitter1);
+      // console.log('API: ', API.emitter1);
+      API.emitter.emit('iwantlogin')
+      // API.emitter1.emit('iwantlogin','nihao')
     }
+    onBeforeMount(() => {
+      // console.log('-------window:----------- ', window);
+  //  window.API.bb
+   })
+   onMounted(() => {
+    //  console.log('-------API------------', API);
+    //  API.aa()
+
+   })
 </script>
 
 <style lang="scss" scoped>
