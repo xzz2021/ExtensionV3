@@ -95,7 +95,7 @@
         <el-dropdown>
           <span class="el-dropdown-link">
             <div class="meicon-logo"><i class="xzzicon-shouye"></i></div>
-            <div class="title" @click="goTOLogin">回到首页</div>
+            <div class="title" @click="backToHome">回到首页</div>
             <div class="arrow-right-czp"><i class="meIconfont"></i></div>
           </span>
           <template #dropdown>
@@ -103,12 +103,12 @@
           </template>
         </el-dropdown>
       </div>
-      <!-- <div>
+      <div>
           <el-dropdown >
             <span class="el-dropdown-link">
               <div class="meicon-logo" style="margin: 0 4px 2px 10px;"><i class="el-icon-user-solid"></i></div>
-              <div v-if="userid" class="title" @click="changeAccount()">切换账号</div>
-              <div v-else class="title" @click="goTOLogin()">账号登录</div>
+              <div v-if="userid" class="title" @click="changeAccount">切换账号</div>
+              <div v-else class="title" @click="goTOLogin">账号登录</div>
               <div class="arrow-right-czp"><i class="meIconfont"></i></div>
             </span>
     <template #dropdown>
@@ -120,43 +120,82 @@
           <el-dropdown >
             <span class="el-dropdown-link">
               <div class="meicon-logo" style="margin: 0 4px 2px 10px;"><i class="el-icon-s-promotion"></i></div>
-              <div class="title" @click="logout()">退出登录</div>
+              <div class="title" @click="logout">退出登录</div>
               <div class="arrow-right-czp"><i class="meIconfont"></i></div>
             </span>
     <template #dropdown>
             <el-dropdown-menu  ></el-dropdown-menu>
     </template>
           </el-dropdown>
-        </div> -->
+        </div>
     </main>
     <footer>
       <div class="version">0818</div>
     </footer>
-    <el-button type="primary" @click="con">jquery</el-button>
-      <PagesTmallMyDoc />
+    <el-button type="primary" @click="con">登录</el-button>
+    <el-button type="primary" @click="con2">退出</el-button>
+      <!-- <PagesTmallMyDoc /> -->
   </div>
 </template>
 
 <script setup>
 // import emitter from '../../content/content'
-import {ref, reactive, onMounted, onBeforeMount  } from 'vue'
-const con = () => {
-  console.log("---jquery: ------", $)
-}
-const goTOLogin = () => {
+import {ref, reactive, onMounted, onBeforeMount, onUpdated } from 'vue'
+import { storeToRefs } from 'pinia'
+import { userStore } from '../../stores/userStore'
+
+const userstore = userStore();
+const { userid } = storeToRefs(userstore)
+    const con = () => {
+      // console.log('userstore: ', userstore);
+      
+      chrome.storage.local.set({userid: '66666666666'})
+        console.log('000000000----userStore.userid: ', userid);
+
+      setTimeout(() => {
+        console.log('1ssssss----userStore.userid: ', userid);
+      }, 1000);
+
+    }
+    const con2 = () => {
+      // console.log('userstore: ', userstore);
+      
+      // userstore.userid = ''
+      chrome.storage.local.set({userid: ''})
+      setTimeout(() => {
+        console.log('1ssssss----userStore.userid: ', userstore.userid);
+      }, 2000);
+    }
+  const goTOLogin = () => {
       // emitter.emit('iwantlogin')
       // console.log('emitter1: ', emitter1);
       // console.log('API: ', API.emitter1);
       API.emitter.emit('iwantlogin')
       // API.emitter1.emit('iwantlogin','nihao')
     }
-    onBeforeMount(() => {
-      // console.log('-------window:----------- ', window);
-  //  window.API.bb
+    const backToHome = () => {
+
+    }
+      const getStorage = () => {
+    chrome.storage.local.get(['userid'], (result) =>{
+      // debugger
+      console.log('result: ------tmtmtmt-------', result)
+      result == {} ? chrome.storage.local.set({userid: ''}) : userstore.userid = result.userid
+    })
+
+  }
+
+   onUpdated(() => {
+     console.log('-------userstore.userid------------',userid)
    })
-   onMounted(() => {
-    //  console.log('-------API------------', API);
-    //  API.aa()
+   onBeforeMount(() => {
+    chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+      // message == 'loginEvent'? setTimeout(() => {  getStorage()}, 50)  : ''
+      message == 'loginEvent'?   getStorage() : ''
+      sendResponse({status: true})
+      // debugger
+      })
+    getStorage()
 
    })
 </script>

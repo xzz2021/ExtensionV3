@@ -17,7 +17,7 @@ const sendMessage = async (message) => {
         // if(message.type == undefined) return reject('发送的请求消息类型不合法')
         chrome.runtime.sendMessage( message, function(response) {
             console.log('-----------option: -----message-------', message)
-            
+            // console.log('response: ', response);
             resolve('发送请求成功')
           })
     })

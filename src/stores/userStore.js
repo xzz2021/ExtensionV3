@@ -1,19 +1,23 @@
 import { defineStore } from 'pinia'
 
+
 export const userStore = defineStore('userInfo', {
     // arrow function recommended for full type inference
     state: () => {
       return {
         count: 0,
-        userId: ''
+        userid: '',
+        try: '22'
       }
     },
+    
       actions: {
         increment() {
           this.count++
         },
     },
   })
+
 
 //--------拿到响应式数据
 //   const store = useUsersStore();

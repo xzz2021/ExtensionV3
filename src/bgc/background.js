@@ -4,7 +4,8 @@
 
 
 
-
+import{ bgcApi as API } from './api/index'
+// console.log('bgcApi: ', API);
 
 
 
@@ -32,28 +33,46 @@
         }})}})
       // })
 
+//----------------监听登录状态的改变----------------------如果改变发送事件----------
+      chrome.storage.onChanged.addListener(function (changes, namespace) {
+        for (let [key, { oldValue, newValue }] of Object.entries(changes)) {
+          // console.log('----------key-------changed-------: ', key);
+          // key == 'userid' ? chrome.runtime.sendMessage('loginEvent') : console.log('----------key-------changed-----执行shibai--: ');
+          if(key == 'userid') {
+            chrome.tabs.query({url:'<all_urls>'},(tabs)=>{
+              console.log('------tab---------res: ', tabs)
+              let l = tabs.length
+              for(let i = 0; i < l; i++){
+                chrome.tabs.sendMessage(
+                  tabs[i].id, 'loginEvent', ()=> {
+                    console.log(i + '----------key-------changed-----发送----成功-: ')
+                  }
+                )
+              }
+             })
+            }
+        }
+      })
 
-
-
-
-
-      // import{ BgcApi as API} from '../api/index'
 
 // 约定传送信息类型,根据类型执行相应函数
 
-
 //----------------监听所有发送的信息-----根据信息类别调用引入的函数---------------
       chrome.runtime.onMessage.addListener(
-        (message, sender, sendResponse) => {
-          // console.log('----------------message: ----------------', message)
+        async (message, sender, sendResponse) => {
+          console.log('----------------message: ----------------', message)
           switch(message.type){
-                case 'myfetch': console.log('----------------message: ---------myfetchmyfetchmyfetch-------')
+                case 'myfetch': let res = await API.myfetch(message.url,message.config)
+                                console.log('res: ', res)
+                                sendResponse({status: true})
                     break;
                 case 'download': console.log('----------------download: ---------downloaddownload-------')
                     break;  
                 case '666': console.log('----------------message: ---------666666666666666-------')
                     break;    
-                default: '类型未定义,请添加相应事件函数'  
+                default: sendResponse({status: false})  
             }
+            sendResponse({status: true})
         }
       )
+

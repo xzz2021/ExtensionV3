@@ -7,9 +7,9 @@
       </div>
     </template> -->
       <span>
-        <el-form label-width="300" :model="loginForm" ref="ruleFormRef" :rules="rules">
+        <el-form label-width="300" :model="loginForm" size="large" ref="ruleFormRef" :rules="rules">
           <el-form-item prop="phone">
-            <el-input v-model.number="loginForm.phone" placeholder="+86" size="large" maxlength="11" />
+            <el-input v-model.number="loginForm.phone" placeholder="+86"  maxlength="11" />
           </el-form-item>
           <el-form-item prop="code">
             <el-input v-model="loginForm.code" placeholder="请输入验证码" size="large" maxlength="6" />
@@ -27,8 +27,13 @@
 </template>
 <script setup>
 import {ref, reactive, onMounted  } from 'vue'
-// import emitter from '../content/content'
-const ruleFormRef = ref('')
+
+import { storeToRefs } from 'pinia'
+import { userStore } from '../stores/userStore'
+
+const userstore = userStore();
+const { userid } = storeToRefs(userstore)
+const ruleFormRef = ref()
 const dialogVisible = ref(false)
 const loginError = ref(false)
 // const hasLogin = ref(true)
@@ -38,7 +43,7 @@ const rules = reactive({
         phone: [
           {required: true, message: '请输入手机号', trigger: 'blur'},
           {type: 'number', message: '手机号必须是数字'},
-          {pattern: /^1[345678]\d{9}$/, message: '请输入正确的手机号', trigger: 'blur'},
+          {pattern: /^1[3456789]\d{9}$/, message: '请输入正确的手机号', trigger: 'blur'},
         ],
         // pwd: [
         //   { required: true, message: '密码不能为空', trigger: 'blur' },
@@ -46,7 +51,7 @@ const rules = reactive({
         // { pattern: /^\d{6}$/, message: '请输入正确的验证码', trigger: 'blur' }
         // ],
       })
-const loginForm = reactive({phone: '', code: ''})
+const loginForm = reactive({phone: '16712753727', code: ''})
 const openDialog = () => {
       dialogVisible.value = true;
 }
@@ -61,7 +66,7 @@ const reset = () => {
       //   })
     }
   // methods: {
-    const getCode = (codeForm) => {
+    const getCode = async (codeForm) => {
       codetitle.value = 30;
       let codeInterval = setInterval(() => {
         codetitle.value--;
@@ -70,18 +75,20 @@ const reset = () => {
           codetitle.value = '获取验证码';
         }
       }, 1000);
-      const urlencoded = new URLSearchParams()
-      urlencoded.append('phone', loginForm.phone)
-      const  url = 'http://pddzd.junchenlun.com/?s=Home.Account.sendCode'
+      // const urlencoded = new URLSearchParams()
+      // urlencoded.append('phone', loginForm.phone)
+      const  url = 'http://pddzdtest.junchenlun.com/?s=Home.Account.sendCode'
       let config = {
         method: 'post',
-        body: urlencoded,
+        body: `'phone',loginForm.phone`,
       };
-      // let res = await 浏览器_跨域axios(config); //-------------------------------------------------------------------
+      let msg = {type: 'myfetch', url, config}
+      let res = await  API.sendMessage(msg) //-------------------------------------------------------------------
+      console.log('------myfetchmyfetch--------res: ', res);
       // console.log(res)
       // if(res.indexOf('后端服务器错误') != -1) { return Message.error({message: '服务器错误,请联系后端api管理员', duration: 1000, showClose: true})}
       // console.log(res.data)
-      fetch(url, config).then((res) => res.json()).then((res) => console.log('成功发送获取验证码请求', res))
+      // fetch(url, config).then((res) => res.json()).then((res) => console.log('成功发送获取验证码请求', res))
 
       // if(res.data.msg = "非法请求：请输入正确手机号格式"){}
     }
@@ -180,8 +187,18 @@ const reset = () => {
   // async created() {
 
   // },
+  const getStorage = () => {
+    chrome.storage.local.get(['userid'], (result) =>{
+      // console.log('result: ----222222222211', result)
+      // console.log('result: ----111111111111', result.userid)
+      result.userid === undefined ? chrome.storage.local.set({userid: ''}) : userStore.userid = result.userid
+    })
+    // console.log('------userStore.userid----------',userstore.try)
+  }
   onMounted(() => {
     API.emitter.on('iwantlogin', openDialog)
+    // getStorage()
+    //  console.log('-------chrome------------', chrome);
     })
 </script>
 <style lang="scss">
