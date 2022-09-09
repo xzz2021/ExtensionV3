@@ -46,6 +46,7 @@ import appjd from '../pages/jd/app.vue'
 function createEntry(myapp,id){
   const el = document.querySelector('body');
   if (el) {
+    //  afterbegin 插入body内部最前面------afterend插入body外部后面
       el.insertAdjacentHTML('afterend',`<div id="${id}"></div>`)
       createApp(myapp).use(pinia).mount(`#${id}`)
       // createApp(myapp).use(pinia).use(VXETable).mount(`#${id}`)

@@ -6,6 +6,14 @@
       <div class="my-header">
       </div>
     </template> -->
+    <!-- <span v-if="userid">
+      <div style="margin:0 auto;">您当前登录的账号是:</div>
+     <div style="margin:0 auto; height:70px"></div>
+     <div style="margin:0 auto; font-size:20px;text-align: center;color:red">{{userAccount}}</div>
+     <div style="margin:0 auto; height:70px"></div>
+     <div class="changeAccount" @click="goToLogin">切换账号</div>
+    </span> -->
+      <!-- <span v-else> -->
       <span>
         <el-form label-width="300" :model="loginForm" size="large" ref="ruleFormRef" :rules="rules">
           <el-form-item prop="phone">
@@ -21,7 +29,7 @@
       </span>
       <!-- <div class="getcode"> <el-button text="plain" link> 获取验证码</el-button></div> -->
       <div class="loginFail" v-if="loginError">验证码错误，请重新输入</div>
-      <el-button class="getcode" plain @click="getCode(ruleFormRef)" link>{{ codetitle }}</el-button>
+      <el-button class="getcode" plain @click="getCode(ruleFormRef)" link :disabled="btnDisabled">{{ codetitle }}</el-button>
     </el-dialog>
   </div>
 </template>
@@ -35,10 +43,9 @@ const userstore = userStore();
 const { userid } = storeToRefs(userstore)
 const ruleFormRef = ref()
 const dialogVisible = ref(false)
+const btnDisabled = ref(false)
 const loginError = ref(false)
-// const hasLogin = ref(true)
 const codetitle = ref('获取验证码')
-// const userAccount = ref('')
 const rules = reactive({
         phone: [
           {required: true, message: '请输入手机号', trigger: 'blur'},
@@ -51,7 +58,7 @@ const rules = reactive({
         // { pattern: /^\d{6}$/, message: '请输入正确的验证码', trigger: 'blur' }
         // ],
       })
-const loginForm = reactive({phone: '16712753727', code: ''})
+const loginForm = reactive({phone: 16712753727, code: ''})
 const openDialog = () => {
       dialogVisible.value = true;
 }
@@ -65,105 +72,58 @@ const reset = () => {
       //     duration: 3000,
       //   })
     }
-  // methods: {
     const getCode = async (codeForm) => {
       codetitle.value = 30;
+      btnDisabled.value = true
       let codeInterval = setInterval(() => {
-        codetitle.value--;
+        codetitle.value--
         if (codetitle.value == 0) {
           clearInterval(codeInterval);
           codetitle.value = '获取验证码';
+      btnDisabled.value = false
         }
       }, 1000);
-      // const urlencoded = new URLSearchParams()
-      // urlencoded.append('phone', loginForm.phone)
       const  url = 'http://pddzdtest.junchenlun.com/?s=Home.Account.sendCode'
       let config = {
         method: 'post',
-        body: `'phone',loginForm.phone`,
-      };
+        body: {phone: loginForm.phone}
+      }
       let msg = {type: 'myfetch', url, config}
       let res = await  API.sendMessage(msg) //-------------------------------------------------------------------
-      console.log('------myfetchmyfetch--------res: ', res);
-      // console.log(res)
-      // if(res.indexOf('后端服务器错误') != -1) { return Message.error({message: '服务器错误,请联系后端api管理员', duration: 1000, showClose: true})}
-      // console.log(res.data)
-      // fetch(url, config).then((res) => res.json()).then((res) => console.log('成功发送获取验证码请求', res))
-
-      // if(res.data.msg = "非法请求：请输入正确手机号格式"){}
+      console.log('------myfetchmyfetch--------res: ', res)
     }
-  //   submitForm(ruleFormRef) {
-  //     this.$refs.ruleFormRef.validate((valid) => {
-  //       if (valid) {
-  //         let that = this;
-  //         this.login(that);
-  //         // console.log('前端表单校验通过submit!');
-  //       } else {
-  //         console.log('submit error!');
+  const  submitForm = async (ruleFormRef) => {
+     if (!ruleFormRef) return
+      await ruleFormRef.validate(async (valid) => {
+        if (valid) {
+      const url =  'http://pddzdtest.junchenlun.com//?s=Home.Account.codelogin'
+      let config = {
+        method: 'post',
+        body: loginForm
+      }
 
-  //         return false;
-  //       }
-  //     });
-  //   },
-  //   async login(that) {
-  //     let phone = this.loginForm.phone + '';
-  //     let code = this.loginForm.code;
-  //     // console.log('data>222:', data);
-  //     let qs = require('qs');
-  //     let data = qs.stringify({
-  //       phone: phone,
-  //       code: code,
-  //     });
-  //     var config = {
-  //       method: 'post',
-  //       url: 'http://pddzd.junchenlun.com//?s=Home.Account.codelogin',
-  //       headers: {
-  //         'Content-Type': 'application/x-www-form-urlencoded',
-  //         Cookie: 'PHPSESSID=m711i68ebmfcsqav4mrtfi9jg2',
-  //       },
-  //       data: data,
-  //     };
+     let msg = {type: 'myfetch', url, config}
+      let res = await  API.sendMessage(msg) //---------------------
+      console.log('------myfetchmyfetch--------res: ', res)
 
-  //     let res = await 浏览器_跨域axios(config);
-
-  //     console.log(...color1, '短信接口>res:', res);
-  //     // if(res.indexOf('后端服务器错误') != -1) { return Message.error({message: '服务器错误,请联系后端api管理员', duration: 1000, showClose: true})}
-  //     if (res.data.data.user_id) {
-  //       // await 浏览器_set_storage("user_id", res.data.user_id)
-  //       // window.user_id = res.data.user_id
-  //       // await localStorage.setItem('user_id', res.data.user_id);
-  //       await 浏览器_set_storage('user_id', res.data.data.user_id);
-  //       Message.success({message: `成功:登录成功:${res.data.data.user_id}`, duration: 1000, showClose: true});
-  //       //设定此次登录时间戳
-  //       let currentStamp = Date.parse(new Date());
-  //       await 浏览器_set_storage('loginStamp', currentStamp);
-  //       await 浏览器_set_storage('userPhone', phone);
-  //       location.reload();
-  //       // let userID = localStorage.getItem('user_id');
-  //       // window.user_id = userID;
-  //       //  let userID = res.data.user_id
-
-  //       //     window.user_id = userID+"66666"
-
-  //       that.dialogVisible = false;
-  //     } else {
-  //       that.loginError = true;
-  //       setTimeout(() => {
-  //         that.loginError = false;
-  //       }, 4500);
-  //       Message.error({message: `失败:登陆失败:${res.data.msg}`, duration: 1000, showClose: true});
-  //     }
-  //   },
-  //   async getID() {
-  //     // 全局获取user_id并赋值window.user_id
-  //     let userID = await 浏览器_get_storage('user_id');
-  //     if (userID == undefined || userID == '' || userID == null) {
-  //       await 浏览器_set_storage('user_id', '');
-  //       console.log(...color1, 'contentcontentcontent--置空后--userID', userID);
-  //     }
-  //     window.user_id = userID;
-  //     console.log(...color1, '2contentcontentcontent--最新--window.user_id', window.user_id);
-  //   },
+      //--------------------------------------------------------
+      if(res){
+      //如果登录成功,存储userid
+      chrome.storage.local.set({userid: res.data.data.user_id})
+      //--------------------------------------------------------
+      dialogVisible.value = false
+        Message.success({message: `成功:登录成功:${res.data.data.user_id}`, duration: 1000, showClose: true});
+         //设定此次登录时间戳以及过期时间,到期后不存在即为过期
+      let res =  API.sendMessage({type: 'mycookies'})
+      console.log('------mycookiesmycookies--------res: ', res)
+          // console.log('前端表单校验通过submit!');
+        } else {
+        Message.success({message: '抱歉,登录失败,请重新登录', duration: 1000, showClose: true});
+          console.log('submit error!')
+        }
+        }
+      })
+    }
   //   async isExpired() {
   //     //定义限定登录有效期函数,失效则置空user_id
   //     // 设定时间戳有效期
@@ -181,23 +141,9 @@ const reset = () => {
   //     this.getID();
   //   },
   // },
-  // created() {
-  //   this.isExpired();
-  // },
-  // async created() {
 
-  // },
-  const getStorage = () => {
-    chrome.storage.local.get(['userid'], (result) =>{
-      // console.log('result: ----222222222211', result)
-      // console.log('result: ----111111111111', result.userid)
-      result.userid === undefined ? chrome.storage.local.set({userid: ''}) : userStore.userid = result.userid
-    })
-    // console.log('------userStore.userid----------',userstore.try)
-  }
   onMounted(() => {
     API.emitter.on('iwantlogin', openDialog)
-    // getStorage()
     //  console.log('-------chrome------------', chrome);
     })
 </script>

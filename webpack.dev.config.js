@@ -1,10 +1,7 @@
-// Generated using webpack-cli https://github.com/webpack/webpack-cli
-// 
-// const path = require('path');
-// const webpack = require('webpack')
-
 
 const devconfig = {
+    mode: 'development',
+    devtool: 'cheap-source-map',
     devServer: {
         // contentBase: path.join(__dirname, 'xzz2022'),   // 告诉服务器从哪里提供内容(默认当前工作目录)
         // static: {
@@ -62,7 +59,6 @@ const devconfig = {
         //   }
         // }
       }
-
 };
 
 module.exports = devconfig

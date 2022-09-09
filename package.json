@@ -5,7 +5,7 @@
   "main": "content.js",
   "scripts": {
     "start": "webpack server",
-    "build": "webpack --mode=production --node-env=production",
+    "build": "webpack --env=production --mode=production",
     "watch": "webpack --watch",
     "serve": "webpack serve"
   },

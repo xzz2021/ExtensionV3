@@ -139,7 +139,7 @@ export default {
   methods: {
     isJump(index,event) {
       if (index > 4) {
-        ElMessage.success({message: `功能正在开发中...敬请期待`, duration: 2500, offset: 450, position: 'top-right'})
+        ElMessage.success({message: `功能正在开发...`, duration: 1500, offset: 450, position: 'top-right',center: true, grouping: true,})
         console.log("999")
         // event.preventDefault()  //阻止跳转
        return event.preventDefault()  //阻止跳转
@@ -168,7 +168,7 @@ body {
 
   // background: url("/img/mask.png") no-repeat;
   .header {
-    margin-bottom: 20px;
+    margin: 5px 0 20px 0;
 
     .section {
       text-align: center;
@@ -251,8 +251,4 @@ body {
   }
 }
 
-* {
-  padding: 0;
-  margin: 0;
-}
 </style>

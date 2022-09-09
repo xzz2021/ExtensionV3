@@ -39,7 +39,7 @@
             cursor: pointer;
             
             // margin-right: 20px;
-            .meicon-logo {
+            .jclicon {
               margin: 0 4px 0 10px;
               width: 16px;
   
@@ -86,9 +86,10 @@
     footer {
       margin: 12px 0;
       padding-bottom: 10px;
+  
       .version {
         margin: 0 auto;
-        width: 55px;
+        width: 74px;
         height: 20px;
         font-size: 14px;
         font-family: $fontYaHei;
@@ -99,11 +100,12 @@
     }
   }
   
-  :deep(.el-dropdown-menu__item:hover) {
+  .el-dropdown-menu__item:hover {
     background-color: #ffa9391f;
     color: $jclbg;
+  
   }
 
-// .el-dropdown.is-disabled{
-//   color: #606266;
-// }
+  :deep(.el-dropdown [disabled] ){
+    color: #606266;
+}

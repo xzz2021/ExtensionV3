@@ -21,7 +21,6 @@ const { ElementPlusResolver } = require('unplugin-vue-components/resolvers')
 
 
 const comconfig = {
-    mode: 'development',
     // target: 'node',
     // entry: ['./main.js','./content.js','./inject.js'],    //数组形式会被整合打包到一个输出文件//单独导出需要使用对象
     entry: {
@@ -41,6 +40,9 @@ const comconfig = {
     stats: {
         orphanModules: true,
       },
+    //   watchOptions: {
+    //     ignored: ['**/node_modules/', '**/bgc/background.js'],
+    //   },
     plugins: [
         new HtmlWebpackPlugin({    // 可以实现自动生成新的html并自动导入js
             template: './src/popup/index.html',  // 指定元html文件的位置
@@ -61,6 +63,34 @@ const comconfig = {
         ]}),
         //实现elementplus自动按需加载
         AutoImport({
+            include: [
+                /\.[tj]sx?$/, // .ts, .tsx, .js, .jsx
+                /\.vue$/, /\.vue\?vue/, // .vue
+                // /\.md$/, // .md
+              ],
+              imports: [
+                // presets
+                'vue',
+                'vue-router',
+                // custom
+                // {
+                //   '@vueuse/core': [
+                //     // named imports
+                //     'useMouse', // import { useMouse } from '@vueuse/core',
+                //     // alias
+                //     ['useFetch', 'useMyFetch'], // import { useFetch as useMyFetch } from '@vueuse/core',
+                //   ],
+                //   'axios': [
+                //     // default imports
+                //     ['default', 'axios'], // import { default as axios } from 'axios',
+                //   ],
+                //   '[package-name]': [
+                //     '[import-names]',
+                //     // alias
+                //     ['[from]', '[alias]'],
+                //   ],
+                // },
+              ],
             resolvers: [ElementPlusResolver()],
           }),
         Components({ 
@@ -82,8 +112,6 @@ const comconfig = {
         //   new webpack.HotModuleReplacementPlugin()
     ],
     // globals: {'$': true},
-    // devtool: 'eval-source-map',
-    devtool: 'cheap-source-map',
     // externals: {}, 忽略指定的模块不进行打包
     module: {  
         rules: [
@@ -105,12 +133,13 @@ const comconfig = {
                     },
                     {
                         test: /\.css$/i,
-                        // use: ["style-loader", stylesHandler,'css-loader'],  //实现样式代码整合在单独一个文件里, 可以取代style-loader
+                        // use: [MiniCssExtractPlugin.loader,'css-loader'],  //实现样式代码整合在单独一个文件里, 可以取代style-loader
                         use: ["style-loader", 'css-loader'],  //实现样式代码整合在单独一个文件里
                     },
                     {
                         test: /\.s[ac]ss$/i,
                         use: ["style-loader", 'css-loader','sass-loader'],  //实现样式代码整合在单独一个文件里  //添加sassloader
+                        // use: ["style-loader", 'css-loader','sass-loader'],  //实现样式代码整合在单独一个文件里  //添加sassloader
                     },
                     {
                         test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,   //实现其他文件类型整合在js里而不是带hash输出独立文件
@@ -139,14 +168,17 @@ const comconfig = {
 };
 
 
-module.exports = () => {
-    
+module.exports = (env,argv) => {
+    //-----mode != production----------
     if (true) {
         let config = {...comconfig, ...devconfig }
         return config;
     
     }else{
-        let config = Object.assign(comconfig, proconfig, {plugins:[...comconfig.plugins,...proconfig.plugins]})
+        //------合并plugins方案-----------------
+        // let config = Object.assign(comconfig, proconfig, {plugins:[...comconfig.plugins,...proconfig.plugins]})
+        //----------直接替换默认com的plugins---------因为生产模式不需要监听页面------------
+        let config = Object.assign(comconfig, proconfig)
         return config;
     }
 };

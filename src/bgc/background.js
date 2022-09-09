@@ -3,10 +3,10 @@
 
 
 
-
+//---------------引入分文件的所有自定义api-----------
 import{ bgcApi as API } from './api/index'
 // console.log('bgcApi: ', API);
-
+//----------------------------------------------------------
 
 
 
@@ -18,61 +18,58 @@ import{ bgcApi as API } from './api/index'
 //-----------------4444如果不是dev页面--(???是否需要判断--扩展程序---页面)-------则执行刷新-------------------
 
 
-// chrome.runtime.onInstalled.addListener(() => {   //-----不能等待加载---否则首次启动浏览器必须手动点击chrome.runtime.reload()才能执行
+ //--------------开发阶段---------编译后-------自动刷新------------------------------------
   chrome.tabs.onUpdated.addListener(
     (tabId, changeInfo, tab) => {
      if(tab.title == "xzz2022" && tab.status == "complete") {
-      // console.log('---------tab.title: ------判定成功------')
-    chrome.tabs.query({active: true},
-    ([tab]) => {
+    chrome.tabs.query({active: true},([tab]) => {
       // console.log('---------------------tab: ', tab);
     if(tab.title != "xzz2022" && tab.url != "chrome://newtab/"){
           chrome.runtime.reload()
           chrome.tabs.reload()
-      // console.log('---------tab.title: ------不应该刷新!!!!!!!!!!!------')
         }})}})
-      // })
+//-------------------------------------------------------------------
 
-//----------------监听登录状态的改变----------------------如果改变发送事件----------
+
+//----------------监听登录状态的改变----------------如果改变发送事件----------
+let matches = ["https://*.1688.com/*", "https://*.tmall.com/*", "https://*.jd.com/*","https://www.google.com/"]
+//let matches = '<all_urls>'
       chrome.storage.onChanged.addListener(function (changes, namespace) {
         for (let [key, { oldValue, newValue }] of Object.entries(changes)) {
-          // console.log('----------key-------changed-------: ', key);
-          // key == 'userid' ? chrome.runtime.sendMessage('loginEvent') : console.log('----------key-------changed-----执行shibai--: ');
           if(key == 'userid') {
-            chrome.tabs.query({url:'<all_urls>'},(tabs)=>{
-              console.log('------tab---------res: ', tabs)
+            chrome.tabs.query({url:matches},(tabs)=>{
               let l = tabs.length
               for(let i = 0; i < l; i++){
-                chrome.tabs.sendMessage(
-                  tabs[i].id, 'loginEvent', ()=> {
-                    console.log(i + '----------key-------changed-----发送----成功-: ')
-                  }
-                )
-              }
-             })
-            }
-        }
-      })
+                chrome.tabs.sendMessage(tabs[i].id, 'loginEvent', ()=> {})
+              }})}}})
+//-----------------------------------------------------------------------
 
 
 // 约定传送信息类型,根据类型执行相应函数
 
 //----------------监听所有发送的信息-----根据信息类别调用引入的函数---------------
       chrome.runtime.onMessage.addListener(
-        async (message, sender, sendResponse) => {
-          console.log('----------------message: ----------------', message)
-          switch(message.type){
-                case 'myfetch': let res = await API.myfetch(message.url,message.config)
-                                console.log('res: ', res)
-                                sendResponse({status: true})
-                    break;
-                case 'download': console.log('----------------download: ---------downloaddownload-------')
-                    break;  
-                case '666': console.log('----------------message: ---------666666666666666-------')
-                    break;    
-                default: sendResponse({status: false})  
+        (message, sender, sendResponse) => {
+          // console.log('----------------message: ----------------', message)
+          if(message.type == 'myfetch'){
+             (async ()=> {
+                  let res = await API.myfetch(message.url,message.config)
+                     console.log('-----api----fetch-----res: ', res)
+                     sendResponse(res)
+                })()
+                return true
             }
-            sendResponse({status: true})
+
+            if(message.type == 'mycookies'){
+                let currentStamp = Date.parse(new Date())
+                API.Cookies.set('loginStamp',currentStamp,{maxAge:10*24*3600})
+                      sendResponse('cookies set success')
+             }
+            
+           
         }
       )
+//-----------------------------------------------------------------------------------------
+
+
 

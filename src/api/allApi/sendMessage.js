@@ -13,12 +13,12 @@ option = {
 const sendMessage = async (message) => {
     return new Promise((resolve, reject) => {
         // let message = JSON.stringify(message)
-        if(message.type == undefined) return resolve('发送的请求消息类型不合法')
+        if(message.type == undefined) return reject('发送的请求消息类型不合法')
         // if(message.type == undefined) return reject('发送的请求消息类型不合法')
-        chrome.runtime.sendMessage( message, function(response) {
-            console.log('-----------option: -----message-------', message)
+        chrome.runtime.sendMessage( message, (response) => {
+            console.log('-----------option: -----response-------', response)
             // console.log('response: ', response);
-            resolve('发送请求成功')
+            resolve(response)
           })
     })
 }
@@ -26,21 +26,5 @@ export default {sendMessage}
 
 
 
-
-
-// export const sendMessage = async (option) => {
-//     return new Promise((reslove, reject) => {
-//         chrome.runtime.sendMessage(option, function(response) {
-//             // console.log(response)
-//             // switch(option.type){
-//             //     case 'myfetch': ''
-//             //         break;
-//             //     case 'download': ''
-//             //         break;    
-//             // }
-//           });
-//     })
-
-// };
 
 

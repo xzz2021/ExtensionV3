@@ -1,7 +1,7 @@
 
 
 const qs = require('qs')
-const urlencoded = new URLSearchParams()
+// const urlencoded = new URLSearchParams()
 
     //对Fetch的封装：让其支持params/请求主体的格式化/请求地址的公共前缀 
 
@@ -12,11 +12,14 @@ inital = {
     body: null,
     headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
-        "Access-Control-Allow-Origin": "*"
+        // "Access-Control-Allow-Origin": "*",
+        // "Access-Control-Allow-Credentials": "true",
     },
     credentials: true,
     responseType: 'JSON',
-    cache: 'no-cache'
+    cache: 'no-cache',
+    redirect: 'follow'
+
 };
 
 // 校验是否为纯粹的对象
@@ -29,10 +32,11 @@ Ctor = proto.hasOwnProperty('constructor') && proto.constructor;
 return typeof Ctor === "function" && Ctor === Object;//构造函数是Object
 };
 
-// 发送数据请求
-const myfetch = function request(url, config) {
+// -----------------------------发送数据请求-------------------------------
+const myfetch = (url, config) => {
+    return  new Promise((resolve, reject) => {
 // 合并配置项{不要去更改inital中的内容}
-if(config == null || typeof config !== "object") config = {}//确保config肯定是对象
+(config == null || typeof config !== "object") ? config = {}: null//确保config肯定是对象
 if (config.headers && isPlainObject(config.headers)) {
     // 单独的给HEADERS先进行深度合并
     config.headers = Object.assign({}, inital.headers, config.headers);
@@ -45,7 +49,7 @@ let {
     credentials,
     responseType,
     cache
-} = Object.assign({}, inital, config);//和饼config
+} = Object.assign({}, inital, config);//合并config
 
 // 处理URL{格式校验 & 公共前缀 & 拼接params中的信息到URL的末尾}
 if (typeof url !== "string") throw new TypeError( ` ${url} is not an string! ` )
@@ -54,7 +58,7 @@ if (params != null) {//不是null和undefined,存在params
     if (isPlainObject(params)) {
         params = qs.stringify(params);
     }
-    url +=  ` ${url.includes('?')?'&':'?'}${params} ` ;//拼接
+    url +=  `${url.includes('?')?'&':'?'}${params}` ;//拼接
 }
 
 // 处理请求主体的数据格式{根据headers中的Content-Type处理成为指定的格式}
@@ -62,6 +66,7 @@ if (body != null) {
     if (isPlainObject(body)) {
         let contentType = headers['Content-Type'] || 'application/json';//默认application/json
         if (contentType.includes('urlencoded')) body = qs.stringify(body);
+        // if (contentType.includes('urlencoded')) body = body;
         if (contentType.includes('json')) body = JSON.stringify(body);
     }
 }
@@ -75,21 +80,24 @@ method = method.toUpperCase();
 responseType = responseType.toUpperCase();
 config = {
     method,
-    credentials,
+    // credentials,
     cache,
-    headers
+    headers,
+    body
 };
-  /^(POST|PUT|PATCH)$/i.test(method) ? config.body = body : null;
+//   /^(POST|PUT|PATCH)$/i.test(method) ? config.body = body : config.body = null;
 //   console.log('-----ffffffff-------urlurlurl----------',url);
-  console.log('-----fffff----configconfigconfig----------',config);
-return fetch(url, config).then(function onfulfilled(response) {
+//-----------------------配置代理url-------------------------
+ let url2 = `http://xzz2022.top:666/${url}`
+ fetch(url2, config).then((response) => {
+    console.log('response:------------- ', response)
     // 走到这边不一定是成功的：
     // Fetch的特点的是，只要服务器有返回结果，不论状态码是多少，它都认为是成功
     let {
         status,
         statusText
     } = response;
-    if (status >= 200 && status < 400) {
+    if (response.ok) {
         // 真正成功获取数据
         let result;
         switch (responseType) {
@@ -107,32 +115,23 @@ return fetch(url, config).then(function onfulfilled(response) {
                 break;
         }
         return result;
+    }else{
+        reject('ERROR CODE 异常', status, '-----异常提示----',statusText)
+        // throw new TypeError('ERROR CODE 异常', status)
     }
     // 应该是失败的处理
-    return Promise.reject({
-        code: 'STATUS ERROR',
-        status,
-        statusText
-    });
-}).catch(function onrejected(reason) {
-    // @1:状态码失败
-    if (reason && reason.code === "STATUS ERROR") {
-        switch (reason.status) {
-            case 401:
-                break;
-                // ...
-        }
-    }
+    // return Promise.reject({
+    //     code: 'STATUS ERROR',
+    //     status,
+    //     statusText
+    // });
+}).then(res => {
+    resolve(res)
 
-    // @2:断网
-    if (!navigator.onLine) {
-        // ...
-    }
+}).catch((reason) => {
+    reject(('网络接口请求异常----或者返回被浏览器安全策略拦截----具体原因是:',reason))
+    // throw new TypeError('网络接口请求异常----或者返回被浏览器安全策略拦截----具体原因是:',reason)
 
-    // @3:处理返回数据格式失败
-    // ...
-
-    return Promise.reject(reason);
 })
-}
+    })}
 export default {myfetch}
