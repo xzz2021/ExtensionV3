@@ -141,10 +141,9 @@
     <footer>
       <div class="version">0818</div>
     </footer>
-    <el-button type="primary" @click="con">登录</el-button>
+    <el-button type="primary" @click="con">下载</el-button>
     <el-button type="primary" @click="con2">退出</el-button>
       <!-- <PagesTmallMyDoc /> -->
-      <ComponentsLoginPanel />
 <div >
 </div>
     </div>
@@ -164,9 +163,14 @@ const msg = reactive({type: '666', msg:'sss'})
 let currentHref = reactive('')
 const diagnosisOption = reactive([{value: 2}, {value: 5}, {value: 10}, {value: 20}])
 const commentOption = reactive([{value: 20}, {value: 50}, {value: 100}, {value: 200}])
-    const con = () => {
+    const con =async () => {
       // chrome.storage.local.set({userid: '66666666666'})
       // $('#logo a').attr('href','http://note.xzz2022.top')
+      //--------------------------------
+      // let msg = {type: 'downloads', url: 'https://junchenlunoffice.oss-cn-shenzhen.aliyuncs.com/plugs/dist.7z'}
+      // let res = await API.sendMessage(msg)
+      // console.log('res:----------下载------ ', res);
+      //--------------------------------------
     }
     const con2 = () => {
       chrome.storage.local.set({userid: ''})

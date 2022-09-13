@@ -15,9 +15,9 @@ import '../css/style'
 //------------------------
 
 //---------全局引入vxe-table----------------
-import 'xe-utils'
-import VXETable from 'vxe-table'
-import 'vxe-table/lib/style.css'
+// import 'xe-utils'
+// import VXETable from 'vxe-table'
+// import 'vxe-table/lib/style.css'
 //-------------开发体积2m------打包体积550k-----------
 //--------------按需引入----开发体积1.3m----------打包体积500k----
 //-------所以干脆全局--(初始cli才400k)--jq(打包90k)+vue+ele+pinia---------
@@ -30,8 +30,8 @@ createEntry(LoginPanel,'jclogin')
 //--------------------------------------------------
 
 //-----popup页面----------调试popup及打包上线时需要挂载此处---------------------------<<---<<---<<----<<-----<<----<<----<<---<<<--------------
-// import popup from '../popup/app.vue'
-// createApp(popup).mount('#pop')
+import popup from '../popup/app.vue'
+createApp(popup).mount('#pop')
 //-------------------------------------------------
 
 //-------------------各平台实例引入----------------

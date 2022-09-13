@@ -60,10 +60,14 @@ let matches = ["https://*.1688.com/*", "https://*.tmall.com/*", "https://*.jd.co
                 return true
             }
 
-            if(message.type == 'mycookies'){
-                let currentStamp = Date.parse(new Date())
-                API.Cookies.set('loginStamp',currentStamp,{maxAge:10*24*3600})
-                      sendResponse('cookies set success')
+            if(message.type == 'mycookies'){//--------------需调用谷歌cookie api才能设定-------------
+                // let currentStamp = Date.parse(new Date())
+                // API.Cookies.set('loginStamp','登录有效期',{maxAge:10*24*3600})
+                //       sendResponse('cookies set success')
+             }
+             if(message.type == 'downloads'){
+              chrome.downloads.download({url: message.url},()=>{})
+              sendResponse('下载完成')
              }
             
            
