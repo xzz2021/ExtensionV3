@@ -3,6 +3,7 @@
 const webpack = require('webpack')
 // const RemoveConsolePlugin = require('./RemoveConsolePlugin');  //自己自定义去除所有console.log的插件
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin")
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
@@ -14,10 +15,13 @@ const TerserWebpackPlugin = require('terser-webpack-plugin')
 // webpack.sourceMapDevToolPlugin 可以配合 FileManagerPlugin管理生成后的map文件
 
 
-// const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin');
+const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader').VueLoaderPlugin
 // const WorkboxWebpackPlugin = require('workbox-webpack-plugin')  //实现PWA渐进式网络开发
 
+const ZipWebpackPlugin = require('zip-webpack-plugin')
+
+// const CompressionWebpackPlugin = require('compression-webpack-plugin')
 
 // const isProduction = process.env.NODE_ENV == 'production';
 
@@ -34,12 +38,30 @@ const proconfig = {
     //     concatenateModules: true,    // 尽可能合并每一个模块到一个函数中  减少体积和运行效率
         minimize: true,
         minimizer: [   //  把未引用的块剔除掉     压缩
-        new TerserWebpackPlugin({
-            extractComments: false,      //  不生成LICENSE文件
+        new TerserWebpackPlugin({//--------------详细配置----------https://github.com/terser/terser
+            extractComments: false,      //  不生成LICENSE文件(提取注释)
+            terserOptions: {
+                format: {
+                  comments: false,//删除所有注释
+                },
+                compress: {
+                  drop_console: true, // 移除所有console.log
+                }
+              },
         }),  ///3333所以要再次引用一次内置的JS压缩插件
-        // new OptimizeCssAssetsWebpackPlugin(),    //实现压缩css 代码  
-            /// //    111不能直接放在plugins里,因为会把非css文件都压缩
-            //   //2222而放在此处minimize又会覆盖官方内置的JS压缩插件
+        new CssMinimizerPlugin(
+            {
+                // parallel: 4,///启用多进程
+                // minimizerOptions: {
+                //     preset: [
+                //       "default",
+                //       {
+                //         discardComments: { removeAll: true },//移除所有注释
+                //       },
+                //     ],
+                //   },
+            }
+        )// 压缩后由90k变为84k
         ]     
     },
     // devtool: 'none',//无需定义,默认值就是none
@@ -53,9 +75,25 @@ const proconfig = {
             {from: 'public/manifest.json', to: './manifest.json'}
         ]}),
         // new MiniCssExtractPlugin(),    // 实现css文件打包
-
+        // new OptimizeCssAssetsWebpackPlugin()
         // new RemoveConsolePlugin()
-    ]
+        // new CompressionWebpackPlugin() //压缩指定文件生成压缩包
+        new ZipWebpackPlugin(  //打包文件夹自动输出压缩包文件
+           {
+            filename: 'xzz.zip',
+            // extension: 'zip',
+            // fileOptions: {
+            //     mtime: new Date(),
+            //     mode: 0o100664,
+            //     compress: true,
+            //     forceZip64Format: false,
+            //   },
+           }
+        )
+
+    ],
+    // externals: {}, //在生产模式引入指定模块外链cdn的情况下,忽略指定的模块不进行打包
+
 }
 
 module.exports = proconfig

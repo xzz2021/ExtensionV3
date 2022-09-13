@@ -82,9 +82,11 @@ const comconfig = {
         Components({ 
             dirs:['src'],
             directoryAsNamespace: true,
+            // globalNamespaces: [],
             resolvers: [ElementPlusResolver() ],
+            exclude: [/[\/]node_modules[\/]/, /[\/].git[\/]/, /[\/].nuxt[\/]/],
         }),
-        new webpack.ProvidePlugin({  // 在函数上下文环境中注入各种库---缺点:无法全局window引用---使用expose-loader解决
+        new webpack.ProvidePlugin({  // 在函数上下文环境中注入第三方库---缺点:无法全局window引用---使用expose-loader解决
         $: 'jquery',
         _: 'lodash'
         }),
@@ -94,9 +96,9 @@ const comconfig = {
             __VUE_OPTIONS_API__: true,
             __VUE_PROD_DEVTOOLS__: false,
           }),
+        
         //   new webpack.HotModuleReplacementPlugin()
     ],
-    // externals: {}, 忽略指定的模块不进行打包
     module: {  
         rules: [
             {
@@ -129,6 +131,7 @@ const comconfig = {
                         use: [MiniCssExtractPlugin.loader,'css-loader'],  //实现样式代码整合在单独一个文件里, 可以取代style-loader
                         // use: ["style-loader", 'css-loader'],  
                     },
+                    //此处可以引入移动端自适应px2rem-loader
                     {
                         test: /\.s[ac]ss$/i,
                         use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],  //实现样式代码整合在单独一个文件里, 可以取代style-loader

@@ -7,11 +7,12 @@ const devconfig = {
     mode: 'development',
     devtool: 'cheap-module-source-map',
     plugins: [
-      //---------------为了避免磁盘重复读写-----仅在首次使用时打开------------
-      // new CopyWebpackPlugin({  //实现静态文件的直接复制
-      //       patterns: [             // 需要拷贝的目录或者路径
-      //       {from: 'public', to: './'}
-      //   ]}),
+    //-------为了避免磁盘重复读写-----仅在首次使用时打开------dev-server会自动读取public目录里的文件---故index.html无需引入---
+        // new CopyWebpackPlugin({  //实现静态文件的直接复制
+        //     patterns: [             // 需要拷贝的目录或者路径
+        //     {from: 'public/logo.png', to: './logo.png'},
+        //     {from: 'public/manifest.json', to: './manifest.json'}
+        // ]}),
     ],
     // watch: true,  // 监听源文件的变动,重新编译
     // watchOptions: {}, //
