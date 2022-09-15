@@ -27,14 +27,19 @@
         </el-dropdown>
       </div>
       <div>
-        <el-dropdown placement="right-start">
+        <el-dropdown placement="right-start" @command="imgDownload">
           <span class="el-dropdown-link">
             <div class="jclicon"><i class="xzzicon-tupian"></i></div>
-            <div class="title" @click="imageDownload">图片下载</div>
+            <div class="title" >图片下载</div>
             <div class="arrow-right-czp"><i class=""></i></div>
           </span>
           <template #dropdown>
-            <el-dropdown-menu>
+             <el-dropdown-menu >
+              <el-dropdown-item :command="item.arg" v-for="item in pictureOption" :key="item.value">
+                <div class="drop-menu">
+                  {{ item.value }}
+                </div>
+              </el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -43,26 +48,42 @@
         <el-dropdown placement="right-start" @command="commentDownload">
           <span class="el-dropdown-link">
             <div class="jclicon"><i class="xzzicon-pinglun"></i></div>
-            <div class="title">评论下载</div>
+            <div class="title">有图评价下载</div>
             <div class="arrow-right-czp"><i class="xzzicon-youjt"></i></div>
           </span>
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item v-for="item in commentOption" :key="item.value" :command="item.value">
-                <div class="drop-menu"> 评价数量前{{ item.value }} </div>
+                <div class="drop-menu"> 评价前{{ item.value }} </div>
               </el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
       </div>
       <div>
-        <el-dropdown placement="right-start">
+        <el-dropdown placement="right-start" @command="commentDownload1">
+          <span class="el-dropdown-link">
+            <div class="jclicon"><i class="xzzicon-pinglun"></i></div>
+            <div class="title">无图评价下载</div>
+            <div class="arrow-right-czp"><i class="xzzicon-youjt"></i></div>
+          </span>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item v-for="item in commentOption1" :key="item.value" :command="item.value">
+                <div class="drop-menu"> 评价前{{ item.value }} </div>
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+      </div>
+      <div>
+        <el-dropdown >
           <span class="el-dropdown-link">
             <div class="jclicon"><i class="xzzicon-tupian"></i></div>
             <div class="title" @click="videoDownload">视频下载</div>
             <div class="arrow-right-czp"><i class=""></i></div>
           </span>
-          <template #dropdown> </template>
+          <!-- <template #dropdown> </template> -->
         </el-dropdown>
       </div>
       <!-- <div>
@@ -115,7 +136,7 @@
       <div>
           <el-dropdown >
             <span class="el-dropdown-link">
-              <div class="jclicon" style="margin: 0 4px 2px 10px;"><i :class="userid ? 'xzzicon-exchange' : 'xzzicon-login'"></i></div>
+              <div class="jclicon"><i :class="userid ? 'xzzicon-exchange' : 'xzzicon-login'"></i></div>
               <div v-if="userid" class="title" @click="changeAccount">切换账号</div>
               <div v-else class="title" @click="goTOLogin">账号登录</div>
               <div class="arrow-right-czp"><i class=""></i></div>
@@ -128,7 +149,7 @@
         <div v-if="userid">
           <el-dropdown >
             <span class="el-dropdown-link">
-              <div class="jclicon" style="margin: 0 4px 2px 10px;"><i class="xzzicon-logout"></i></div>
+              <div class="jclicon" ><i class="xzzicon-logout"></i></div>
               <div class="title" @click="logout">退出登录</div>
               <div class="arrow-right-czp"><i class=""></i></div>
             </span>
@@ -141,13 +162,9 @@
     <footer>
       <div class="version">0818</div>
     </footer>
-    <el-button type="primary" @click="con">下载</el-button>
-    <el-button type="primary" @click="con2">退出</el-button>
-      <!-- <PagesTmallMyDoc /> -->
-      <!-- <MyDoc /> -->
-<div >
-</div>
     </div>
+    <ComponentsLoginPanel />
+    <ComponentsWordsTool />
 </template>
 
 
@@ -158,12 +175,23 @@ import { storeToRefs } from 'pinia'
 import { userStore } from '../../stores/userStore'
 
 const userstore = userStore();
-const { userid } = storeToRefs(userstore)
+const { userid, userToken } = storeToRefs(userstore)
 
 const msg = reactive({type: '666', msg:'sss'})
 let currentHref = reactive('')
+let curCookies = reactive('')
+
 const diagnosisOption = reactive([{value: 2}, {value: 5}, {value: 10}, {value: 20}])
 const commentOption = reactive([{value: 20}, {value: 50}, {value: 100}, {value: 200}])
+const commentOption1 = reactive([{value: 20}, {value: 50}, {value: 100}, {value: 200}])
+const pictureOption  = reactive([
+        {value: '全部下载(带目录)', arg: 'allwith'},
+        {value: '全部下载', arg: 'all'},
+        {value: '主图下载', arg: 'main'},
+        {value: 'sku图下载', arg: 'sku'},
+        {value: '详情图下载', arg: 'detail'},
+      ])
+
     const con =async () => {
       // chrome.storage.local.set({userid: '66666666666'})
       // $('#logo a').attr('href','http://note.xzz2022.top')
@@ -173,30 +201,119 @@ const commentOption = reactive([{value: 20}, {value: 50}, {value: 100}, {value: 
       // console.log('res:----------下载------ ', res);
       //--------------------------------------
     }
-    const con2 = () => {
-      chrome.storage.local.set({userid: ''})
-      
+    const imgDownload = async (arg) =>{
+          if (userid == '') return API.emitter.emit('iwantlogin')
+      if (!(currentHref.indexOf('item.jd') > 1)) {
+        return this.ElMessage.error('请进入商品详情页,再点击开始下载');
+      }
+      let config = {
+        method: 'post',
+        url: '',
+        data: {
+          url: currentHref,
+          account: userid,
+          cookies: curCookies,
+          num: 66,
+        }, 
+      }
+      switch(arg){
+        case 'allwith': config.url = 'http://119.23.254.170:5000/api/jd/startPicture'
+          break
+        case 'all': config.url = 'http://119.23.254.170:5000/api/jd/startPictureNoDir'
+          break
+        case 'main': config.url = 'http://119.23.254.170:5000/api/jd/startPictureMain'
+          break
+        case 'sku': config.url = 'http://119.23.254.170:5000/api/jd/startPictureSku'
+          break
+        case 'detail': config.url = 'http://119.23.254.170:5000/api/jd/startPictureDetail'
+          break
+      }
+      // 'http://119.23.254.170:5000/api/jd/startCommentsLetter'
+      // this.BUS.progressPanel = true;
+      console.log('------开始请求key----------');
+      // console.log('config: ', config);
+      let msg = {type: 'myfetch', config}
+      let res = await  API.sendMessage(msg) //---------------------
+      console.log('------myfetchmyfetch--------res: ', res)
+      console.log('-------------taskId----有返回------------', res);
+      if (res.data.status == 'success') {
+        let config2 = {
+          method: 'post',
+          url: 'http://119.23.254.170:5000/api/jd/getPicture',
+          data: {
+            taskId: res.data.taskId,
+          }, //qs将对象 序列化成URL的形式，以&进行拼接
+        };
+        const myInterval = setInterval(async () => {
+          this.percentage >= 90 ? '' : (this.percentage += 9);
+          let res2 = await 浏览器_跨域axios(config2);
+          console.log('---------开始爬取------有返回------------', res2);
+          if (res2.data.status == 'stop' && res2.data.link != '') {
+            clearInterval(myInterval);
+            console.log('开始下载--------------');
+            浏览器_url表格链接下载(res2.data.link);
+            this.BUS.progressPanel = false;
+            this.percentage = 0;
+          }
+          if (res2.data.status == 'stop' && res2.data.link == '') {
+            clearInterval(myInterval)
+          this.percentage = 0
+          this.BUS.progressPanel = false
+            console.log("获取文件出错,请重新下载")}
+        }, 6000);
+      } else {
+        clearInterval(myInterval);
+        this.percentage = 0;
+        this.BUS.progressPanel = false;
+        console.log('获取task出错,请重新下载');
+      }
     }
     const videoDownload = async () =>{
     if (userid == '') return API.emitter.emit('iwantlogin')
     if (!(currentHref.indexOf('item.jd') > 1)) {
         return alert('请进入商品详情页,再点击开始下载')
       }
-      
         jq('.video-icon').click()
         let url = jq('video source').attr('src')
-        // if(src == undefined) return  this.$message({ message: '当前商品没有视频', type: 'error', duration: 1500,})
+        if(src == undefined) return  ElMessage.error({ message: '当前商品没有视频',  duration: 1500,})
         let msg = {type: 'download', url}
       let res = await  API.sendMessage(msg) 
-      console.log('res: ', res)
+      // console.log('res: ', res)
+      res && ElMessage.success({ message: '视频下载完成', duration: 1500,})
+    }
+
+
+    const keyWordTool = () =>{
+    console.log('发送成功');
+      API.emitter.emit('iwantkey')
+    }
+    const  backToHome =  () => {
+      window.open('https://www.jd.com/')
+    }
+    const changeAccount = () => {
+      API.emitter.emit('iwantlogin')
+    }
+    const goTOLogin = () => {
+      API.emitter.emit('iwantlogin')
+    }
+    const logout = () => {
+      chrome.storage.local.set({userid: ''})
+      ElMessage.success('账号退出成功!')
     }
   const getStorage = () => {
     chrome.storage.local.get(['userid'], (result) =>{
       result == {} ? chrome.storage.local.set({userid: ''}) : userstore.userid = result.userid
     })
+    chrome.storage.local.get(['userPhone'], (result) =>{
+      result == {} ? chrome.storage.local.set({userPhone: ''}) : userstore.userPhone = result.userPhone
+    })
+    chrome.storage.local.get(['userToken'], (result) =>{
+      result == {} ? chrome.storage.local.set({userToken: ''}) : userstore.userToken = result.userToken
+    })
   }
   onMounted(() => {
     currentHref = window.location.href
+    curCookies = "{'" + document.cookie + "'}"
     // console.log('window.location.href: ', window.location.href)
   })
    onBeforeMount(() => {
@@ -205,9 +322,413 @@ const commentOption = reactive([{value: 20}, {value: 50}, {value: 100}, {value: 
       sendResponse({status: true})
       })
     getStorage()
-
    })
-  
+  /*
+export default {
+  computed: { ...BUS_mapState({ BUS: (state) => state }) },
+  components: 动态子组件,
+  data() {
+    return {
+      // dialogShow: false,
+      userId: '',
+      
+      percentage: 0,
+      currentHref: '',
+      imageData: [{value: 'all'}],
+      countdown: 90,
+      cookies: '',
+      userToken: '',
+    };
+  },
+  methods: {
+    async imgDownload(arg){
+      if (this.userId == '') return this.$myBus.$emit('iwantlogin');
+      if (!(this.currentHref.indexOf('item.jd') > 1)) {
+        return this.ElMessage.error('请进入商品详情页,再点击开始下载');
+      }
+      let config = {
+        method: 'post',
+        url: '',
+        data: {
+          url: this.currentHref,
+          account: this.userId,
+          cookies: this.cookies,
+          num: 66,
+        }, //qs将对象 序列化成URL的形式，以&进行拼接
+      }
+      // {value: '全部下载(带目录)', arg: 'allwith'},
+      //   {value: '全部下载', arg: 'all'},
+      //   {value: '主图下载', arg: 'main'},
+      //   {value: 'sku图下载', arg: 'sku'},
+      //   {value: '详情图下载', arg: 'detail'},
+      switch(arg){
+        case 'allwith': config.url = 'http://119.23.254.170:5000/api/jd/startPicture'
+          break
+        case 'all': config.url = 'http://119.23.254.170:5000/api/jd/startPictureNoDir'
+          break
+        case 'main': config.url = 'http://119.23.254.170:5000/api/jd/startPictureMain'
+          break
+        case 'sku': config.url = 'http://119.23.254.170:5000/api/jd/startPictureSku'
+          break
+        case 'detail': config.url = 'http://119.23.254.170:5000/api/jd/startPictureDetail'
+          break
+      }
+      // 'http://119.23.254.170:5000/api/jd/startCommentsLetter'
+      this.BUS.progressPanel = true;
+      console.log('------开始请求key----------');
+      // console.log('config: ', config);
+      let res = await 浏览器_跨域axios(config);
+      console.log('-------------taskId----有返回------------', res);
+      if (res.data.status == 'success') {
+        let config2 = {
+          method: 'post',
+          url: 'http://119.23.254.170:5000/api/jd/getPicture',
+          data: {
+            taskId: res.data.taskId,
+          }, //qs将对象 序列化成URL的形式，以&进行拼接
+        };
+        const myInterval = setInterval(async () => {
+          this.percentage >= 90 ? '' : (this.percentage += 9);
+          let res2 = await 浏览器_跨域axios(config2);
+          console.log('---------开始爬取------有返回------------', res2);
+          if (res2.data.status == 'stop' && res2.data.link != '') {
+            clearInterval(myInterval);
+            console.log('开始下载--------------');
+            浏览器_url表格链接下载(res2.data.link);
+            this.BUS.progressPanel = false;
+            this.percentage = 0;
+          }
+          if (res2.data.status == 'stop' && res2.data.link == '') {
+            clearInterval(myInterval)
+          this.percentage = 0
+          this.BUS.progressPanel = false
+            console.log("获取文件出错,请重新下载")}
+        }, 6000);
+      } else {
+        clearInterval(myInterval);
+        this.percentage = 0;
+        this.BUS.progressPanel = false;
+        console.log('获取task出错,请重新下载');
+      }
+    },
+    async videoDownload() {
+      if (this.userId == '') return this.$myBus.$emit('iwantlogin');
+      if (!(this.currentHref.indexOf('item.jd') > 1)) {
+        return this.ElMessage.error('请进入商品详情页,再点击开始下载');
+      }
+      jq('.video-icon').click();
+      let src = jq('video source').attr('src');
+      if (src == undefined) return this.ElMessage({message: '当前商品没有视频', type: 'error', duration: 1500});
+      await 浏览器_京东视频下载(src);
+    },
+    async commentDownload(num) {
+      if (this.userId == '') return this.$myBus.$emit('iwantlogin');
+      if (!(this.currentHref.indexOf('item.jd') > 1)) {
+        return this.ElMessage.error('请进入商品详情页,再点击开始下载');
+      }
+      let config = {
+        method: 'post',
+        url: 'http://119.23.254.170:5000/api/jd/startComments',
+        data: {
+          url: this.currentHref,
+          account: this.userId,
+          cookies: this.cookies,
+          num,
+        }, //qs将对象 序列化成URL的形式，以&进行拼接
+      }
+      // 'http://119.23.254.170:5000/api/jd/startCommentsLetter'
+      this.BUS.progressPanel = true;
+      console.log('------开始请求key----------')
+      console.log('config: ', config);
+      let res = await 浏览器_跨域axios(config);
+      console.log('-----------res: ---------有返回------------', res)
+      if (res.data.status == 'success') {
+        let config2 = {
+          method: 'post',
+          url: 'http://119.23.254.170:5000/api/jd/getComments',
+          data: {
+            taskId: res.data.taskId,
+          }, //qs将对象 序列化成URL的形式，以&进行拼接
+        };
+        const myInterval = setInterval(async () => {
+          this.percentage >= 90 ? '' : (this.percentage += 9);
+          let res2 = await 浏览器_跨域axios(config2);
+          console.log('-----------res: ---111------有返回------------', res2)
+          if (res2.data.status == 'stop' && res2.data.link != '') {
+            clearInterval(myInterval);
+            console.log('开始下载--------------');
+            浏览器_url表格链接下载(res2.data.link);
+            this.BUS.progressPanel = false;
+            this.percentage = 0;
+          }
+          if (res2.data.status == 'stop' && res2.data.link == '') {
+            clearInterval(myInterval)
+          this.percentage = 0
+          this.BUS.progressPanel = false
+            console.log("获取文件出错,请重新下载")  }
+        }, 3000);
+      } else {
+        clearInterval(myInterval);
+        this.percentage = 0;
+        this.BUS.progressPanel = false;
+        console.log('获取task出错,请重新下载');
+      }
+    },
+    async commentDownload1(num) {
+      if (this.userId == '') return this.$myBus.$emit('iwantlogin');
+      if (!(this.currentHref.indexOf('item.jd') > 1)) {
+        return this.ElMessage.error('请进入商品详情页,再点击开始下载');
+      }
+      let config = {
+        method: 'post',
+        url: 'http://119.23.254.170:5000/api/jd/startCommentsLetter',
+        data: {
+          url: this.currentHref,
+          account: this.userId,
+          cookies: this.cookies,
+          num,
+        }, //qs将对象 序列化成URL的形式，以&进行拼接
+      };
+      // 'http://119.23.254.170:5000/api/jd/startCommentsLetter'
+      this.BUS.progressPanel = true;
+      console.log('------开始请求key----------');
+      let res = await 浏览器_跨域axios(config)
+      console.log('-----------res: ---------有返回------------', res);
+      if (res.data.status == 'success') {
+        let config2 = {
+          method: 'post',
+          url: 'http://119.23.254.170:5000/api/jd/getComments',
+          data: {
+            taskId: res.data.taskId,
+          }, //qs将对象 序列化成URL的形式，以&进行拼接
+        };
+        const myInterval = setInterval(async () => {
+          this.percentage >= 90 ? '' : (this.percentage += 9);
+          let res2 = await 浏览器_跨域axios(config2);
+          console.log('-----------res: ---111------有返回------------', res2);
+          if (res2.data.status == 'stop' && res2.data.link != '') {
+            clearInterval(myInterval);
+            console.log('开始下载--------------');
+            浏览器_url表格链接下载(res2.data.link);
+            this.BUS.progressPanel = false;
+            this.percentage = 0;
+          }
+          if (res2.data.status == 'stop' && res2.data.link == '') {
+            clearInterval(myInterval)
+          this.percentage = 0
+          this.BUS.progressPanel = false
+            console.log("获取文件出错,请重新下载")  }
+        }, 3000);
+      } else {
+        clearInterval(myInterval);
+        this.percentage = 0;
+        this.BUS.progressPanel = false;
+        console.log('获取task出错,请重新下载');
+      }
+    },
+    async imageDownload() {
+      if (this.userId == '') return this.$myBus.$emit('iwantlogin');
+      if (!(this.currentHref.indexOf('item.jd') > 1)) {
+        return this.ElMessage.error('请进入商品详情页,再点击开始下载');
+      }
+      let config = {
+        method: 'post',
+        url: 'http://119.23.254.170:5000/api/jd/startPicture',
+        data: {
+          url: this.currentHref,
+          account: this.userId,
+          cookies: this.cookies,
+          num: 2,
+        }, //qs将对象 序列化成URL的形式，以&进行拼接
+      };
+      this.BUS.progressPanel = true;
+      const myInterval = setInterval(() => {
+        this.percentage >= 90 ? '' : (this.percentage += 6);
+      }, 1000);
+      // console.log('------开始请求key----------')
+      let res = await 浏览器_跨域axios(config);
+      //  console.log('-----------res: ---------有返回------------', res)
+      if (res.data.taskId != undefined) {
+        clearInterval(myInterval);
+        console.log('开始下载--------------');
+        let url = `http://119.23.254.170:5000/api/jd/getPicture?taskId=${res.data.taskId}`;
+        浏览器_url表格链接下载(url);
+        this.BUS.progressPanel = false;
+        this.percentage = 0;
+      }
+      if (res.data.status == '超时') {
+        clearInterval(myInterval);
+        this.BUS.progressPanel = false;
+        this.percentage = 0;
+        console.log('请求超时,请重新下载');
+      }
+      //   if(res.data.taskId != undefined) {
+      //   let config2 = {
+      //     method: 'post',
+      //     url: 'http://119.23.254.170:5000/api/jd/getPicture',
+      //     data:  {taskId: res.data.taskId}
+      //     // data: qs.stringify( {taskId: res.data.taskId})
+      //     }
+      //     let myInterval =  setInterval(async () => {
+      //       let res2 = await 浏览器_跨域axios(config2)
+      //     // console.log('------图片下载---interval-----调用KEY--', res2)
+      //     console.log('res2.data.status: ', res2.data.status);
+      //     if(res2.data.status  ===  undefined) {
+      //       clearInterval(myInterval)
+      //     let  url = `http://119.23.254.170:5000/api/jd/getPicture?taskId=${res.data.taskId}`
+      //   //  console.log('url: ----------------------', url)
+      //   setTimeout(() => {
+
+      //     window.open(url)
+      //   }, 500);
+      // }
+      //   },3000)
+      // }
+    },
+    async OneClickDiagnosis(DiagnosisNum) {
+      if (this.userId == '') return this.$myBus.$emit('iwantlogin');
+      if (!(this.currentHref.indexOf('item.jd') > 1)) {
+        return this.ElMessage.error('请进入商品详情页,再点击开始诊断');
+      }
+      this.BUS.info_id = 0
+      this.BUS.progressPanel = true;
+      let config = {
+        method: 'post',
+        url: 'http://119.23.254.170:5000/api/jd/startCrawl',
+        data: {
+          url: this.currentHref,
+          account: this.userId,
+          cookies: this.cookies,
+          num: DiagnosisNum,
+        }, //qs将对象 序列化成URL的形式，以&进行拼接
+      };
+      let res = await 浏览器_跨域axios(config);
+      // console.log('------------调用返回KEY成功--', res);
+      if (res.data.taskId != undefined) {
+        // console.log('res.data.taskId: ', res.data.taskId);
+        let config2 = {
+          method: 'post',
+          url: 'http://119.23.254.170:5000/api/jd/getCrawl',
+          data: {taskId: res.data.taskId},
+          // data: qs.stringify( {taskId: res.data.taskId})
+        };
+        // let time1 = DiagnosisNum < 11? 70000 : 70000
+        // let time2 = DiagnosisNum < 11? 3000 : 5000
+        // setTimeout(() => {
+        //   this.countdown = 0
+        // }, 180*1000)
+        //------11111----------------获取到完整数据才展示的方法-----------------------
+        //   let myInterval =  setInterval(async () => {
+        //    this.percentage >= 93 ? this.percentage = 100: this.percentage += Math.floor(30/DiagnosisNum)
+        //    let res2 = await 浏览器_跨域axios(config2)
+        //   // console.log('res2------------1111111: ', res2)
+        // if ( res2.data.detailData.length == DiagnosisNum ){
+        //   this.BUS.diagnosisData = res2.data
+        //   this.BUS.progressPanel = false
+        //   this.BUS.dialogShow = true
+        //   this.percentage = 0
+        //   clearInterval(myInterval)
+        //   // this.countdown = 30
+        // }
+        // if (this.countdown == 0){
+        //   //后端数据出现异常
+        //   clearInterval(myInterval)
+        //   this.BUS.progressPanel = false
+        //   this.countdown = 30
+        //   this.percentage = 0
+        // }
+        //   }, time2)
+        //---1111111----------------------------------------------------------------
+
+        //-------222222----------push累加方法-----------------------------------
+
+        const myInterval = setInterval(async () => {
+          this.percentage >= 90 ? '' : (this.percentage += Math.floor(20 / DiagnosisNum));
+          let res2 = await 浏览器_跨域axios(config2);
+          console.log('res2------------2222222: ', res2);
+          if (res2.data.detailData.length != 0) {
+            this.BUS.diagnosisData = res2.data;
+            this.BUS.progressPanel = false;
+            this.BUS.dialogShow = true;
+            this.percentage = 0;
+          }
+          if (res2.data.detailData.length == DiagnosisNum || res2.data.status != '爬虫未结束') {
+            clearInterval(myInterval);
+            this.BUS.diagnosisData = res2.data;
+            //--------------存储数据------------------
+            let config3 = {
+              method: 'post',
+              url: 'http://pddzd.junchenlun.com//?s=Jd.StoreBrowse.addRecord',
+              data: {
+                shop_name: this.BUS.diagnosisData.shopName,
+                user_id: this.userId,
+                token: this.userToken,
+                data: JSON.stringify(this.BUS.diagnosisData),
+              }, //qs将对象 序列化成URL的形式，以&进行拼接
+            };
+            if (res2.data.status != '爬虫未结束') {
+              let res3 = await 浏览器_跨域axios(config3);
+              console.log('-----------res3: --------------', res3);
+              if (res3.data.data.code == 0) {
+                console.log('数据存储成功');
+              } else {
+                console.log('数据存储失败');
+              }
+            }
+          }
+          // if ( this.countdown == 0){
+          //   clearInterval(myInterval)
+          //   this.BUS.progressPanel = false
+          //   this.countdown = 90
+          //   this.percentage = 0
+          //   alert("数据获取超时,请重新诊断")
+          // }
+        }, 8000);
+        //-------22222---------------------------------------------
+      }
+    },
+    async scanRecord() {
+      this.BUS.scanShow = true;
+      await this.$refs.ScanRecord.getScanData();
+    },
+    openOrderPanel() {
+      this.BUS.orderShow = true;
+    },
+    clearDiagnosisData() {
+      // this.BUS.diagnosisData = ''
+    },
+   async downloadExcel() {
+        let url = `http://pddzd.junchenlun.com/?s=Jd.StoreBrowse.export&token=${this.userToken}&user_id=${this.userId}&info_id=${this.BUS.info_id}`
+        await 浏览器_url表格链接下载(url)
+
+    },
+    keyWordTool() {
+      this.$myBus.$emit('iwantKey');
+    },
+    async backHome() {
+      window.open('https://www.jd.com/');
+    },
+    changeAccount() {
+      this.$myBus.$emit('iwantchangeAccount');
+    },
+    goTOLogin() {
+      this.$myBus.$emit('iwantlogin');
+    },
+    logout() {
+      浏览器_set_storage('user_id', '');
+      Message.success('账号退出成功!');
+      location.reload();
+    },
+  },
+  async mounted() {
+    this.userId = await 浏览器_get_storage('user_id');
+    this.userToken = await 浏览器_get_storage('userToken');
+    // console.log('this.userToken: ', this.userToken);
+    this.currentHref = window.location.href;
+    this.cookies = "{'" + document.cookie + "'}";
+  },
+};
+  */
 
 </script>
 <style lang="scss" scoped>

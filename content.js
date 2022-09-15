@@ -6,38 +6,38 @@ const pinia = createPinia()
 //-----------------------------------
 
 // //---------------引入所有API挂载到全局----------<<<<<<<<<<<<<<<<<<<<<---此处引入有问题
-import{ allApi as API} from '../api/index'
+import{ allApi as API} from './src/api/contentApi/index'
 window.API = API
 // //------------------------------------------------------
 
 //引入自定义的所有css入口文件
-import '../css/style'
+import './src/css/style'
 //------------------------
 
 //---------全局引入vxe-table----------------
-// import 'xe-utils'
-// import VXETable from 'vxe-table'
-// import 'vxe-table/lib/style.css'
-//-------------开发体积2m------打包体积550k-----------
-//--------------按需引入----开发体积1.3m----------打包体积500k----
-//-------所以干脆全局--(初始cli才400k)--jq(打包90k)+vue+ele+pinia---------
+import 'xe-utils'
+import VXETable from 'vxe-table'
+import 'vxe-table/lib/style.css'
+//---------开发体积2m----打包体积550k-----
+//-------------结合babel-loader配置按需加载后----打包体积只有100k
+//-------所以可以全局引入------jq(打包90k)+vue+ele+pinia---------
 
 
 //-----------------全局登录组件----------------------
-import LoginPanel from '../components/LoginPanel.vue'
-createEntry(LoginPanel,'jclogin')
+// import LoginPanel from '../components/LoginPanel.vue'
+// createEntry(LoginPanel,'jclogin')
 // createApp(LoginPanel).component('login-panel', LoginPanel);
 //--------------------------------------------------
 
-//-----popup页面----------调试popup及打包上线时需要挂载此处---------------------------<<---<<---<<----<<-----<<----<<----<<---<<<--------------
-import popup from '../popup/app.vue'
+//-----popup页面----------调试popup及打包上线时需要挂载此处-----------<<---<<---<<----<<-----<<----<<----<<---<<<--------------
+import popup from './src/popup/app.vue'
 createApp(popup).mount('#pop')
 //-------------------------------------------------
 
 //-------------------各平台实例引入----------------
-import app1688 from '../pages/1688/app.vue'
-import apptmall from '../pages/tmall/app.vue'
-import appjd from '../pages/jd/app.vue'
+import app1688 from './src/pages/1688/app.vue'
+import apptmall from './src/pages/tmall/app.vue'
+import appjd from './src/pages/jd/app.vue'
 
 //---------------------------------------------------------
 
@@ -48,8 +48,8 @@ function createEntry(myapp,id){
   if (el) {
     //  afterbegin 插入body内部最前面------afterend插入body外部后面
       el.insertAdjacentHTML('afterend',`<div id="${id}"></div>`)
-      createApp(myapp).use(pinia).mount(`#${id}`)
-      // createApp(myapp).use(pinia).use(VXETable).mount(`#${id}`)
+      // createApp(myapp).use(pinia).mount(`#${id}`)
+      createApp(myapp).use(pinia).use(VXETable).mount(`#${id}`)
     }
 }
 

@@ -7,7 +7,8 @@ export const userStore = defineStore('userInfo', {
       return {
         count: 0,
         userid: '',
-        try: '22'
+        userPhone: '',
+        userToken: '',
       }
     },
     

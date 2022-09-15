@@ -3,7 +3,7 @@
     <div class="header">
       <div class="section">
         <img style="width: 165px; height: 66px;" src="https://junchenlunoffice.oss-cn-shenzhen.aliyuncs.com/plugs/logo1/JunChenLun_logo_desc.png" alt="" />
-        <a target="_blank" href="https://www.junchenlun.com/guides/pdd">
+        <a target="_blank" href="http://pddzd.junchenlun.com/plugs/">
           进入官网 >
         </a>
       </div>

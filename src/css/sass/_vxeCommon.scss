@@ -26,6 +26,18 @@
   flex-direction: column;
   align-items: center;
 }
+
+%flexColCen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+%flexColLeft {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
 // 混入会重复编译   混入更适合带自定义变量传参使用
 // @mixin myBtn {
 //   width: 88px;
@@ -65,15 +77,15 @@
       line-height: 40px;
       color: $white;
   }
-:deep(.vxe-modal--header) {
+:deep( .vxe-modal--header) {
     background: $jclbg;
     padding: 0 !important;
   }
-  :deep(.vxe-modal--box) {
+  :deep( .vxe-modal--box) {
     border: none !important;
 }
 
-:deep(.vxe-modal--close-btn){
+:deep( .vxe-modal--close-btn){
   top: 12px ;
   color: $white;
   &:hover{

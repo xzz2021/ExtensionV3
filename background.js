@@ -4,7 +4,7 @@
 
 
 //---------------引入分文件的所有自定义api-----------
-import{ bgcApi as API } from './api/index'
+import{ bgcApi as API } from './src/api/bgcApi/index'
 // console.log('bgcApi: ', API);
 //----------------------------------------------------------
 
@@ -41,7 +41,13 @@ let matches = ["https://*.1688.com/*", "https://*.tmall.com/*", "https://*.jd.co
               let l = tabs.length
               for(let i = 0; i < l; i++){
                 chrome.tabs.sendMessage(tabs[i].id, 'loginEvent', ()=> {})
-              }})}}})
+              }})}
+              //如果userid变化为空,也就是用户退出了登录,则清空userPhone和userToken
+              if(key == 'userid' && newValue == '') {
+                chrome.storage.local.set({userPhone: ''})
+                chrome.storage.local.set({userToken: ''})
+              }
+            }})
 //-----------------------------------------------------------------------
 
 
@@ -53,7 +59,7 @@ let matches = ["https://*.1688.com/*", "https://*.tmall.com/*", "https://*.jd.co
           // console.log('----------------message: ----------------', message)
           if(message.type == 'myfetch'){
              (async ()=> {
-                  let res = await API.myfetch(message.url,message.config)
+                  let res = await API.myfetch(message.config.url,message.config)
                      console.log('-----api----fetch-----res: ', res)
                      sendResponse(res)
                 })()
@@ -74,6 +80,5 @@ let matches = ["https://*.1688.com/*", "https://*.tmall.com/*", "https://*.jd.co
         }
       )
 //-----------------------------------------------------------------------------------------
-
 
 

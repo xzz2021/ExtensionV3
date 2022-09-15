@@ -27,8 +27,8 @@ const comconfig = {
     // entry: ['./main.js','./content.js','./inject.js'],    //数组形式会被整合打包到一个输出文件//单独导出需要使用对象
     entry: {
         // popup: './src/popup/pop.js',
-        background: './src/bgc/background.js',
-        content: './src/content/content.js'
+        background: './background.js',
+        content: './content.js'
     },
     output: {
         filename: './[name].js',
@@ -119,7 +119,7 @@ const comconfig = {
                             // presenrts: ['@babel/preset-env'],//@babel/preset-env----指示把ES6转换成ES5语法--------
                             // 开启babel缓存,第二次构建时,只构建改动的文件,其余直接读取缓存
                             cacheDirectory: true,
-                            //此处自定义按需treeShaking引入----UI组件和相应css---有问题---------需优化
+                            //此处自定义按需treeShaking引入----体积减少300k--UI组件和相应css---有问题---------需优化
                             // plugins: [["import", {
                             //     "libraryName": "vxe-table",
                             //     "style": true,   // or 'css'
