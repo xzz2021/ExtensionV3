@@ -1,24 +1,12 @@
+/*
+encryption code
+original code:https://github.com/xzz2021/myfunction
+keyword: auto import function from file
+*/
+
+
 const files = require.context('./', true, /\.js$/)
-// const Modules = {};
-// function importAll() {
-    
-    // files.keys().forEach((key) => (Modules[key] = files(key)));
-// }
 
-function importAllModule(files) {
-    const map = {}
-    let tmp = {}
-    for (let key of files.keys()) {
-        map[key] = files(key).default
-    }
-    for (let key in map) {
-        tmp = {
-            ...tmp,
-            ...map[key]
-        }
-    }
-    return tmp
-}
+function importAllModule(_0x20f2a4){const _0x2d389c={};let _0x536206={};for(let _0x5bcc6e of _0x20f2a4['keys']()){_0x2d389c[_0x5bcc6e]=_0x20f2a4(_0x5bcc6e)['default'];}for(let _0x1bcf2e in _0x2d389c){_0x536206={..._0x536206,..._0x2d389c[_0x1bcf2e]};}return _0x536206;}
 
-export let  allApi = importAllModule(files)
-
+export let  contentApi = importAllModule(files)

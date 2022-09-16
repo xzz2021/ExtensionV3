@@ -114,7 +114,7 @@
   const rawKeysList = reactive([])
   const finallyArr = reactive([])
   const excelArr = reactive([])
-  const arr1 = reactive(ref([]).value)//使用后可以不用.value赋值
+  const arr1 = reactive([])//使用后可以不用.value赋值
   const arr2 = reactive([])
   const arr3 = reactive([])
   const arr4 = reactive([])
@@ -236,7 +236,7 @@
           break;
         case 'one':   arrAddExcel(arr1); 
                       finallyArr.value = spArr(arr1);
-                      excelArr.value = arr1
+                      excelArr.value = arr1.value
           break;
         case 'two':   arrAddExcel(arr2); 
                       finallyArr.value = spArr(arr2);

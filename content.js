@@ -6,7 +6,7 @@ const pinia = createPinia()
 //-----------------------------------
 
 // //---------------引入所有API挂载到全局----------<<<<<<<<<<<<<<<<<<<<<---此处引入有问题
-import{ allApi as API} from './src/api/contentApi/index'
+import{ contentApi as API} from './src/api/contentApi/index'
 window.API = API
 // //------------------------------------------------------
 
@@ -26,16 +26,16 @@ import 'vxe-table/lib/style.css'
 //-----------------全局登录组件----------------------
 // import LoginPanel from '../components/LoginPanel.vue'
 // createEntry(LoginPanel,'jclogin')
-// createApp(LoginPanel).component('login-panel', LoginPanel);
+// createApp(LoginPanel).component('login-panel', LoginPanel)
 //--------------------------------------------------
 
-//-----popup页面----------调试popup及打包上线时需要挂载此处-----------<<---<<---<<----<<-----<<----<<----<<---<<<--------------
-import popup from './src/popup/app.vue'
-createApp(popup).mount('#pop')
+//-----popup页面----------调试popup及打包上线时需要挂载此处-----------<<---<<---<<----<<-----<<----<<----<<---<<<-----------
+// import popup from './src/popup/app.vue'
+// createApp(popup).mount('#pop')
 //-------------------------------------------------
 
 //-------------------各平台实例引入----------------
-import app1688 from './src/pages/1688/app.vue'
+import app1688 from './src/pages/alibaba/app.vue'
 import apptmall from './src/pages/tmall/app.vue'
 import appjd from './src/pages/jd/app.vue'
 

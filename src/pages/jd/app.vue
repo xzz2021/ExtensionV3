@@ -177,9 +177,9 @@ import { userStore } from '../../stores/userStore'
 const userstore = userStore();
 const { userid, userToken } = storeToRefs(userstore)
 
-const msg = reactive({type: '666', msg:'sss'})
-let currentHref = reactive('')
-let curCookies = reactive('')
+//---------------单纯字符串变量不可使用reactive---------
+let currentHref = ref('')
+let curCookies  = ref('')
 
 const diagnosisOption = reactive([{value: 2}, {value: 5}, {value: 10}, {value: 20}])
 const commentOption = reactive([{value: 20}, {value: 50}, {value: 100}, {value: 200}])
@@ -201,394 +201,10 @@ const pictureOption  = reactive([
       // console.log('res:----------下载------ ', res);
       //--------------------------------------
     }
-    const imgDownload = async (arg) =>{
-          if (userid == '') return API.emitter.emit('iwantlogin')
-      if (!(currentHref.indexOf('item.jd') > 1)) {
-        return this.ElMessage.error('请进入商品详情页,再点击开始下载');
-      }
-      let config = {
-        method: 'post',
-        url: '',
-        data: {
-          url: currentHref,
-          account: userid,
-          cookies: curCookies,
-          num: 66,
-        }, 
-      }
-      switch(arg){
-        case 'allwith': config.url = 'http://119.23.254.170:5000/api/jd/startPicture'
-          break
-        case 'all': config.url = 'http://119.23.254.170:5000/api/jd/startPictureNoDir'
-          break
-        case 'main': config.url = 'http://119.23.254.170:5000/api/jd/startPictureMain'
-          break
-        case 'sku': config.url = 'http://119.23.254.170:5000/api/jd/startPictureSku'
-          break
-        case 'detail': config.url = 'http://119.23.254.170:5000/api/jd/startPictureDetail'
-          break
-      }
-      // 'http://119.23.254.170:5000/api/jd/startCommentsLetter'
-      // this.BUS.progressPanel = true;
-      console.log('------开始请求key----------');
-      // console.log('config: ', config);
-      let msg = {type: 'myfetch', config}
-      let res = await  API.sendMessage(msg) //---------------------
-      console.log('------myfetchmyfetch--------res: ', res)
-      console.log('-------------taskId----有返回------------', res);
-      if (res.data.status == 'success') {
-        let config2 = {
-          method: 'post',
-          url: 'http://119.23.254.170:5000/api/jd/getPicture',
-          data: {
-            taskId: res.data.taskId,
-          }, //qs将对象 序列化成URL的形式，以&进行拼接
-        };
-        const myInterval = setInterval(async () => {
-          this.percentage >= 90 ? '' : (this.percentage += 9);
-          let res2 = await 浏览器_跨域axios(config2);
-          console.log('---------开始爬取------有返回------------', res2);
-          if (res2.data.status == 'stop' && res2.data.link != '') {
-            clearInterval(myInterval);
-            console.log('开始下载--------------');
-            浏览器_url表格链接下载(res2.data.link);
-            this.BUS.progressPanel = false;
-            this.percentage = 0;
-          }
-          if (res2.data.status == 'stop' && res2.data.link == '') {
-            clearInterval(myInterval)
-          this.percentage = 0
-          this.BUS.progressPanel = false
-            console.log("获取文件出错,请重新下载")}
-        }, 6000);
-      } else {
-        clearInterval(myInterval);
-        this.percentage = 0;
-        this.BUS.progressPanel = false;
-        console.log('获取task出错,请重新下载');
-      }
-    }
-    const videoDownload = async () =>{
-    if (userid == '') return API.emitter.emit('iwantlogin')
-    if (!(currentHref.indexOf('item.jd') > 1)) {
-        return alert('请进入商品详情页,再点击开始下载')
-      }
-        jq('.video-icon').click()
-        let url = jq('video source').attr('src')
-        if(src == undefined) return  ElMessage.error({ message: '当前商品没有视频',  duration: 1500,})
-        let msg = {type: 'download', url}
-      let res = await  API.sendMessage(msg) 
-      // console.log('res: ', res)
-      res && ElMessage.success({ message: '视频下载完成', duration: 1500,})
-    }
-
-
-    const keyWordTool = () =>{
-    console.log('发送成功');
-      API.emitter.emit('iwantkey')
-    }
-    const  backToHome =  () => {
-      window.open('https://www.jd.com/')
-    }
-    const changeAccount = () => {
-      API.emitter.emit('iwantlogin')
-    }
-    const goTOLogin = () => {
-      API.emitter.emit('iwantlogin')
-    }
-    const logout = () => {
-      chrome.storage.local.set({userid: ''})
-      ElMessage.success('账号退出成功!')
-    }
-  const getStorage = () => {
-    chrome.storage.local.get(['userid'], (result) =>{
-      result == {} ? chrome.storage.local.set({userid: ''}) : userstore.userid = result.userid
-    })
-    chrome.storage.local.get(['userPhone'], (result) =>{
-      result == {} ? chrome.storage.local.set({userPhone: ''}) : userstore.userPhone = result.userPhone
-    })
-    chrome.storage.local.get(['userToken'], (result) =>{
-      result == {} ? chrome.storage.local.set({userToken: ''}) : userstore.userToken = result.userToken
-    })
-  }
-  onMounted(() => {
-    currentHref = window.location.href
-    curCookies = "{'" + document.cookie + "'}"
-    // console.log('window.location.href: ', window.location.href)
-  })
-   onBeforeMount(() => {
-    chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-      message == 'loginEvent'? getStorage() : ''
-      sendResponse({status: true})
-      })
-    getStorage()
-   })
-  /*
-export default {
-  computed: { ...BUS_mapState({ BUS: (state) => state }) },
-  components: 动态子组件,
-  data() {
-    return {
-      // dialogShow: false,
-      userId: '',
-      
-      percentage: 0,
-      currentHref: '',
-      imageData: [{value: 'all'}],
-      countdown: 90,
-      cookies: '',
-      userToken: '',
-    };
-  },
-  methods: {
-    async imgDownload(arg){
+    const  OneClickDiagnosis = async (DiagnosisNum) => {
       if (this.userId == '') return this.$myBus.$emit('iwantlogin');
-      if (!(this.currentHref.indexOf('item.jd') > 1)) {
-        return this.ElMessage.error('请进入商品详情页,再点击开始下载');
-      }
-      let config = {
-        method: 'post',
-        url: '',
-        data: {
-          url: this.currentHref,
-          account: this.userId,
-          cookies: this.cookies,
-          num: 66,
-        }, //qs将对象 序列化成URL的形式，以&进行拼接
-      }
-      // {value: '全部下载(带目录)', arg: 'allwith'},
-      //   {value: '全部下载', arg: 'all'},
-      //   {value: '主图下载', arg: 'main'},
-      //   {value: 'sku图下载', arg: 'sku'},
-      //   {value: '详情图下载', arg: 'detail'},
-      switch(arg){
-        case 'allwith': config.url = 'http://119.23.254.170:5000/api/jd/startPicture'
-          break
-        case 'all': config.url = 'http://119.23.254.170:5000/api/jd/startPictureNoDir'
-          break
-        case 'main': config.url = 'http://119.23.254.170:5000/api/jd/startPictureMain'
-          break
-        case 'sku': config.url = 'http://119.23.254.170:5000/api/jd/startPictureSku'
-          break
-        case 'detail': config.url = 'http://119.23.254.170:5000/api/jd/startPictureDetail'
-          break
-      }
-      // 'http://119.23.254.170:5000/api/jd/startCommentsLetter'
-      this.BUS.progressPanel = true;
-      console.log('------开始请求key----------');
-      // console.log('config: ', config);
-      let res = await 浏览器_跨域axios(config);
-      console.log('-------------taskId----有返回------------', res);
-      if (res.data.status == 'success') {
-        let config2 = {
-          method: 'post',
-          url: 'http://119.23.254.170:5000/api/jd/getPicture',
-          data: {
-            taskId: res.data.taskId,
-          }, //qs将对象 序列化成URL的形式，以&进行拼接
-        };
-        const myInterval = setInterval(async () => {
-          this.percentage >= 90 ? '' : (this.percentage += 9);
-          let res2 = await 浏览器_跨域axios(config2);
-          console.log('---------开始爬取------有返回------------', res2);
-          if (res2.data.status == 'stop' && res2.data.link != '') {
-            clearInterval(myInterval);
-            console.log('开始下载--------------');
-            浏览器_url表格链接下载(res2.data.link);
-            this.BUS.progressPanel = false;
-            this.percentage = 0;
-          }
-          if (res2.data.status == 'stop' && res2.data.link == '') {
-            clearInterval(myInterval)
-          this.percentage = 0
-          this.BUS.progressPanel = false
-            console.log("获取文件出错,请重新下载")}
-        }, 6000);
-      } else {
-        clearInterval(myInterval);
-        this.percentage = 0;
-        this.BUS.progressPanel = false;
-        console.log('获取task出错,请重新下载');
-      }
-    },
-    async videoDownload() {
-      if (this.userId == '') return this.$myBus.$emit('iwantlogin');
-      if (!(this.currentHref.indexOf('item.jd') > 1)) {
-        return this.ElMessage.error('请进入商品详情页,再点击开始下载');
-      }
-      jq('.video-icon').click();
-      let src = jq('video source').attr('src');
-      if (src == undefined) return this.ElMessage({message: '当前商品没有视频', type: 'error', duration: 1500});
-      await 浏览器_京东视频下载(src);
-    },
-    async commentDownload(num) {
-      if (this.userId == '') return this.$myBus.$emit('iwantlogin');
-      if (!(this.currentHref.indexOf('item.jd') > 1)) {
-        return this.ElMessage.error('请进入商品详情页,再点击开始下载');
-      }
-      let config = {
-        method: 'post',
-        url: 'http://119.23.254.170:5000/api/jd/startComments',
-        data: {
-          url: this.currentHref,
-          account: this.userId,
-          cookies: this.cookies,
-          num,
-        }, //qs将对象 序列化成URL的形式，以&进行拼接
-      }
-      // 'http://119.23.254.170:5000/api/jd/startCommentsLetter'
-      this.BUS.progressPanel = true;
-      console.log('------开始请求key----------')
-      console.log('config: ', config);
-      let res = await 浏览器_跨域axios(config);
-      console.log('-----------res: ---------有返回------------', res)
-      if (res.data.status == 'success') {
-        let config2 = {
-          method: 'post',
-          url: 'http://119.23.254.170:5000/api/jd/getComments',
-          data: {
-            taskId: res.data.taskId,
-          }, //qs将对象 序列化成URL的形式，以&进行拼接
-        };
-        const myInterval = setInterval(async () => {
-          this.percentage >= 90 ? '' : (this.percentage += 9);
-          let res2 = await 浏览器_跨域axios(config2);
-          console.log('-----------res: ---111------有返回------------', res2)
-          if (res2.data.status == 'stop' && res2.data.link != '') {
-            clearInterval(myInterval);
-            console.log('开始下载--------------');
-            浏览器_url表格链接下载(res2.data.link);
-            this.BUS.progressPanel = false;
-            this.percentage = 0;
-          }
-          if (res2.data.status == 'stop' && res2.data.link == '') {
-            clearInterval(myInterval)
-          this.percentage = 0
-          this.BUS.progressPanel = false
-            console.log("获取文件出错,请重新下载")  }
-        }, 3000);
-      } else {
-        clearInterval(myInterval);
-        this.percentage = 0;
-        this.BUS.progressPanel = false;
-        console.log('获取task出错,请重新下载');
-      }
-    },
-    async commentDownload1(num) {
-      if (this.userId == '') return this.$myBus.$emit('iwantlogin');
-      if (!(this.currentHref.indexOf('item.jd') > 1)) {
-        return this.ElMessage.error('请进入商品详情页,再点击开始下载');
-      }
-      let config = {
-        method: 'post',
-        url: 'http://119.23.254.170:5000/api/jd/startCommentsLetter',
-        data: {
-          url: this.currentHref,
-          account: this.userId,
-          cookies: this.cookies,
-          num,
-        }, //qs将对象 序列化成URL的形式，以&进行拼接
-      };
-      // 'http://119.23.254.170:5000/api/jd/startCommentsLetter'
-      this.BUS.progressPanel = true;
-      console.log('------开始请求key----------');
-      let res = await 浏览器_跨域axios(config)
-      console.log('-----------res: ---------有返回------------', res);
-      if (res.data.status == 'success') {
-        let config2 = {
-          method: 'post',
-          url: 'http://119.23.254.170:5000/api/jd/getComments',
-          data: {
-            taskId: res.data.taskId,
-          }, //qs将对象 序列化成URL的形式，以&进行拼接
-        };
-        const myInterval = setInterval(async () => {
-          this.percentage >= 90 ? '' : (this.percentage += 9);
-          let res2 = await 浏览器_跨域axios(config2);
-          console.log('-----------res: ---111------有返回------------', res2);
-          if (res2.data.status == 'stop' && res2.data.link != '') {
-            clearInterval(myInterval);
-            console.log('开始下载--------------');
-            浏览器_url表格链接下载(res2.data.link);
-            this.BUS.progressPanel = false;
-            this.percentage = 0;
-          }
-          if (res2.data.status == 'stop' && res2.data.link == '') {
-            clearInterval(myInterval)
-          this.percentage = 0
-          this.BUS.progressPanel = false
-            console.log("获取文件出错,请重新下载")  }
-        }, 3000);
-      } else {
-        clearInterval(myInterval);
-        this.percentage = 0;
-        this.BUS.progressPanel = false;
-        console.log('获取task出错,请重新下载');
-      }
-    },
-    async imageDownload() {
-      if (this.userId == '') return this.$myBus.$emit('iwantlogin');
-      if (!(this.currentHref.indexOf('item.jd') > 1)) {
-        return this.ElMessage.error('请进入商品详情页,再点击开始下载');
-      }
-      let config = {
-        method: 'post',
-        url: 'http://119.23.254.170:5000/api/jd/startPicture',
-        data: {
-          url: this.currentHref,
-          account: this.userId,
-          cookies: this.cookies,
-          num: 2,
-        }, //qs将对象 序列化成URL的形式，以&进行拼接
-      };
-      this.BUS.progressPanel = true;
-      const myInterval = setInterval(() => {
-        this.percentage >= 90 ? '' : (this.percentage += 6);
-      }, 1000);
-      // console.log('------开始请求key----------')
-      let res = await 浏览器_跨域axios(config);
-      //  console.log('-----------res: ---------有返回------------', res)
-      if (res.data.taskId != undefined) {
-        clearInterval(myInterval);
-        console.log('开始下载--------------');
-        let url = `http://119.23.254.170:5000/api/jd/getPicture?taskId=${res.data.taskId}`;
-        浏览器_url表格链接下载(url);
-        this.BUS.progressPanel = false;
-        this.percentage = 0;
-      }
-      if (res.data.status == '超时') {
-        clearInterval(myInterval);
-        this.BUS.progressPanel = false;
-        this.percentage = 0;
-        console.log('请求超时,请重新下载');
-      }
-      //   if(res.data.taskId != undefined) {
-      //   let config2 = {
-      //     method: 'post',
-      //     url: 'http://119.23.254.170:5000/api/jd/getPicture',
-      //     data:  {taskId: res.data.taskId}
-      //     // data: qs.stringify( {taskId: res.data.taskId})
-      //     }
-      //     let myInterval =  setInterval(async () => {
-      //       let res2 = await 浏览器_跨域axios(config2)
-      //     // console.log('------图片下载---interval-----调用KEY--', res2)
-      //     console.log('res2.data.status: ', res2.data.status);
-      //     if(res2.data.status  ===  undefined) {
-      //       clearInterval(myInterval)
-      //     let  url = `http://119.23.254.170:5000/api/jd/getPicture?taskId=${res.data.taskId}`
-      //   //  console.log('url: ----------------------', url)
-      //   setTimeout(() => {
-
-      //     window.open(url)
-      //   }, 500);
-      // }
-      //   },3000)
-      // }
-    },
-    async OneClickDiagnosis(DiagnosisNum) {
-      if (this.userId == '') return this.$myBus.$emit('iwantlogin');
-      if (!(this.currentHref.indexOf('item.jd') > 1)) {
-        return this.ElMessage.error('请进入商品详情页,再点击开始诊断');
+      if (!(currentHref.value.indexOf('item.jd') > 1)) {
+        return this.$message.error('请进入商品详情页,再点击开始诊断');
       }
       this.BUS.info_id = 0
       this.BUS.progressPanel = true;
@@ -596,7 +212,7 @@ export default {
         method: 'post',
         url: 'http://119.23.254.170:5000/api/jd/startCrawl',
         data: {
-          url: this.currentHref,
+          url: currentHref.value,
           account: this.userId,
           cookies: this.cookies,
           num: DiagnosisNum,
@@ -686,62 +302,189 @@ export default {
         }, 8000);
         //-------22222---------------------------------------------
       }
-    },
-    async scanRecord() {
-      this.BUS.scanShow = true;
-      await this.$refs.ScanRecord.getScanData();
-    },
-    openOrderPanel() {
-      this.BUS.orderShow = true;
-    },
-    clearDiagnosisData() {
-      // this.BUS.diagnosisData = ''
-    },
-   async downloadExcel() {
-        let url = `http://pddzd.junchenlun.com/?s=Jd.StoreBrowse.export&token=${this.userToken}&user_id=${this.userId}&info_id=${this.BUS.info_id}`
-        await 浏览器_url表格链接下载(url)
+    }
+    const imgDownload = async (arg) =>{
+          if (userid == '') return API.emitter.emit('iwantlogin')
+      if (!(currentHref.indexOf('item.jd') > 1)) {
+        return this.ElMessage.error('请进入商品详情页,再点击开始下载');
+      }
+      let config = {
+        method: 'post',
+        url: '',
+        data: {
+          url: currentHref,
+          account: userid,
+          cookies: curCookies.value,
+          num: 66,
+        }, 
+      }
+      switch(arg){
+        case 'allwith': config.url = 'http://119.23.254.170:5000/api/jd/startPicture'
+          break
+        case 'all': config.url = 'http://119.23.254.170:5000/api/jd/startPictureNoDir'
+          break
+        case 'main': config.url = 'http://119.23.254.170:5000/api/jd/startPictureMain'
+          break
+        case 'sku': config.url = 'http://119.23.254.170:5000/api/jd/startPictureSku'
+          break
+        case 'detail': config.url = 'http://119.23.254.170:5000/api/jd/startPictureDetail'
+          break
+      }
+      // 'http://119.23.254.170:5000/api/jd/startCommentsLetter'
+      // this.BUS.progressPanel = true;
+      console.log('------开始请求key----------');
+      // console.log('config: ', config);
+      let msg = {type: 'myfetch', config}
+      let res = await  API.sendMessage(msg) //---------------------
+      console.log('------myfetchmyfetch--------res: ', res)
+      console.log('-------------taskId----有返回------------', res);
+      if (res.data.status == 'success') {
+        let config2 = {
+          method: 'post',
+          url: 'http://119.23.254.170:5000/api/jd/getPicture',
+          data: {
+            taskId: res.data.taskId,
+          }, //qs将对象 序列化成URL的形式，以&进行拼接
+        };
+        const myInterval = setInterval(async () => {
+          this.percentage >= 90 ? '' : (this.percentage += 9);
+          let res2 = await 浏览器_跨域axios(config2);
+          console.log('---------开始爬取------有返回------------', res2);
+          if (res2.data.status == 'stop' && res2.data.link != '') {
+            clearInterval(myInterval);
+            console.log('开始下载--------------');
+            浏览器_url表格链接下载(res2.data.link);
+            this.BUS.progressPanel = false;
+            this.percentage = 0;
+          }
+          if (res2.data.status == 'stop' && res2.data.link == '') {
+            clearInterval(myInterval)
+          this.percentage = 0
+          this.BUS.progressPanel = false
+            console.log("获取文件出错,请重新下载")}
+        }, 6000);
+      } else {
+        clearInterval(myInterval);
+        this.percentage = 0;
+        this.BUS.progressPanel = false;
+        console.log('获取task出错,请重新下载');
+      }
+    }
+    const commentDownload = async (num) =>{
+      if (this.userId == '') return this.$myBus.$emit('iwantlogin');
+      if (!(currentHref.value.indexOf('item.jd') > 1)) {
+        return this.$message.error('请进入商品详情页,再点击开始下载');
+      }
+      let config = {
+        method: 'post',
+        url: 'http://119.23.254.170:5000/api/jd/startComments',
+        data: {
+          url: currentHref.value,
+          account: this.userId,
+          cookies: this.cookies,
+          num,
+        }, //qs将对象 序列化成URL的形式，以&进行拼接
+      }
+      // 'http://119.23.254.170:5000/api/jd/startCommentsLetter'
+      this.BUS.progressPanel = true;
+      console.log('------开始请求key----------')
+      console.log('config: ', config);
+      let res = await 浏览器_跨域axios(config);
+      console.log('-----------res: ---------有返回------------', res)
+      if (res.data.status == 'success') {
+        let config2 = {
+          method: 'post',
+          url: 'http://119.23.254.170:5000/api/jd/getComments',
+          data: {
+            taskId: res.data.taskId,
+          }, //qs将对象 序列化成URL的形式，以&进行拼接
+        };
+        const myInterval = setInterval(async () => {
+          this.percentage >= 90 ? '' : (this.percentage += 9);
+          let res2 = await 浏览器_跨域axios(config2);
+          console.log('-----------res: ---111------有返回------------', res2)
+          if (res2.data.status == 'stop' && res2.data.link != '') {
+            clearInterval(myInterval);
+            console.log('开始下载--------------');
+            浏览器_url表格链接下载(res2.data.link);
+            this.BUS.progressPanel = false;
+            this.percentage = 0;
+          }
+          if (res2.data.status == 'stop' && res2.data.link == '') {
+            clearInterval(myInterval)
+          this.percentage = 0
+          this.BUS.progressPanel = false
+            console.log("获取文件出错,请重新下载")  }
+        }, 3000);
+      } else {
+        clearInterval(myInterval);
+        this.percentage = 0;
+        this.BUS.progressPanel = false;
+        console.log('获取task出错,请重新下载');
+      }
+    }
+    const commentDownload1 = async (num) =>{
 
-    },
-    keyWordTool() {
-      this.$myBus.$emit('iwantKey');
-    },
-    async backHome() {
-      window.open('https://www.jd.com/');
-    },
-    changeAccount() {
-      this.$myBus.$emit('iwantchangeAccount');
-    },
-    goTOLogin() {
-      this.$myBus.$emit('iwantlogin');
-    },
-    logout() {
-      浏览器_set_storage('user_id', '');
-      Message.success('账号退出成功!');
-      location.reload();
-    },
-  },
-  async mounted() {
-    this.userId = await 浏览器_get_storage('user_id');
-    this.userToken = await 浏览器_get_storage('userToken');
-    // console.log('this.userToken: ', this.userToken);
-    this.currentHref = window.location.href;
-    this.cookies = "{'" + document.cookie + "'}";
-  },
-};
-  */
+    }
+    const videoDownload = async () =>{
+    if (userid == '') return API.emitter.emit('iwantlogin')
+    if (!(currentHref.indexOf('item.jd') > 1)) {
+        return alert('请进入商品详情页,再点击开始下载')
+      }
+        $('.video-icon').click()
+        let url = $('video source').attr('src')
+        if(url == undefined) return  ElMessage.error({ message: '当前商品没有视频',  duration: 1500,})
+        let msg = {type: 'downloads', url}
+      let res = await  API.sendMessage(msg) 
+      console.log('res:-------- ', res);
+      res && ElMessage.success({ message: `视频${res}`, duration: 2500,})
+    }
+
+
+    const keyWordTool = () =>{
+      API.emitter.emit('iwantkey')
+    }
+    const  backToHome =  () => {
+      window.open('https://www.jd.com/')
+    }
+    const changeAccount = () => {
+      API.emitter.emit('iwantlogin')
+    }
+    const goTOLogin = () => {
+      API.emitter.emit('iwantlogin')
+    }
+    const logout = () => {
+      chrome.storage.local.set({userid: ''})
+      ElMessage.success('账号退出成功!')
+    }
+  const getStorage = () => {
+    chrome.storage.local.get(['userid'], (result) =>{
+      result == {} ? chrome.storage.local.set({userid: ''}) : userstore.userid = result.userid
+    })
+    chrome.storage.local.get(['userPhone'], (result) =>{
+      result != {} && (userstore.userPhone = result.userPhone)
+    })
+    chrome.storage.local.get(['userToken'], (result) =>{
+      result != {} && (userstore.userToken = result.userToken)
+    })
+  }
+  onMounted(() => {
+    currentHref = window.location.href
+    curCookies.value = "{'" + document.cookie + "'}"
+    // console.log('window.location.href: ', window.location.href)
+  })
+   onBeforeMount(() => {
+    chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+      message == 'loginEvent'? getStorage() : ''
+      sendResponse({status: true})
+      })
+    getStorage()
+    console.log(jq222)
+   })
 
 </script>
 <style lang="scss" scoped>
 @import "../../css/sass/jclpanel.scss";
-// .box{
-//     width: 200px;
-//     height: 200px;
-//     position: fixed;
-//     z-index: 100001;
-//     left: 200px;
-//     top: 100px;
-//     z-index: 333;
-//     // background-color: rgba(77, 255, 201, 0.788);
-// }
+
 
 </style>

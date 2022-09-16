@@ -50,19 +50,17 @@ const rules = reactive({
         phone: [
           {required: true, message: '请输入手机号', trigger: 'blur'},
           {type: 'number', message: '手机号必须是数字'},
-          {pattern: /^1[3456789]\d{9}$/, message: '请输入正确的手机号', trigger: 'blur'},
+          {pattern: /^1[3456789]\d{9}$/, message: '请输入正确的手机号', trigger: 'blur'}
         ],
         code: [
           { required: true, message: '验证码不能为空', trigger: 'blur' },
         // { type: 'number', message: '验证码必须是数字' },
         { pattern: /^\d{6}$/, message: '请输入完整的验证码', trigger: 'blur' }
-        ],
+        ]
       })
 const loginForm = reactive({phone: 16712753727, code: ''})
 const openDialog = () => {
-      dialogVisible.value = true;
-      // API.emitter.off('iwantlogin')
-      // console.log('API.emitter: ', API.emitter);
+      dialogVisible.value = true
 }
 const reset = () => {
       loginForm.value = {}
