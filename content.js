@@ -30,8 +30,8 @@ import 'vxe-table/lib/style.css'
 //--------------------------------------------------
 
 //-----popup页面----------调试popup及打包上线时需要挂载此处-----------<<---<<---<<----<<-----<<----<<----<<---<<<-----------
-// import popup from './src/popup/app.vue'
-// createApp(popup).mount('#pop')
+import popup from './src/popup/app.vue'
+createApp(popup).mount('#pop')
 //-------------------------------------------------
 
 //-------------------各平台实例引入----------------
@@ -71,4 +71,16 @@ switch (true) {
 
 
 
+//-----------------注入js到任意页面------------------
+
+//----参考------https://stackoverflow.com/questions/9515704/use-a-content-script-to-access-the-page-context-variables-and-functions/9517879#9517879
+var s = document.createElement('script');
+s.src = chrome.runtime.getURL('inject.js');
+s.onload = function() {
+    this.remove();
+};
+(document.head || document.documentElement).appendChild(s);
+
+
+//-----脚本动态参数注入仅限于bgc-----------------
 

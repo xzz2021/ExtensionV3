@@ -10,6 +10,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const VueLoaderPlugin = require('vue-loader').VueLoaderPlugin
 
+// const InstallPlugin = require('install-webpack-plugin');
 //实现elementplus自动按需加载
 const AutoImport = require('unplugin-auto-import/webpack')
 const Components = require('unplugin-vue-components/webpack')
@@ -28,7 +29,8 @@ const comconfig = {
     entry: {
         // popup: './src/popup/pop.js',
         background: './background.js',
-        content: './content.js'
+        content: './content.js',
+        inject: './inject.js'
     },
     output: {
         filename: './[name].js',
@@ -95,7 +97,21 @@ const comconfig = {
             // 此处解决vue未定义extension大量报错问题
             __VUE_OPTIONS_API__: true,
             __VUE_PROD_DEVTOOLS__: false,
+            // "VERSION": JSON.stringify('0916')
           }),
+        // new InstallPlugin({
+        //     dependencies: {
+        //       peer: true,
+        //     },
+        //     packageManager: {
+        //       type: 'npm',
+        //       options: {
+        //         dev: true,
+        //         quiet: false,
+        //       },
+        //     },
+        //     prompt: true,
+        //   })
         
         //   new webpack.HotModuleReplacementPlugin()
     ],
@@ -103,17 +119,22 @@ const comconfig = {
         rules: [
             {
                 oneOf:[
-                    {  //将库(函数)挂载暴露到外部window-----------
-                        test: require.resolve("jquery"),
-                        loader: "expose-loader",
-                        options: {
-                          exposes: [{
-                            globalName: 'jq222',
-                            // moduleLocalName: '$',
-                            override: true
-                          }],
-                        },
-                      },
+                    // {  //将库(函数)挂载暴露到外部window-----------
+                    //     test: require.resolve("jquery"),
+                    //     loader: "expose-loader",
+                    //     options: {
+                    //       exposes:  {
+                    //         globalName: "jquery",
+                    //         },
+                    //     },
+                    // },
+                    // {  //将库(函数)挂载暴露到外部window-----------
+                    //     test: require.resolve("lodash"),
+                    //     loader: "expose-loader",
+                    //     options: {
+                    //       exposes:"lada666",
+                    //     },
+                    // },
                     {
                         test: /\.(js|jsx)$/i,
                         loader: 'babel-loader', //调用babelcore把源代码转换成抽象语法树,解析遍历生成,

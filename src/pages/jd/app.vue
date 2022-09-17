@@ -160,7 +160,7 @@
         </div>
     </main>
     <footer>
-      <div class="version">0818</div>
+      <div class="version">{{version}}</div>
     </footer>
     </div>
     <ComponentsLoginPanel />
@@ -175,7 +175,7 @@ import { storeToRefs } from 'pinia'
 import { userStore } from '../../stores/userStore'
 
 const userstore = userStore();
-const { userid, userToken } = storeToRefs(userstore)
+const { userid, userToken, version } = storeToRefs(userstore)
 
 //---------------单纯字符串变量不可使用reactive---------
 let currentHref = ref('')
@@ -479,12 +479,10 @@ const pictureOption  = reactive([
       sendResponse({status: true})
       })
     getStorage()
-    console.log(jq222)
    })
 
 </script>
 <style lang="scss" scoped>
 @import "../../css/sass/jclpanel.scss";
-
 
 </style>

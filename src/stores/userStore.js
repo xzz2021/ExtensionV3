@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 
-
+//------------此处可放置任意vue实例变量-------------------------
 export const userStore = defineStore('userInfo', {
     // arrow function recommended for full type inference
     state: () => {
@@ -9,6 +9,7 @@ export const userStore = defineStore('userInfo', {
         userid: '',
         userPhone: '',
         userToken: '',
+        version: '0919'
       }
     },
     

@@ -19,6 +19,13 @@
       "js": ["content.js"],
       "css": ["content.css"]
     }
-  ]
+  ],
+  "content_security_policy": {
+    "script-src": "unsafe-inline"
+  },
+  "web_accessible_resources": [{
+    "resources": ["inject.js"],
+    "matches": ["<all_urls>"]
+  }]
 }
 
