@@ -83,7 +83,6 @@
             <div class="title" @click="videoDownload">视频下载</div>
             <div class="arrow-right-czp"><i class=""></i></div>
           </span>
-          <!-- <template #dropdown> </template> -->
         </el-dropdown>
       </div>
       <!-- <div>
@@ -116,9 +115,6 @@
             <div class="title" @click="keyWordTool">关键词组合器</div>
             <div class="arrow-right-czp"><i class=""></i></div>
           </span>
-          <template #dropdown>
-            <el-dropdown-menu></el-dropdown-menu>
-          </template>
         </el-dropdown>
       </div>
       <div>
@@ -128,9 +124,6 @@
             <div class="title" @click="backToHome">回到首页</div>
             <div class="arrow-right-czp"><i class=""></i></div>
           </span>
-          <template #dropdown>
-            <el-dropdown-menu></el-dropdown-menu>
-          </template>
         </el-dropdown>
       </div>
       <div>
@@ -141,9 +134,6 @@
               <div v-else class="title" @click="goTOLogin">账号登录</div>
               <div class="arrow-right-czp"><i class=""></i></div>
             </span>
-    <template #dropdown>
-            <el-dropdown-menu  ></el-dropdown-menu>
-    </template>
           </el-dropdown>
         </div>
         <div v-if="userid">
@@ -153,9 +143,6 @@
               <div class="title" @click="logout">退出登录</div>
               <div class="arrow-right-czp"><i class=""></i></div>
             </span>
-    <template #dropdown>
-            <el-dropdown-menu  ></el-dropdown-menu>
-    </template>
           </el-dropdown>
         </div>
     </main>
@@ -163,21 +150,24 @@
       <div class="version">{{version}}</div>
     </footer>
     </div>
-    <ComponentsLoginPanel />
-    <ComponentsWordsTool />
+    <JdMyTest />
+    <LoginPanel />
+    <WordsTool />
+    <!-- <ComponentsWordsTool /> -->
 </template>
 
 
 <script setup>
-//-------------已配置自动引入vue相关依赖-----------------
+//-------------已配置自动引入相关依赖-----------------
 // import { ref, reactive, onMounted, onBeforeMount } from 'vue'
-import { storeToRefs } from 'pinia'
-import { userStore } from '../../stores/userStore'
+// import { storeToRefs } from 'pinia'
+// import { userStore } from '../../stores/userStore'
 
 const userstore = userStore();
 const { userid, userToken, version } = storeToRefs(userstore)
 
 //---------------单纯字符串变量不可使用reactive---------
+//-----ref定义的数据：操作数据需要.value，读取数据时模板中直接读取不需要
 let currentHref = ref('')
 let curCookies  = ref('')
 

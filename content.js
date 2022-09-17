@@ -69,18 +69,18 @@ switch (true) {
     break;
 }
 
-
-
 //-----------------注入js到任意页面------------------
 
 //----参考------https://stackoverflow.com/questions/9515704/use-a-content-script-to-access-the-page-context-variables-and-functions/9517879#9517879
-var s = document.createElement('script');
-s.src = chrome.runtime.getURL('inject.js');
+const s = document.createElement('script')
+s.src = chrome.runtime.getURL('inject.js')
 s.onload = function() {
-    this.remove();
-};
-(document.head || document.documentElement).appendChild(s);
+    this.remove()
+};//--<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<-------此处分号不可去掉--------------
+(document.head || document.documentElement).appendChild(s) // ------document.documentElement----指向html标签
 
-
-//-----脚本动态参数注入仅限于bgc-----------------
+//-----脚本动态参数注入仅限于bgc----------如果动态注入可能需要配置mainfest.json----------
+  /* "content_security_policy": {
+    "script-src": "unsafe-inline"
+  }, */
 

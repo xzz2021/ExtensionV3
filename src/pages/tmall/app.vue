@@ -134,7 +134,7 @@
     </footer>
     <el-button type="primary" @click="con">登录</el-button>
     <el-button type="primary" @click="con2">退出</el-button>
-      <!-- <MyDoc /> -->
+  <!-- <MyTest style="color: red" /> -->
   </div>
 </template>
 

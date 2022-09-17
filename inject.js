@@ -2,9 +2,12 @@
 // window._ = _
 // window.jq = $
 
+function aa(){
 
-// console.log('------------trytrytry-------------')
+    console.log('------------trytrytry-------------')
+}
 
 
 
 
+window.aa = aa

@@ -68,15 +68,18 @@ const comconfig = {
         new VueLoaderPlugin(),   // 引入vue解析插件
         
         //实现elementplus自动按需加载-----以及任何其他自定义引入的自动按需引入-------
-        AutoImport({
+        AutoImport({  // https://github.com/antfu/unplugin-auto-import/tree/main/src/presets
             include: [
                 /\.[tj]sx?$/, // .ts, .tsx, .js, .jsx
                 /\.vue$/, /\.vue\?vue/, // .vue
                 // /\.md$/, // .md
               ],
               imports: [
-                // presets
                 'vue',
+                'pinia',
+                {
+                    '../../stores/userStore':['userStore']
+                }
                 
               ],
             resolvers: [ElementPlusResolver()],
@@ -84,9 +87,10 @@ const comconfig = {
         Components({ 
             dirs:['src'],
             directoryAsNamespace: true,
-            // globalNamespaces: [],
+            globalNamespaces: ['components', 'pages'],
             resolvers: [ElementPlusResolver() ],
-            exclude: [/[\/]node_modules[\/]/, /[\/].git[\/]/, /[\/].nuxt[\/]/],
+            // include: [/src/],
+            // exclude: [/[\/]node_modules[\/]/, /[\/].git[\/]/, /[\/].nuxt[\/]/],
         }),
         new webpack.ProvidePlugin({  // 在函数上下文环境中注入第三方库---缺点:无法全局window引用---使用expose-loader解决
         $: 'jquery',
@@ -97,6 +101,7 @@ const comconfig = {
             // 此处解决vue未定义extension大量报错问题
             __VUE_OPTIONS_API__: true,
             __VUE_PROD_DEVTOOLS__: false,
+            "AUTHOR": JSON.stringify('xzz2022')
             // "VERSION": JSON.stringify('0916')
           }),
         // new InstallPlugin({
