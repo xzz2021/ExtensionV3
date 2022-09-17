@@ -1,12 +1,26 @@
 
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+
+
+
 const devconfig = {
     mode: 'development',
-    devtool: 'cheap-source-map',
+    devtool: 'cheap-module-source-map',
+    plugins: [
+    //-------为了避免磁盘重复读写-----仅在首次使用时打开------dev-server会自动读取public目录里的文件---故index.html无需引入---
+        // new CopyWebpackPlugin({  //实现静态文件的直接复制
+        //     patterns: [             // 需要拷贝的目录或者路径
+        //     {from: 'public/logo.png', to: './logo.png'},
+        //     {from: 'public/manifest.json', to: './manifest.json'}
+        // ]}),
+    ],
+    // watch: true,  // 监听源文件的变动,重新编译
+    // watchOptions: {}, //
     devServer: {
-        // contentBase: path.join(__dirname, 'xzz2022'),   // 告诉服务器从哪里提供内容(默认当前工作目录)
+        // contentBase: path.join(__dirname, 'xzz2022'),   // 告诉服务器从哪里提供额外的内容(默认当前工作目录),类似web服务器放置图片资源等
         // static: {
         //     directory: path.join(__dirname, 'xzz2022'), 
-        //   },  // 告诉服务器从哪里提供内容(默认当前工作目录)
+        //   },  // 告诉服务器从哪里提供额外的静态资源内容(默认当前工作目录)
         host: 'localhost', // 默认localhost,想外部可访问用'0.0.0.0'
         port: 8888, // 默认8080
         // inline: true, // 可以监控js变化
@@ -19,7 +33,6 @@ const devconfig = {
         //   // target: ['index.html', 'https://tmall.com'],//启动后打开指定页面
         // },
         compress: true, // 一切服务都启用gzip 压缩
-        // allowedHosts: ["localhost.com"], //必须加上此行,不然webpack安全策略在非监听页面会一直报错
         allowedHosts: 'auto', //必须加上此行,不然webpack安全策略在非监听页面会一直报错-----------auto会自动引入所监听的url
         client: {
           reconnect: false,   //不会尝试重新连接///不然非监听页会一直报错
@@ -62,3 +75,27 @@ const devconfig = {
 };
 
 module.exports = devconfig
+
+
+
+//-----webpack-dev-server----本质上是开了一个express服务器
+/*
+let express = require('express')
+let app = express()
+const  webpack = require('webpack')
+const webpackOptions = require('./webpack.config.js')
+const webpackDevMiddleware = require('webpack-dev-middleware')
+webpackOptions.mode = 'development'
+
+const compiler = webpack(webpackOptions)
+编译完会生成文件并交给中间件
+app.use(webpackDevMiddleware(compiler, {}))
+app.listen(8888)
+
+
+
+
+
+
+
+*/

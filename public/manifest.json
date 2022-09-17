@@ -6,7 +6,7 @@
   "background": { 
     "service_worker": "background.js" 
   },
-  "permissions": ["storage", "activeTab", "tabs", "contextMenus", "scripting"],
+  "permissions": ["storage", "activeTab", "tabs", "contextMenus", "scripting", "downloads"],
   "action": {
     "default_title": "popup.html",
     "default_icon": "logo.png",
@@ -16,8 +16,13 @@
   "content_scripts": [
     {
       "matches": ["https://*.1688.com/*", "https://*.tmall.com/*", "https://*.jd.com/*","https://www.google.com/"],
-      "js": ["content.js"]
+      "js": ["content.js"],
+      "css": ["content.css"]
     }
-  ]
+  ],
+  "web_accessible_resources": [{
+    "resources": ["inject.js"],
+    "matches": ["<all_urls>"]
+  }]
 }
 

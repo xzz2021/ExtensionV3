@@ -90,7 +90,7 @@ config = {
 //-----------------------配置代理url-------------------------
  let url2 = `http://xzz2022.top:666/${url}`
  fetch(url2, config).then((response) => {
-    console.log('response:------------- ', response)
+    // console.log('response:------------- ', response)
     // 走到这边不一定是成功的：
     // Fetch的特点的是，只要服务器有返回结果，不论状态码是多少，它都认为是成功
     let {
@@ -126,11 +126,12 @@ config = {
     //     statusText
     // });
 }).then(res => {
+    // console.log('res: --------------------', res);
     resolve(res)
 
 }).catch((reason) => {
     reject(('网络接口请求异常----或者返回被浏览器安全策略拦截----具体原因是:',reason))
-    // throw new TypeError('网络接口请求异常----或者返回被浏览器安全策略拦截----具体原因是:',reason)
+    //--------------走代理url后不存在浏览器安全策略拦截,但是会有请求异常直接报错的可能-------需要优化上面整体的reject的逻辑--------------
 
 })
     })}

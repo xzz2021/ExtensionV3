@@ -134,12 +134,12 @@
     </footer>
     <el-button type="primary" @click="con">登录</el-button>
     <el-button type="primary" @click="con2">退出</el-button>
-      <!-- <PagesTmallMyDoc /> -->
+  <!-- <MyTest style="color: red" /> -->
   </div>
 </template>
 
 <script setup>
-import {ref, reactive, onMounted, onBeforeMount, onUpdated } from 'vue'
+// import {ref, reactive, onMounted, onBeforeMount, onUpdated } from 'vue'
 import { storeToRefs } from 'pinia'
 import { userStore } from '../../stores/userStore'
 

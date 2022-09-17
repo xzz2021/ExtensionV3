@@ -2,25 +2,26 @@
   <div class="jclLogin">
     <!-- <HasLogin /> -->
     <el-dialog v-model="dialogVisible" title="手机号登录/注册" width="400px" @closed="reset" :close-on-click-modal="false" center>
-    <!-- <template #header="{  }">
-      <div class="my-header">
-      </div>
-    </template> -->
-    <!-- <span v-if="userid">
+
+    <span v-if="userid">
       <div style="margin:0 auto;">您当前登录的账号是:</div>
      <div style="margin:0 auto; height:70px"></div>
-     <div style="margin:0 auto; font-size:20px;text-align: center;color:red">{{userAccount}}</div>
+     <div style="margin:0 auto; font-size:20px;text-align: center;color:red">{{userPhone}}</div>
      <div style="margin:0 auto; height:70px"></div>
-     <div class="changeAccount" @click="goToLogin">切换账号</div>
-    </span> -->
-      <!-- <span v-else> -->
-      <span>
+     <div class="changeAccount" @click="switchAccount">切换账号</div>
+    </span>
+      <span v-else>
+      <!-- <span> -->
         <el-form label-width="300" :model="loginForm" size="large" ref="ruleFormRef" :rules="rules">
           <el-form-item prop="phone">
             <el-input v-model.number="loginForm.phone" placeholder="+86"  maxlength="11" />
           </el-form-item>
           <el-form-item prop="code">
-            <el-input v-model="loginForm.code" placeholder="请输入验证码" size="large" maxlength="6" />
+            <div class="codeSec" >
+
+            <el-input class="codeinput" v-model="loginForm.code" placeholder="请输入验证码" size="large" maxlength="6" />
+            <el-button class="getcode" plain @click="getCode(ruleFormRef)"  :disabled="btnDisabled">{{ codetitle }}</el-button>
+            </div>
           </el-form-item>
           <el-form-item class="submititem">
             <div class="submitbtn" @click="submitForm(ruleFormRef)">登录</div>
@@ -29,18 +30,17 @@
       </span>
       <!-- <div class="getcode"> <el-button text="plain" link> 获取验证码</el-button></div> -->
       <div class="loginFail" v-if="loginError">验证码错误，请重新输入</div>
-      <el-button class="getcode" plain @click="getCode(ruleFormRef)" link :disabled="btnDisabled">{{ codetitle }}</el-button>
     </el-dialog>
   </div>
 </template>
 <script setup>
-import {ref, reactive, onMounted  } from 'vue'
+// import {ref, reactive, onMounted  } from 'vue'
 
 import { storeToRefs } from 'pinia'
 import { userStore } from '../stores/userStore'
 
 const userstore = userStore();
-const { userid } = storeToRefs(userstore)
+const { userid, userPhone } = storeToRefs(userstore)
 const ruleFormRef = ref()
 const dialogVisible = ref(false)
 const btnDisabled = ref(false)
@@ -50,29 +50,28 @@ const rules = reactive({
         phone: [
           {required: true, message: '请输入手机号', trigger: 'blur'},
           {type: 'number', message: '手机号必须是数字'},
-          {pattern: /^1[3456789]\d{9}$/, message: '请输入正确的手机号', trigger: 'blur'},
+          {pattern: /^1[3456789]\d{9}$/, message: '请输入正确的手机号', trigger: 'blur'}
         ],
-        // pwd: [
-        //   { required: true, message: '密码不能为空', trigger: 'blur' },
+        code: [
+          { required: true, message: '验证码不能为空', trigger: 'blur' },
         // { type: 'number', message: '验证码必须是数字' },
-        // { pattern: /^\d{6}$/, message: '请输入正确的验证码', trigger: 'blur' }
-        // ],
+        { pattern: /^\d{6}$/, message: '请输入完整的验证码', trigger: 'blur' }
+        ]
       })
 const loginForm = reactive({phone: 16712753727, code: ''})
 const openDialog = () => {
-      dialogVisible.value = true;
+      dialogVisible.value = true
 }
 const reset = () => {
       loginForm.value = {}
-      ruleFormRef.resetFields();
-      API.emitter.off('iwantlogin')
+      // ruleFormRef.resetFields();
       // Message.error({
       //     showClose: true,
       //     message: '您当前为普通用户,只能使用部分功能,登录后可以解锁全部VIP功能!',
       //     duration: 3000,
       //   })
     }
-    const getCode = async (codeForm) => {
+    const getCode = async (ruleFormRef) => {
       codetitle.value = 30;
       btnDisabled.value = true
       let codeInterval = setInterval(() => {
@@ -83,7 +82,7 @@ const reset = () => {
       btnDisabled.value = false
         }
       }, 1000);
-      const  url = 'http://pddzdtest.junchenlun.com/?s=Home.Account.sendCode'
+      const  url = 'http://pddzd.junchenlun.com/?s=Home.Account.sendCode'
       let config = {
         method: 'post',
         body: {phone: loginForm.phone}
@@ -91,36 +90,37 @@ const reset = () => {
       let msg = {type: 'myfetch', url, config}
       let res = await  API.sendMessage(msg) //-------------------------------------------------------------------
       console.log('------myfetchmyfetch--------res: ', res)
+      if(res.ret == '200'){ ElMessage.success({message: `短信发送成功,请查收!`, duration: 1500, center: true})}
     }
-  const  submitForm = async (ruleFormRef) => {
+  const  submitForm =  (ruleFormRef) => {
      if (!ruleFormRef) return
-      await ruleFormRef.validate(async (valid) => {
+       ruleFormRef.validate(async (valid) => {
         if (valid) {
-      const url =  'http://pddzdtest.junchenlun.com//?s=Home.Account.codelogin'
       let config = {
+        url: 'http://pddzd.junchenlun.com//?s=Home.Account.codelogin',
+        // url: 'http://pddzdtest.junchenlun.com/pddzd/public/',
         method: 'post',
         body: loginForm
       }
 
-     let msg = {type: 'myfetch', url, config}
+     let msg = {type: 'myfetch', config}
       let res = await  API.sendMessage(msg) //---------------------
       console.log('------myfetchmyfetch--------res: ', res)
-
+      if(res === undefined) return  ElMessage.success({message: '登录失败,请重新登录', duration: 1500, center: true})
       //--------------------------------------------------------
-      if(res){
+      if(res.ret == '200'){
       //如果登录成功,存储userid
-      chrome.storage.local.set({userid: res.data.data.user_id})
+      chrome.storage.local.set({userid: res.data.user_id})
+      chrome.storage.local.set({userPhone: loginForm.phone})
+      chrome.storage.local.set({userToken: res.data.token})
       //--------------------------------------------------------
       dialogVisible.value = false
-        Message.success({message: `成功:登录成功:${res.data.data.user_id}`, duration: 1000, showClose: true});
+        ElMessage.success({message: `成功:登录成功:${res.data.data.user_id}`, duration: 1000, showClose: true});
          //设定此次登录时间戳以及过期时间,到期后不存在即为过期
-      let res =  API.sendMessage({type: 'mycookies'})
-      console.log('------mycookiesmycookies--------res: ', res)
+      // let res =  API.sendMessage({type: 'mycookies'})
+      // console.log('------mycookiesmycookies--------res: ', res)
           // console.log('前端表单校验通过submit!');
-        } else {
-        Message.success({message: '抱歉,登录失败,请重新登录', duration: 1000, showClose: true});
-          console.log('submit error!')
-        }
+        } else {ElMessage.error({message: `登录失败,原因:${res.msg},请核对验证码!`, duration: 1500, center: true})}
         }
       })
     }
@@ -141,10 +141,19 @@ const reset = () => {
   //     this.getID();
   //   },
   // },
-
+  // const getStorage = () => {
+  //   chrome.storage.local.get(['userid'], (result) =>{
+  //     result == {} ? chrome.storage.local.set({userid: ''}) : userstore.userid = result.userid
+  //   })
+  // }
+  const switchAccount = () => {
+    userstore.userid = ''
+    }
   onMounted(() => {
+    
     API.emitter.on('iwantlogin', openDialog)
     //  console.log('-------chrome------------', chrome);
+    // getStorage()
     })
 </script>
 <style lang="scss">

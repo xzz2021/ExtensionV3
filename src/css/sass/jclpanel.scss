@@ -4,14 +4,13 @@
     position: fixed;
     top: 30px;
     left: 20px;
-    z-index: 9999;
+    z-index: 666;
     background-color: $white;
     width: 180px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     border-radius: 4px;
     header {
       margin-bottom: 7px;
-  
       .section {
         display: flex;
         align-items: center;
@@ -67,26 +66,15 @@
             &:hover {
               color: $jclbg !important;
               background-color: #ffa9391f;
-    
             }
           }
-  
-          
         }
-    //     .el-dropdown-link[disabled] {
-    //       color: #606266;
-    //   }
-    //   .el-dropdown [disabled] {
-    //     color: #606266;
-    // }
-      
       }
     }
   
     footer {
       margin: 12px 0;
       padding-bottom: 10px;
-  
       .version {
         margin: 0 auto;
         width: 74px;
@@ -100,12 +88,9 @@
     }
   }
   
-  .el-dropdown-menu__item:hover {
+  :deep(.el-dropdown-menu__item):hover {
     background-color: #ffa9391f;
     color: $jclbg;
-  
   }
 
-  :deep(.el-dropdown [disabled] ){
-    color: #606266;
-}
+

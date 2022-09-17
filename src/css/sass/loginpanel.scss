@@ -39,6 +39,7 @@
           // height: 50px !important;
   
           .el-form-item__content {
+            display: block;
             .el-input {
               height: 100%;
               font-size: 14px;
@@ -83,28 +84,27 @@
         border-radius: 5px;
   
       }
-  
+      .codeSec{
+        display: flex;
+      .codeinput{
+        border-right-style: none !important;
+      }
       .getcode {
-        position: absolute;
-        top: 176px;
-        left: 248px;
-        text-align: center;
-        height: 37px;
-        width: 110px;
-        // height: 21px;
-        // font-size: 16px;
-        // line-height: 30px;
-        border: none;
+        border-left-style: none;
+        // border-radius: 0 4px 4px 0;
+        // margin-left: 5px;
         color: #ff9712;
         &:hover{
           color: #ff9712;
           background-color: transparent;
+          border: 1px solid #ff9712;
         }
         &:actived{
           color: #ff9712;
           background-color: transparent;
         }
       }
+    }
       .el-button--warning.is-link {
         --el-button-text-color: #ff9712;
       }
@@ -131,3 +131,10 @@
     }
   }
   
+  // :deep(.){
+
+  // }
+
+  :root {
+    --el-color-primary: #ff9712;
+  }

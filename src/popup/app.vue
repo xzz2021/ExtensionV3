@@ -3,7 +3,7 @@
     <div class="header">
       <div class="section">
         <img style="width: 165px; height: 66px;" src="https://junchenlunoffice.oss-cn-shenzhen.aliyuncs.com/plugs/logo1/JunChenLun_logo_desc.png" alt="" />
-        <a target="_blank" href="https://www.junchenlun.com/guides/pdd">
+        <a target="_blank" href="http://pddzd.junchenlun.com/plugs/">
           进入官网 >
         </a>
       </div>
@@ -17,17 +17,16 @@
       </div>
     </div>
     <div class="footer">
-      <div class="version">0817</div>
+      <div class="version">0917</div>
     </div>
     <!-- <el-input v-model="myin"></el-input> -->
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      popData: [
+<script setup>
+
+      const popData =  reactive(
+        [
         {
           title: '拼多多商城',
           href: 'https://mobile.yangkeduo.com',
@@ -54,15 +53,21 @@ export default {
           imgsrc: 'https://junchenlunoffice.oss-cn-shenzhen.aliyuncs.com/plugs/logo1/1688.png',
         },
         {
+          title: '阿里国际站',
+          href: 'https://www.alibaba.com',
+          imgsrc: 'https://junchenlunoffice.oss-cn-shenzhen.aliyuncs.com/plugs/logo1/1688.png',
+        },
+        {
+          title: '京东',
+          href: 'https://www.jd.com/',
+          imgsrc: 'https://junchenlunoffice.oss-cn-shenzhen.aliyuncs.com/plugs/logo1/jd.png',
+        },
+        {
           title: '亚马逊',
           href: 'amazon',
           imgsrc: 'https://junchenlunoffice.oss-cn-shenzhen.aliyuncs.com/plugs/logo1/amazon.png',
         },
-        {
-          title: '京东',
-          href: 'jd',
-          imgsrc: 'https://junchenlunoffice.oss-cn-shenzhen.aliyuncs.com/plugs/logo1/jd.png',
-        },
+        
         {
           title: '苏宁',
           href: 'suning',
@@ -82,11 +87,6 @@ export default {
           title: '小红书',
           href: 'xiaohs',
           imgsrc: 'https://junchenlunoffice.oss-cn-shenzhen.aliyuncs.com/plugs/logo1/xiaohs.png',
-        },
-        {
-          title: '阿里国际站',
-          href: '1688',
-          imgsrc: 'https://junchenlunoffice.oss-cn-shenzhen.aliyuncs.com/plugs/logo1/1688.png',
         },
         {
           title: '速卖通',
@@ -133,23 +133,15 @@ export default {
         //   href: 'lazada',
         //   imgsrc: 'https://junchenlunoffice.oss-cn-shenzhen.aliyuncs.com/plugs/logo1/lazada.png'
         // }
-      ],
-    }
-  },
-  methods: {
-    isJump(index,event) {
-      if (index > 4) {
+      ])
+
+
+    const  isJump = (index,event) => {
+      if (index > 6) {
         ElMessage.success({message: `功能正在开发...`, duration: 1500, offset: 450, position: 'top-right',center: true, grouping: true,})
-        console.log("999")
-        // event.preventDefault()  //阻止跳转
        return event.preventDefault()  //阻止跳转
-        // console.log($(".container"))
-        // return false
       }
-    },
-  },
-  mounted() {},
-}
+    }
 </script>
 
 <style lang="scss" scoped>
