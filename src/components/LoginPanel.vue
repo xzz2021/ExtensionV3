@@ -82,12 +82,14 @@ const reset = () => {
       btnDisabled.value = false
         }
       }, 1000);
-      const  url = 'http://pddzd.junchenlun.com/?s=Home.Account.sendCode'
+      // const  url = 'http://pddzd.junchenlun.com/?s=Home.Account.sendCode'
       let config = {
+        url: 'http://pddzd.junchenlun.com/?s=Home.Account.sendCode',
         method: 'post',
         body: {phone: loginForm.phone}
       }
-      let msg = {type: 'myfetch', url, config}
+      let msg = {type: 'myfetch', config}
+      console.log('-------开始发送短信---------------');
       let res = await  API.sendMessage(msg) //-------------------------------------------------------------------
       console.log('------myfetchmyfetch--------res: ', res)
       if(res.ret == '200'){ ElMessage.success({message: `短信发送成功,请查收!`, duration: 1500, center: true})}

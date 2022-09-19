@@ -1,3 +1,7 @@
+//因为loginpanel会在全局直接挂载,所以此处挂载css会直接生成
+@import 'root';
+
+
 .jclLogin {
     position: fixed;
     z-index: 100001;
@@ -135,6 +139,3 @@
 
   // }
 
-  :root {
-    --el-color-primary: #ff9712;
-  }

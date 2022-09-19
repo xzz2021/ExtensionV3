@@ -10,9 +10,7 @@ import{ contentApi as API} from './src/api/contentApi/index'
 window.API = API
 // //------------------------------------------------------
 
-//引入自定义的所有css入口文件
-import './src/css/style'
-//------------------------
+
 
 //---------全局引入vxe-table----------------
 import 'xe-utils'
@@ -22,6 +20,10 @@ import 'vxe-table/lib/style.css'
 //-------------结合babel-loader配置按需加载后----打包体积只有100k
 //-------所以可以全局引入------jq(打包90k)+vue+ele+pinia---------
 
+
+//引入自定义的所有css入口文件
+import './src/css/style'
+//------------------------
 
 //-----------------全局登录组件----------------------
 // import LoginPanel from '../components/LoginPanel.vue'
@@ -41,6 +43,17 @@ import appjd from './src/pages/jd/app.vue'
 
 //---------------------------------------------------------
 
+
+// Vue.directive('disClick', {
+//   inserted:  function (el, binding) {
+//     el.addEventListener("click", function(){
+//       el.setAttribute("disabled", "disabled")
+//       setTimeout(() => {
+//         el.removeAttribute("disabled")
+//       }, binding.value);
+//     })
+//   }
+// })
 
 //------------vue实例-----挂载入口---------------------
 function createEntry(myapp,id){
