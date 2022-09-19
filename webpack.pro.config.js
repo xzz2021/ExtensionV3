@@ -15,7 +15,7 @@ const TerserWebpackPlugin = require('terser-webpack-plugin')
 // webpack.sourceMapDevToolPlugin 可以配合 FileManagerPlugin管理生成后的map文件
 
 
-const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin');
+// const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader').VueLoaderPlugin
 // const WorkboxWebpackPlugin = require('workbox-webpack-plugin')  //实现PWA渐进式网络开发
 

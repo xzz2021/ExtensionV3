@@ -132,24 +132,40 @@
     <footer>
       <div class="version">0818</div>
     </footer>
-    <el-button type="primary" @click="con">登录</el-button>
+    <el-button  type="primary" @click="con">登录</el-button>
     <el-button type="primary" @click="con2">退出</el-button>
+    <!-- <div v-unclickable="3"  @click="con222">点点点</div> -->
+  
   <!-- <MyTest style="color: red" /> -->
   </div>
 </template>
 
 <script setup>
-// import {ref, reactive, onMounted, onBeforeMount, onUpdated } from 'vue'
-import { storeToRefs } from 'pinia'
-import { userStore } from '../../stores/userStore'
 
-const userstore = userStore();
-const { userid } = storeToRefs(userstore)
+
+//自定义V-指令,避免短时间内重复点击--------------v-disClick="3"----------------
+/* const VdisClick={
+  mounted: (el, binding) =>{
+          el.addEventListener("click", function(){
+            el.setAttribute("disabled", "disabled")
+            el.setAttribute("style", "pointer-events: none")
+            setTimeout(() => {
+              el.removeAttribute("disabled")
+              el.removeAttribute("style")
+            }, binding.value * 1000);
+          })
+      }
+}  */
+// const userstore = userStore();
+// const { userid } = storeToRefs(userstore)
     const con = () => {
-      chrome.storage.local.set({userid: '66666666666'})
+      // chrome.storage.local.set({userid: '66666666666'})
+      console.log('--------我被点击了-----------');
     }
-    const con2 = () => {
-      chrome.storage.local.set({userid: ''})
+    const con222 = () => {
+      // chrome.storage.local.set({userid: ''})
+      console.log('--------我被点击了222222-----------');
+
     }
   const goTOLogin = () => {
       API.emitter.emit('iwantlogin')
@@ -159,7 +175,7 @@ const { userid } = storeToRefs(userstore)
     }
       const getStorage = () => {
     chrome.storage.local.get(['userid'], (result) =>{
-      console.log('result: ------tmtmtmt-------', result)
+      // console.log('result: ------tmtmtmt-------', result)
       result == {} ? chrome.storage.local.set({userid: ''}) : userstore.userid = result.userid
     })
   }
