@@ -79,10 +79,9 @@ const reset = () => {
         if (codetitle.value == 0) {
           clearInterval(codeInterval);
           codetitle.value = '获取验证码';
-      btnDisabled.value = false
+          btnDisabled.value = false
         }
-      }, 1000);
-      // const  url = 'http://pddzd.junchenlun.com/?s=Home.Account.sendCode'
+      }, 1000)
       let config = {
         url: 'http://pddzd.junchenlun.com/?s=Home.Account.sendCode',
         method: 'post',
@@ -99,9 +98,9 @@ const reset = () => {
        ruleFormRef.validate(async (valid) => {
         if (valid) {
       let config = {
-        url: 'http://pddzd.junchenlun.com//?s=Home.Account.codelogin',
-        // url: 'http://pddzdtest.junchenlun.com/pddzd/public/',
-        method: 'post',
+        // url: 'http://pddzd.junchenlun.com//?s=Home.Account.codelogin',
+        url: 'http://pddzdtest.junchenlun.com/pddzd/public/',
+        method: 'POST',
         body: loginForm
       }
 

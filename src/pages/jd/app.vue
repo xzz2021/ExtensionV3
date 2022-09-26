@@ -153,6 +153,7 @@
     <JdMyTest />
     <LoginPanel />
     <WordsTool />
+    <OrderRemarks />
     <!-- <ComponentsWordsTool /> -->
 </template>
 
@@ -429,7 +430,6 @@ const pictureOption  = reactive([
       console.log('res:-------- ', res);
       res && ElMessage.success({ message: `视频${res}`, duration: 2500,})
     }
-
 
     const keyWordTool = () =>{
       API.emitter.emit('iwantkey')

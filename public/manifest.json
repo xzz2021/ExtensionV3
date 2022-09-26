@@ -15,7 +15,7 @@
   "icons": { "16": "logo.png", "48": "logo.png", "128": "logo.png" },
   "content_scripts": [
     {
-      "matches": ["https://*.1688.com/*", "https://*.tmall.com/*", "https://*.jd.com/*","https://www.google.com/"],
+      "matches": ["https://*.1688.com/*", "https://*.tmall.com/*", "https://*.jd.com/*","https://www.google.com/", "http://*.junchenlun.com/*"],
       "js": ["content.js"],
       "css": ["content.css"]
     }
