@@ -9,7 +9,7 @@ export const userStore = defineStore('userInfo', {
         userid: '',
         userPhone: '',
         userToken: '',
-        version: '0919'
+        version: '0928'
       }
     },
     

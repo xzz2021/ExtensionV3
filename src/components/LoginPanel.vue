@@ -83,7 +83,7 @@ const reset = () => {
         }
       }, 1000)
       let config = {
-        url: 'http://pddzd.junchenlun.com/?s=Home.Account.sendCode',
+        url: '?s=Home.Account.sendCode',
         method: 'post',
         body: {phone: loginForm.phone}
       }
@@ -98,9 +98,8 @@ const reset = () => {
        ruleFormRef.validate(async (valid) => {
         if (valid) {
       let config = {
-        // url: 'http://pddzd.junchenlun.com//?s=Home.Account.codelogin',
-        url: 'http://pddzdtest.junchenlun.com/pddzd/public/',
-        method: 'POST',
+        url: '/?s=Home.Account.codelogin',
+        // url: 'http://pddzdtest.junchenlun.com/pddzd/public/',      //测试接口
         body: loginForm
       }
 

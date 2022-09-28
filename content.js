@@ -12,7 +12,6 @@ window.API = API
 // //------------------------------------------------------
 
 
-
 //---------全局引入vxe-table----------------
 import 'xe-utils'
 import VXETable from 'vxe-table'
@@ -26,11 +25,6 @@ import 'vxe-table/lib/style.css'
 import './src/css/style'
 //------------------------
 
-//-----------------全局登录组件----------------------
-// import LoginPanel from '../components/LoginPanel.vue'
-// createEntry(LoginPanel,'jclogin')
-// createApp(LoginPanel).component('login-panel', LoginPanel)
-//--------------------------------------------------
 
 //-----popup页面----------调试popup及打包上线时需要挂载此处-----------<<---<<---<<----<<-----<<----<<----<<---<<<-----------
 import popup from './src/popup/app.vue'

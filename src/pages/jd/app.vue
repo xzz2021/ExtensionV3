@@ -1,6 +1,6 @@
 <template>
-<div class="导航栏 jclpanel box">
-    <header>
+<div class="导航栏 jclpanel" >
+    <header class="jclheader" >
       <div class="section">
         <img
           style="width: 107px; height: 40px"
@@ -9,7 +9,9 @@
         />
       </div>
     </header>
-    <main>
+      <!-- <transition name="fade"> -->
+    <el-collapse-transition>
+    <main class="jclmain" v-show="showMain">
       <div>
         <el-dropdown placement="right-start"  @command="OneClickDiagnosis">
           <span class="el-dropdown-link">
@@ -111,7 +113,7 @@
        <div>
         <el-dropdown>
           <span class="el-dropdown-link">
-            <div class="jclicon"><i class="xzzicon-biaoti"></i></div>
+            <div class="jclicon"><i class="xzzicon-gjczhq"></i></div>
             <div class="title" @click="keyWordTool">关键词组合器</div>
             <div class="arrow-right-czp"><i class=""></i></div>
           </span>
@@ -145,25 +147,26 @@
             </span>
           </el-dropdown>
         </div>
+        <Div  class="version">
+          {{ version }}
+        </Div>
     </main>
-    <footer>
-      <div class="version">{{version}}</div>
+    </el-collapse-transition>
+    <!-- </transition> -->
+
+    <footer @click="showMain = !showMain">
+      <div class="shrink"><i :class="!showMain? 'xzzicon-shrink': 'xzzicon-shrink2'"></i></div>
+    <!-- <el-button type="primary">Primary</el-button> -->
     </footer>
     </div>
     <JdMyTest />
     <LoginPanel />
     <WordsTool />
     <OrderRemarks />
-    <!-- <ComponentsWordsTool /> -->
 </template>
 
 
 <script setup>
-//-------------已配置自动引入相关依赖-----------------
-// import { ref, reactive, onMounted, onBeforeMount } from 'vue'
-// import { storeToRefs } from 'pinia'
-// import { userStore } from '../../stores/userStore'
-
 const userstore = userStore();
 const { userid, userToken, version } = storeToRefs(userstore)
 
@@ -171,7 +174,10 @@ const { userid, userToken, version } = storeToRefs(userstore)
 //-----ref定义的数据：操作数据需要.value，读取数据时模板中直接读取不需要
 let currentHref = ref('')
 let curCookies  = ref('')
-
+let showMain  = ref(true)
+// let jdx = ref(-200)
+// let jdy = ref(-200)
+// let reloadDrag = ref(true)
 const diagnosisOption = reactive([{value: 2}, {value: 5}, {value: 10}, {value: 20}])
 const commentOption = reactive([{value: 20}, {value: 50}, {value: 100}, {value: 200}])
 const commentOption1 = reactive([{value: 20}, {value: 50}, {value: 100}, {value: 200}])
@@ -182,16 +188,6 @@ const pictureOption  = reactive([
         {value: 'sku图下载', arg: 'sku'},
         {value: '详情图下载', arg: 'detail'},
       ])
-
-    const con =async () => {
-      // chrome.storage.local.set({userid: '66666666666'})
-      // $('#logo a').attr('href','http://note.xzz2022.top')
-      //--------------------------------
-      // let msg = {type: 'downloads', url: 'https://junchenlunoffice.oss-cn-shenzhen.aliyuncs.com/plugs/dist.7z'}
-      // let res = await API.sendMessage(msg)
-      // console.log('res:----------下载------ ', res);
-      //--------------------------------------
-    }
     const  OneClickDiagnosis = async (DiagnosisNum) => {
       if (this.userId == '') return this.$myBus.$emit('iwantlogin');
       if (!(currentHref.value.indexOf('item.jd') > 1)) {
@@ -427,7 +423,7 @@ const pictureOption  = reactive([
         if(url == undefined) return  ElMessage.error({ message: '当前商品没有视频',  duration: 1500,})
         let msg = {type: 'downloads', url}
       let res = await  API.sendMessage(msg) 
-      console.log('res:-------- ', res);
+      // console.log('res:-------- ', res);
       res && ElMessage.success({ message: `视频${res}`, duration: 2500,})
     }
 
@@ -462,6 +458,7 @@ const pictureOption  = reactive([
     currentHref = window.location.href
     curCookies.value = "{'" + document.cookie + "'}"
     // console.log('window.location.href: ', window.location.href)
+
   })
    onBeforeMount(() => {
     chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
