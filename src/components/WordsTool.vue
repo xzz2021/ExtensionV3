@@ -3,7 +3,7 @@
 
 
 <vxe-modal  className="wordstool modifytool" :showHeader="false" @hide="clearWordsTool" v-model="openTool" width="870px" height="550px"
-      :position="{top: 100}"  >
+      :position="{top: 100}"  marginSize="-700" >
       <div class="toolcontainer">
         <el-collapse v-model="collapseActive"  >
             <el-collapse-item name="aa">

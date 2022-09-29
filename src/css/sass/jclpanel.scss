@@ -1,17 +1,15 @@
 @import 'variable.scss';
-@import 'vxeCommon';
 
 .jclpanel {
     position: fixed;
     top: 30px;
     left: 20px;
-    z-index: 666;
+    z-index: 11111;
     background-color: $white;
     width: 180px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     border-radius: 4px;
     header {
-      margin-bottom: 7px;
       .section {
         display: flex;
         align-items: center;
@@ -20,12 +18,10 @@
         border-radius: 4px 4px 0 0;
       }
     }
-  
     main {
       display: flex;
       flex-flow: column;
       align-items: center;
-  
       >div {
         margin: 5px 0;
         border-radius: 4px;
@@ -44,7 +40,6 @@
               width: 16px;
   
             }
-  
             .title {
               text-align: left;
               // background-color: rgb(238, 248, 98);
@@ -57,7 +52,6 @@
               font-weight: 400;
               line-height: 20px;
             }
-  
             .arrow-right-czp {
               font-size: 10px;
               width: 16px;
@@ -71,27 +65,54 @@
           }
         }
       }
-    }
-  
-    footer {
-      margin: 12px 0;
-      padding-bottom: 10px;
       .version {
+        // margin: 12px 0;
+        // padding-top: 10px;
         margin: 0 auto;
         width: 74px;
-        height: 20px;
+        // height: 20px;
         font-size: 14px;
         font-family: $fontYaHei;
         font-weight: 400;
-        line-height: 22px;
+        line-height: 26px;
         color: #999999;
+      }
+    }
+    footer{
+      // height: 20px;
+      .shrink{
+        text-align: center;
+        &:hover{
+          color: $jclbg;
+        }
       }
     }
   }
   
+  // .el-dropdown-menu__item:hover {
+  //   background-color: #ffa9391f;
+  //   color: $jclbg;
+  
+  // }
+
   :deep(.el-dropdown-menu__item):hover {
     background-color: #ffa9391f;
     color: $jclbg;
   }
 
+//vue3面板过渡动画-----------已使用plus3内置动画
+// .fade-enter-active, .fade-leave-active {
+//   overflow: hidden;
+//   max-height: 800px;
+//   transition: max-height 1s;
+// }
+// .fade-enter-from, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+//   max-height: 0;
+// }
+
+
+//隐藏面板拖拽句柄
+.vdr.active:before {
+  display:none;
+}
 

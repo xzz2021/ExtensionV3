@@ -1,3 +1,4 @@
+// 'use strict'默认启用
 import { createApp } from 'vue'
 
 //-------pinia----打包60k---------
@@ -9,7 +10,6 @@ const pinia = createPinia()
 import{ contentApi as API} from './src/api/contentApi/index'
 window.API = API
 // //------------------------------------------------------
-
 
 
 //---------全局引入vxe-table----------------
@@ -25,11 +25,6 @@ import 'vxe-table/lib/style.css'
 import './src/css/style'
 //------------------------
 
-//-----------------全局登录组件----------------------
-// import LoginPanel from '../components/LoginPanel.vue'
-// createEntry(LoginPanel,'jclogin')
-// createApp(LoginPanel).component('login-panel', LoginPanel)
-//--------------------------------------------------
 
 //-----popup页面----------调试popup及打包上线时需要挂载此处-----------<<---<<---<<----<<-----<<----<<----<<---<<<-----------
 import popup from './src/popup/app.vue'
@@ -68,13 +63,13 @@ function createEntry(myapp,id){
 
 
 
-let url = window.location.href
+let url = location.host
 switch (true) {
-  case url.indexOf('jd.com/')>1: createEntry(appjd, 'marketjd')
+  case url.indexOf('jd.com')>1: createEntry(appjd, 'marketjd')
     break;
-  case url.indexOf('1688.com/')>1: createEntry(app1688, 'market1688')
+  case url.indexOf('1688.com')>1: createEntry(app1688, 'market1688')
     break;
-  case url.indexOf('tmall.com/')>1: createEntry(apptmall, 'markettmall')
+  case url.indexOf('tmall.com')>1: createEntry(apptmall, 'markettmall')
     break;
   // case valueN: ''
   //   break;
@@ -89,7 +84,7 @@ const s = document.createElement('script')
 s.src = chrome.runtime.getURL('inject.js')
 s.onload = function() {
     this.remove()
-};//--<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<-------此处分号不可去掉--------------
+};//--<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<-------此处分号不可去掉--------应该是立即执行函数必须以分号分隔------
 (document.head || document.documentElement).appendChild(s) // ------document.documentElement----指向html标签
 
 //-----脚本动态参数注入仅限于bgc----------如果动态注入可能需要配置mainfest.json----------
