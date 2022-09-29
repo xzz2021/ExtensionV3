@@ -1,6 +1,9 @@
 <template>
 <div class="导航栏 jclpanel" >
-    <header class="jclheader" >
+    <VueDragResize :isActive="true" :w="180" :h="60" :x="jdx" :y="jdy" :z="22" v-if="reloadDrag" :isResizable="false" @dragstop="onDragstop" >
+      <!-- https://github.com/kirillmurashov/vue-drag-resize/tree/v2.0.3 -->
+      <div class="dragbox">
+    <header class="jclheader">
       <div class="section">
         <img
           style="width: 107px; height: 40px"
@@ -9,8 +12,8 @@
         />
       </div>
     </header>
-      <!-- <transition name="fade"> -->
-    <el-collapse-transition>
+      <transition name="fade">
+    <!-- <el-collapse-transition> -->
     <main class="jclmain" v-show="showMain">
       <div>
         <el-dropdown placement="right-start"  @command="OneClickDiagnosis">
@@ -151,23 +154,24 @@
           {{ version }}
         </Div>
     </main>
-    </el-collapse-transition>
-    <!-- </transition> -->
+    <!-- </el-collapse-transition> -->
+    </transition>
 
     <footer @click="showMain = !showMain">
       <div class="shrink"><i :class="!showMain? 'xzzicon-shrink': 'xzzicon-shrink2'"></i></div>
-    <!-- <el-button type="primary">Primary</el-button> -->
+    <el-button type="primary">Primary</el-button>
     </footer>
     </div>
-    <JdMyTest />
+</VueDragResize>
+    </div>
     <LoginPanel />
-    <WordsTool />
-    <OrderRemarks />
+    <!-- <WordsTool />
+    <OrderRemarks /> -->
 </template>
 
 
 <script setup>
-const userstore = userStore();
+const userstore = userStore()
 const { userid, userToken, version } = storeToRefs(userstore)
 
 //---------------单纯字符串变量不可使用reactive---------
@@ -175,9 +179,9 @@ const { userid, userToken, version } = storeToRefs(userstore)
 let currentHref = ref('')
 let curCookies  = ref('')
 let showMain  = ref(true)
-// let jdx = ref(-200)
-// let jdy = ref(-200)
-// let reloadDrag = ref(true)
+let jdx = ref(60)
+let jdy = ref(120)
+let reloadDrag = ref(true)
 const diagnosisOption = reactive([{value: 2}, {value: 5}, {value: 10}, {value: 20}])
 const commentOption = reactive([{value: 20}, {value: 50}, {value: 100}, {value: 200}])
 const commentOption1 = reactive([{value: 20}, {value: 50}, {value: 100}, {value: 200}])
@@ -188,6 +192,23 @@ const pictureOption  = reactive([
         {value: 'sku图下载', arg: 'sku'},
         {value: '详情图下载', arg: 'detail'},
       ])
+
+
+      const onDragstop = (e) => {
+      let winHeight = window.innerHeight - 60
+      let winWidth = window.innerWidth - 200
+      if(e.top < 0 || e.left < 0 || e.top > winHeight || e.left > winWidth){
+        reloadDrag.value = false
+        setTimeout(() => {
+        reloadDrag.value = true
+        }, 100);
+      }else{
+      jdx.value = e.left
+      jdy.value = e.top
+      //  浏览器_set_storage('jdx', e.left);
+      //  浏览器_set_storage('jdy', e.top);
+      }
+    }
     const  OneClickDiagnosis = async (DiagnosisNum) => {
       if (this.userId == '') return this.$myBus.$emit('iwantlogin');
       if (!(currentHref.value.indexOf('item.jd') > 1)) {

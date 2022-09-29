@@ -17,13 +17,16 @@
       </div>
     </div>
     <div class="footer">
-      <div class="version">0917</div>
+      <div class="version">{{version}}</div>
     </div>
     <!-- <el-input v-model="myin"></el-input> -->
   </div>
 </template>
 
 <script setup>
+import { userStore } from '../stores/userStore'//因为路径不同,所以需手动引入覆盖
+const userstore = userStore()
+const { version } = storeToRefs(userstore)
 
       const popData =  reactive(
         [
@@ -148,15 +151,14 @@
 body {
   background: url('https://junchenlunoffice.oss-cn-shenzhen.aliyuncs.com/plugs/logo1/mask.png') no-repeat;
 }
-
 .container {
   width: 368px;
-  height: 445px;
-  opacity: 1;
+  // height: 445px;
+  // opacity: 1;
   // chrome原生body界面无法覆写边框样式
   // background-clip: padding-box;
   // border: 1px solid #DDDDDD;
-  border-radius: 4px;
+  // border-radius: 4px;
 
   // background: url("/img/mask.png") no-repeat;
   .header {
@@ -172,20 +174,19 @@ body {
       width: 328px;
       height: 94px;
       background: linear-gradient(180deg, #ffad44 0%, #ff9712 100%);
-      opacity: 1;
+      // opacity: 1;
       border-radius: 4px;
 
       a {
-        width: 71px;
+        // width: 71px;
         // width: 56px;
         text-decoration: none;
-        height: 19px;
+        // height: 19px;
         font-size: 14px;
         font-family: Microsoft YaHei;
-        font-weight: 400;
-        line-height: 22px;
+        // font-weight: 400;
+        // line-height: 22px;
         color: #ffffff;
-        opacity: 1;
       }
     }
   }
@@ -208,17 +209,14 @@ body {
 
         img {
           width: 38px;
-          height: 38px;
+          // height: 38px;
         }
 
         span {
-          font-family: Microsoft YaHei;
           margin-top: 8px;
           height: 19px;
           line-height: 22px;
           font-size: 14px;
-          font-family: Microsoft YaHei;
-          font-weight: 400;
           color: #000;
         }
       }
@@ -230,15 +228,14 @@ body {
     padding-bottom: 10px;
 
     .version {
+      text-align: center;
       margin: 0 auto;
       width: 74px;
       height: 20px;
       font-size: 14px;
       font-family: Microsoft YaHei;
-      font-weight: 400;
       line-height: 22px;
       color: #999999;
-      opacity: 1;
     }
   }
 }

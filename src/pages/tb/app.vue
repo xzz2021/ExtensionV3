@@ -1,5 +1,5 @@
 <template>
-  <div class="tmall">{{version}}</div>
+  <div class="taobao">{{version}}</div>
 </template>
 
 <script setup>
@@ -47,12 +47,12 @@ const { userid, userToken, version } = storeToRefs(userstore)
 <style lang="scss" scoped>
 @import "../../css/sass/jclpanel.scss";
 
-.tmall{
+.taobao{
   position: fixed;
   top: 60px;
   left: 20px;
   width: 200px;
   height: 200px;
-  background-color: rgba(116, 247, 104, 0.74);
+  background-color: rgba(104, 238, 247, 0.74);
 }
 </style>

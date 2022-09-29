@@ -6,11 +6,10 @@ import { createPinia } from 'pinia'
 const pinia = createPinia()
 //-----------------------------------
 
-// //---------------引入所有API挂载到全局----------<<<<<<<<<<<<<<<<<<<<<---此处引入有问题
+// //---------------引入所有API挂载到全局----------
 import{ contentApi as API} from './src/api/contentApi/index'
 window.API = API
 // //------------------------------------------------------
-
 
 //---------全局引入vxe-table----------------
 import 'xe-utils'
@@ -25,30 +24,32 @@ import 'vxe-table/lib/style.css'
 import './src/css/style'
 //------------------------
 
-
-//-----popup页面----------调试popup及打包上线时需要挂载此处-----------<<---<<---<<----<<-----<<----<<----<<---<<<-----------
+//-----popup页面----------
 import popup from './src/popup/app.vue'
-createApp(popup).mount('#pop')
+$('#pop')[0] ? createApp(popup).use(pinia).mount('#pop'): ''
 //-------------------------------------------------
+
+
+
+// Vue.directive('disClick', {
+  //   inserted:  function (el, binding) {
+    //     el.addEventListener("click", function(){
+      //       el.setAttribute("disabled", "disabled")
+      //       setTimeout(() => {
+        //         el.removeAttribute("disabled")
+        //       }, binding.value);
+        //     })
+        //   }
+        // })
+        
 
 //-------------------各平台实例引入----------------
 import app1688 from './src/pages/alibaba/app.vue'
 import apptmall from './src/pages/tmall/app.vue'
+import apptb from './src/pages/tb/app.vue'
 import appjd from './src/pages/jd/app.vue'
 
 //---------------------------------------------------------
-
-
-// Vue.directive('disClick', {
-//   inserted:  function (el, binding) {
-//     el.addEventListener("click", function(){
-//       el.setAttribute("disabled", "disabled")
-//       setTimeout(() => {
-//         el.removeAttribute("disabled")
-//       }, binding.value);
-//     })
-//   }
-// })
 
 //------------vue实例-----挂载入口---------------------
 function createEntry(myapp,id){
@@ -56,21 +57,24 @@ function createEntry(myapp,id){
   if (el) {
     //  afterbegin 插入body内部最前面------afterend插入body外部后面
       el.insertAdjacentHTML('afterend',`<div id="${id}"></div>`)
-      // createApp(myapp).use(pinia).mount(`#${id}`)
       createApp(myapp).use(pinia).use(VXETable).mount(`#${id}`)
     }
 }
 
 
-
 let url = location.host
-switch (true) {
-  case url.indexOf('jd.com')>1: createEntry(appjd, 'marketjd')
+let currentWebsite = ''
+url.match(/login|mms|passport/) == null? currentWebsite = url.match(/tmall|taobao|1688|yangkeduo|pinduoduo|alibaba|jd/)[0] : '' 
+
+switch (currentWebsite) {
+  case 'jd': createEntry(appjd, 'marketjd')
     break;
-  case url.indexOf('1688.com')>1: createEntry(app1688, 'market1688')
+  case '1688': createEntry(app1688, 'market1688')
     break;
-  case url.indexOf('tmall.com')>1: createEntry(apptmall, 'markettmall')
+  case 'tmall': createEntry(apptmall, 'markettmall')
     break;
+  case 'taobao': createEntry(apptb, 'markettb')
+  break;
   // case valueN: ''
   //   break;
   default: ''
