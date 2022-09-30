@@ -14,7 +14,7 @@
 <script setup>
 const isopen = ref(false)
 onMounted(() => {
-  console.log('myOrder')
+  // console.log('myOrder')
 })
 </script>
 <style lang='scss' scoped>

@@ -3,12 +3,19 @@
 // 约定传送信息类型,根据类型执行相应函数
 /*
 option = {
-    type?: (myfetch,download,getstorage,setstorage) 
+    type?: (myfetch,downloads,tabQuery)
 }
 
 */
 
+/* 
+msg = { type: 'tabQuery', requirement: {active: true} }
+msg = { type: 'tabOperate', tabId: tab.id,   action: 'remove'}
 
+
+*/
+//查询匹配值示例:{active: true}----key= audible, autoDiscardable,discarded, groupId, height, highlighted,
+// -------------id,incognito, index,pinned,selected, status,title,url,width, windowId.
 
 const sendMessage =  (message) => {
     return new Promise((resolve, reject) => {

@@ -44,12 +44,9 @@ const comconfig = {
     stats: {
         orphanModules: true,
       },
-    //   watchOptions: {
-    //     ignored: ['**/node_modules/', '**/bgc/background.js'],
-    //   },
     plugins: [
         new HtmlWebpackPlugin({    // 可以实现自动生成新的html并自动导入js
-            template: './src/popup/index.html',  // 指定元html文件的位置
+            template: './src/popup/pop.html',  // 指定元html文件的位置
             filename: 'popup.html',   // 指定输出的名称
             chunks: ['content'],          //指定自定义需要注入的js
             inject: 'body',
@@ -89,21 +86,15 @@ const comconfig = {
             directoryAsNamespace: true,
             globalNamespaces: ['components', 'pages'],
             resolvers: [ElementPlusResolver() ],
+            // allowOverrides: true,
             // include: [/src/],
+            exclude: [/[\/]app.vue[\/]/],
             // exclude: [/[\/]node_modules[\/]/, /[\/].git[\/]/, /[\/].nuxt[\/]/],
         }),
         new webpack.ProvidePlugin({  // 在函数上下文环境中注入第三方库---缺点:无法全局window引用---使用expose-loader解决
         $: 'jquery',
         _: 'lodash'
         }),
-        //可以定义全局上下文的变量
-        new webpack.DefinePlugin({
-            // 此处解决vue未定义extension大量报错问题
-            __VUE_OPTIONS_API__: true,
-            __VUE_PROD_DEVTOOLS__: false,
-            "AUTHOR": JSON.stringify('xzz2022')
-            // "VERSION": JSON.stringify('0916')
-          }),
         // new InstallPlugin({
         //     dependencies: {
         //       peer: true,
@@ -171,6 +162,10 @@ const comconfig = {
                         test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,   //实现其他文件类型整合在js里而不是带hash输出独立文件
                         type: 'asset',
                     },
+                    // {
+                    //     test: /\.(ts|tsx)$/i,
+                    //     use: [ 'babel-loader', 'ts-loader'],  
+                    // },
                     
                 ]
             },

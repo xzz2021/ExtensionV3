@@ -6,11 +6,10 @@ import { createPinia } from 'pinia'
 const pinia = createPinia()
 //-----------------------------------
 
-// //---------------引入所有API挂载到全局----------<<<<<<<<<<<<<<<<<<<<<---此处引入有问题
+// //---------------引入所有API挂载到全局----------
 import{ contentApi as API} from './src/api/contentApi/index'
 window.API = API
 // //------------------------------------------------------
-
 
 //---------全局引入vxe-table----------------
 import 'xe-utils'
@@ -26,29 +25,26 @@ import './src/css/style'
 //------------------------
 
 
-//-----popup页面----------调试popup及打包上线时需要挂载此处-----------<<---<<---<<----<<-----<<----<<----<<---<<<-----------
-import popup from './src/popup/app.vue'
-createApp(popup).mount('#pop')
-//-------------------------------------------------
+
+// Vue.directive('disClick', {
+  //   inserted:  function (el, binding) {
+    //     el.addEventListener("click", function(){
+      //       el.setAttribute("disabled", "disabled")
+      //       setTimeout(() => {
+        //         el.removeAttribute("disabled")
+        //       }, binding.value);
+        //     })
+        //   }
+        // })
+        
 
 //-------------------各平台实例引入----------------
 import app1688 from './src/pages/alibaba/app.vue'
 import apptmall from './src/pages/tmall/app.vue'
+import apptb from './src/pages/tb/app.vue'
 import appjd from './src/pages/jd/app.vue'
 
 //---------------------------------------------------------
-
-
-// Vue.directive('disClick', {
-//   inserted:  function (el, binding) {
-//     el.addEventListener("click", function(){
-//       el.setAttribute("disabled", "disabled")
-//       setTimeout(() => {
-//         el.removeAttribute("disabled")
-//       }, binding.value);
-//     })
-//   }
-// })
 
 //------------vue实例-----挂载入口---------------------
 function createEntry(myapp,id){
@@ -56,23 +52,46 @@ function createEntry(myapp,id){
   if (el) {
     //  afterbegin 插入body内部最前面------afterend插入body外部后面
       el.insertAdjacentHTML('afterend',`<div id="${id}"></div>`)
-      // createApp(myapp).use(pinia).mount(`#${id}`)
       createApp(myapp).use(pinia).use(VXETable).mount(`#${id}`)
     }
 }
 
 
-
 let url = location.host
-switch (true) {
-  case url.indexOf('jd.com')>1: createEntry(appjd, 'marketjd')
+
+
+//-----popup页面----------
+import popup from './src/popup/app.vue'
+// document.getElementById('pop') ? createApp(popup).use(pinia).mount('#pop'): ''
+// $('#pop')[0] ? createApp(popup).use(pinia).mount('#pop'): ''
+//-------------------------------------------------
+//-------------------版本1.0----------------------
+// let devUrl = (url == 'lemakflpnefnpaegkhgpmjknjkafpnif' || url == 'localhost:8888')
+// let loginUrl = url.match(/login|mms|passport/)  == null
+// let checkedUrl = url.match(/tmall|taobao|1688|yangkeduo|pinduoduo|alibaba|jd/) 
+// checkedUrl =  devUrl && 'iamdev' || (loginUrl && checkedUrl  ? checkedUrl[0] : '')
+//----------------------------------------------------------------------------------
+
+//-------------------版本2.0----------------------
+let loginUrl = url.match(/login|mms|passport/) != null
+let checkedUrl = url.match(/tmall|taobao|1688|yangkeduo|pinduoduo|alibaba|jd|lemak|localhost/)
+loginUrl? checkedUrl = '': checkedUrl = checkedUrl ? checkedUrl[0] : ''
+//------------------------------------------------
+
+
+switch (checkedUrl) {
+  case 'jd': createEntry(appjd, 'marketjd')
     break;
-  case url.indexOf('1688.com')>1: createEntry(app1688, 'market1688')
+  case '1688': createEntry(app1688, 'market1688')
     break;
-  case url.indexOf('tmall.com')>1: createEntry(apptmall, 'markettmall')
+  case 'tmall': createEntry(apptmall, 'markettmall')
     break;
-  // case valueN: ''
-  //   break;
+  case 'taobao': createEntry(apptb, 'markettb')
+  break;
+  case 'lemak': createApp(popup).mount('#pop')
+    break;
+  case 'localhost': createApp(popup).mount('#pop')
+    break;
   default: ''
     break;
 }
@@ -92,3 +111,4 @@ s.onload = function() {
     "script-src": "unsafe-inline"
   }, */
 
+console.log('chrome: ', chrome);

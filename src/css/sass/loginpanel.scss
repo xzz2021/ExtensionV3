@@ -1,6 +1,5 @@
-//因为loginpanel会在全局直接挂载,所以此处挂载css会直接生成
+//因为loginpanel未配置scoped会在全局直接挂载,所以此处挂载css会直接生成
 @use 'root';
-
 
 .jclLogin {
     position: fixed;

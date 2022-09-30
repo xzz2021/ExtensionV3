@@ -1,6 +1,9 @@
 <template>
 <div class="导航栏 jclpanel" >
-    <header class="jclheader" >
+    <VueDragResize :isActive="true" :w="180" :h="60" :x="jdx" :y="jdy" :z="22" v-if="reloadDrag" :isResizable="false" @dragstop="onDragstop" >
+      <!-- https://github.com/kirillmurashov/vue-drag-resize/tree/v2.0.3 -->
+      <div class="dragbox">
+    <header class="jclheader">
       <div class="section">
         <img
           style="width: 107px; height: 40px"
@@ -9,8 +12,8 @@
         />
       </div>
     </header>
-      <!-- <transition name="fade"> -->
-    <el-collapse-transition>
+      <transition name="fade">
+    <!-- <el-collapse-transition> -->
     <main class="jclmain" v-show="showMain">
       <div>
         <el-dropdown placement="right-start"  @command="OneClickDiagnosis">
@@ -49,7 +52,7 @@
       <div>
         <el-dropdown placement="right-start" @command="commentDownload">
           <span class="el-dropdown-link">
-            <div class="jclicon"><i class="xzzicon-pinglun"></i></div>
+            <div class="jclicon"><i class="xzzicon-pingjia"></i></div>
             <div class="title">有图评价下载</div>
             <div class="arrow-right-czp"><i class="xzzicon-youjt"></i></div>
           </span>
@@ -87,17 +90,24 @@
           </span>
         </el-dropdown>
       </div>
-      <!-- <div>
+      <div>
+        <el-dropdown>
+          <span class="el-dropdown-link">
+            <div class="jclicon"><i class="xzzicon-dingdan"></i></div>
+            <div class="title">订单备注</div>
+            <div class="arrow-right-czp"><i class=""></i></div>
+          </span>
+        </el-dropdown>
+      </div>
+      <div>
         <el-dropdown>
           <span class="el-dropdown-link">
             <div class="jclicon"><i class="xzzicon-liulan"></i></div>
             <div class="title">浏览记录</div>
             <div class="arrow-right-czp"><i class=""></i></div>
           </span>
-          <template #dropdown>
-          </template>
         </el-dropdown>
-      </div> -->
+      </div>
       <!-- <div>
         <el-dropdown>
           <span class="el-dropdown-link">
@@ -147,27 +157,28 @@
             </span>
           </el-dropdown>
         </div>
-        <Div  class="version">
-          {{ version }}
-        </Div>
+        <div  class="version"> {{ version }} </div>
     </main>
-    </el-collapse-transition>
-    <!-- </transition> -->
+    <!-- </el-collapse-transition> -->
+    </transition>
 
     <footer @click="showMain = !showMain">
       <div class="shrink"><i :class="!showMain? 'xzzicon-shrink': 'xzzicon-shrink2'"></i></div>
-    <!-- <el-button type="primary">Primary</el-button> -->
+    <el-button type="primary" >Primary</el-button>
     </footer>
     </div>
-    <JdMyTest />
+</VueDragResize>
+    </div>
     <LoginPanel />
-    <WordsTool />
-    <OrderRemarks />
+    <MyProgress :show="progressVisible" :percentage="percentage" />
+    <!-- <WordsTool />
+    <OrderRemarks /> -->
 </template>
 
 
 <script setup>
-const userstore = userStore();
+
+const userstore = userStore()
 const { userid, userToken, version } = storeToRefs(userstore)
 
 //---------------单纯字符串变量不可使用reactive---------
@@ -175,9 +186,11 @@ const { userid, userToken, version } = storeToRefs(userstore)
 let currentHref = ref('')
 let curCookies  = ref('')
 let showMain  = ref(true)
-// let jdx = ref(-200)
-// let jdy = ref(-200)
-// let reloadDrag = ref(true)
+let progressVisible = ref(false)
+let percentage = ref(60)
+let jdx = ref(60)
+let jdy = ref(120)
+let reloadDrag = ref(true)
 const diagnosisOption = reactive([{value: 2}, {value: 5}, {value: 10}, {value: 20}])
 const commentOption = reactive([{value: 20}, {value: 50}, {value: 100}, {value: 200}])
 const commentOption1 = reactive([{value: 20}, {value: 50}, {value: 100}, {value: 200}])
@@ -188,6 +201,21 @@ const pictureOption  = reactive([
         {value: 'sku图下载', arg: 'sku'},
         {value: '详情图下载', arg: 'detail'},
       ])
+      const onDragstop = (e) => {
+      let winHeight = window.innerHeight - 60
+      let winWidth = window.innerWidth - 200
+      if(e.top < 0 || e.left < 0 || e.top > winHeight || e.left > winWidth){
+        reloadDrag.value = false
+        setTimeout(() => {
+        reloadDrag.value = true
+        }, 100);
+      }else{
+      jdx.value = e.left
+      jdy.value = e.top
+      //  浏览器_set_storage('jdx', e.left);
+      //  浏览器_set_storage('jdy', e.top);
+      }
+    }
     const  OneClickDiagnosis = async (DiagnosisNum) => {
       if (this.userId == '') return this.$myBus.$emit('iwantlogin');
       if (!(currentHref.value.indexOf('item.jd') > 1)) {
@@ -460,12 +488,16 @@ const pictureOption  = reactive([
     // console.log('window.location.href: ', window.location.href)
 
   })
-   onBeforeMount(() => {
+   onBeforeMount(async () => {
     chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       message == 'loginEvent'? getStorage() : ''
       sendResponse({status: true})
       })
     getStorage()
+    // let res = await API.sendMessage({type: 'tabQuery', requirement:{title: "xzz2022"}})
+    // console.log('tab-----------------res: ', res);
+    // let res2 = await API.sendMessage({ type: 'tabOperate', tabId: res.id,   action: 'remove'})
+    // console.log('tab-----------------res: ', res2);
    })
 
 </script>
