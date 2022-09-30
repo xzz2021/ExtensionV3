@@ -24,11 +24,6 @@ import 'vxe-table/lib/style.css'
 import './src/css/style'
 //------------------------
 
-//-----popup页面----------
-import popup from './src/popup/app.vue'
-$('#pop')[0] ? createApp(popup).use(pinia).mount('#pop'): ''
-//-------------------------------------------------
-
 
 
 // Vue.directive('disClick', {
@@ -63,10 +58,28 @@ function createEntry(myapp,id){
 
 
 let url = location.host
-let currentWebsite = ''
-url.match(/login|mms|passport/) == null? currentWebsite = url.match(/tmall|taobao|1688|yangkeduo|pinduoduo|alibaba|jd/)[0] : '' 
 
-switch (currentWebsite) {
+
+//-----popup页面----------
+import popup from './src/popup/app.vue'
+// document.getElementById('pop') ? createApp(popup).use(pinia).mount('#pop'): ''
+// $('#pop')[0] ? createApp(popup).use(pinia).mount('#pop'): ''
+//-------------------------------------------------
+//-------------------版本1.0----------------------
+// let devUrl = (url == 'lemakflpnefnpaegkhgpmjknjkafpnif' || url == 'localhost:8888')
+// let loginUrl = url.match(/login|mms|passport/)  == null
+// let checkedUrl = url.match(/tmall|taobao|1688|yangkeduo|pinduoduo|alibaba|jd/) 
+// checkedUrl =  devUrl && 'iamdev' || (loginUrl && checkedUrl  ? checkedUrl[0] : '')
+//----------------------------------------------------------------------------------
+
+//-------------------版本2.0----------------------
+let loginUrl = url.match(/login|mms|passport/) != null
+let checkedUrl = url.match(/tmall|taobao|1688|yangkeduo|pinduoduo|alibaba|jd|lemak|localhost/)
+loginUrl? checkedUrl = '': checkedUrl = checkedUrl ? checkedUrl[0] : ''
+//------------------------------------------------
+
+
+switch (checkedUrl) {
   case 'jd': createEntry(appjd, 'marketjd')
     break;
   case '1688': createEntry(app1688, 'market1688')
@@ -75,8 +88,10 @@ switch (currentWebsite) {
     break;
   case 'taobao': createEntry(apptb, 'markettb')
   break;
-  // case valueN: ''
-  //   break;
+  case 'lemak': createApp(popup).mount('#pop')
+    break;
+  case 'localhost': createApp(popup).mount('#pop')
+    break;
   default: ''
     break;
 }
@@ -96,3 +111,4 @@ s.onload = function() {
     "script-src": "unsafe-inline"
   }, */
 
+console.log('chrome: ', chrome);

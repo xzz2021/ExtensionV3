@@ -30,7 +30,7 @@ const comconfig = {
         // popup: './src/popup/pop.js',
         background: './background.js',
         content: './content.js',
-        // inject: './inject.js'
+        inject: './inject.js'
     },
     output: {
         filename: './[name].js',
@@ -95,14 +95,6 @@ const comconfig = {
         $: 'jquery',
         _: 'lodash'
         }),
-        //可以定义全局上下文的变量
-        new webpack.DefinePlugin({
-            // 此处解决vue未定义extension大量报错问题
-            __VUE_OPTIONS_API__: true,
-            __VUE_PROD_DEVTOOLS__: false,
-            "AUTHOR": JSON.stringify('xzz2022')
-            // "VERSION": JSON.stringify('0916')
-          }),
         // new InstallPlugin({
         //     dependencies: {
         //       peer: true,
@@ -170,6 +162,10 @@ const comconfig = {
                         test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,   //实现其他文件类型整合在js里而不是带hash输出独立文件
                         type: 'asset',
                     },
+                    // {
+                    //     test: /\.(ts|tsx)$/i,
+                    //     use: [ 'babel-loader', 'ts-loader'],  
+                    // },
                     
                 ]
             },

@@ -15,13 +15,16 @@
   "icons": { "16": "logo.png", "48": "logo.png", "128": "logo.png" },
   "content_scripts": [
     {
-      "matches": ["https://*.1688.com/*", "https://*.tmall.com/*", "https://*.jd.com/*", "https://*.taobao.com/*","https://www.google.com/", "http://*.junchenlun.com/*"],
+      "matches": ["https://*.1688.com/*", "https://*.tmall.com/*", "https://*.jd.com/*", 
+      "https://*.taobao.com/*", "https://*.alibaba.com/*", "https://*.yangkeduo.com/*",
+      "https://*.pingduoduo.com/*", "http://*.junchenlun.com/*", "https://www.google.com/"
+    ],
       "js": ["content.js"],
       "css": ["content.css"]
     }
   ],
   "web_accessible_resources": [{
-    "resources": ["inject.js"],
+    "resources": ["inject.js","content.js", "content.js.map", "inject.js.map"],
     "matches": ["<all_urls>"]
   }]
 }

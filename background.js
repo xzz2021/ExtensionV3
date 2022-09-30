@@ -1,15 +1,9 @@
 
 
 
-
-
 //---------------引入分文件的所有自定义api-----------
 import{ bgcApi as API } from './src/api/bgcApi/index'
-// console.log('bgcApi: ', API);
 //----------------------------------------------------------
-
-
-
 
 
 //-------------1111挂载好之后监听网页更新------此网页为webdevserver监听的网页-------
@@ -18,27 +12,31 @@ import{ bgcApi as API } from './src/api/bgcApi/index'
 //-----------------4444如果不是dev页面----且不是浏览器的newtab页----------(???是否需要判断--扩展程序---页面)-------则执行刷新-------------------
 
 
-
 //---------最优策略其实是自建HotReloadPlugin----------借助devserver内部的websocket执行自定义函数-----------------------
 
 //-------------------或者摒弃devserver曲线----------直接自己建立一个websocket执行自定义函数-------后期学习改进-----
 
 
- //--------------开发阶段---------编译后-------自动刷新runtime------然后自动刷新当前聚焦的tab页------------------------------
+//--------------开发阶段---------编译后-------自动刷新runtime------然后自动刷新当前聚焦的tab页---------
+//---------优化刷新逻辑---------------------
   chrome.tabs.onUpdated.addListener(
     (tabId, changeInfo, tab) => {
      if(tab.title == "xzz2022" && tab.status == "complete") {
-    chrome.tabs.query({active: true},([tab]) => {
-      // console.log('---------------------tab: ', tab);
-    if(tab.title != "xzz2022" && tab.url != "chrome://newtab/"){
+       chrome.tabs.query({active: true},([tab]) => {
+         console.log('-------tab: ----------------', tab);
+         if(tab.url.match(/tmall|taobao|1688|yangkeduo|pinduoduo|alibaba|jd/)){
           chrome.runtime.reload()
           chrome.tabs.reload()
+        }else{
+          chrome.runtime.reload()
         }})}})
 //-------------------------------------------------------------------
 
 
 //------------通过监听storage的变化----------监听登录状态的改变----------------如果改变发送事件----------
-let matches = ["https://*.1688.com/*", "https://*.tmall.com/*", "https://*.jd.com/*","https://www.google.com/"]
+let matches = ["https://*.1688.com/*", "https://*.tmall.com/*", "https://*.jd.com/*", 
+"https://*.taobao.com/*", "https://*.alibaba.com/*", "https://*.yangkeduo.com/*",
+"https://*.pingduoduo.com/*"]
 //let matches = '<all_urls>'
       chrome.storage.onChanged.addListener(function (changes, namespace) {
         for (let [key, { oldValue, newValue }] of Object.entries(changes)) {
@@ -63,27 +61,44 @@ let matches = ["https://*.1688.com/*", "https://*.tmall.com/*", "https://*.jd.co
       chrome.runtime.onMessage.addListener(
         (message, sender, sendResponse) => {
           // console.log('----------------message: ----------------', message)
-          if(message.type == 'myfetch'){
-             (async ()=> {
-                  let res = await API.myfetch(message.config.url,message.config)
-                     console.log('-----api----fetch-----res: ', res)
-                     sendResponse(res)
-                })()
-                return true
-            }
 
-            if(message.type == 'mycookies'){//--------------需调用谷歌cookie api才能设定-------------
-                // let currentStamp = Date.parse(new Date())
-                // API.Cookies.set('loginStamp','登录有效期',{maxAge:10*24*3600})
-                //       sendResponse('cookies set success')
-             }
-             if(message.type == 'downloads'){
-              chrome.downloads.download({url: message.url},()=>{})
-              sendResponse('下载完成')
-             }
-            
-           
+          switch(message.type){
+          case 'myfetch':   {
+                             (async ()=> {
+                                let res = await API.myfetch(message.config.url,message.config)
+                                sendResponse(res)
+                              })()
+                              return true
+                            }
+            break;            
+            case 'mycookies': {//--------------需调用谷歌cookie api才能设定-------------
+                               // let currentStamp = Date.parse(new Date())
+                               // API.Cookies.set('loginStamp','登录有效期',{maxAge:10*24*3600})
+                               //       sendResponse('cookies set success')
+                              }
+            break;
+            case 'downloads': {
+                                 chrome.downloads.download({url: message.url},()=>{})
+                                 sendResponse('下载完成')
+                                }
+           break;
+            case 'tabQuery': { 
+                              (async ()=> {
+                                let aaa = await API.tabQuery(message.requirement)
+                                sendResponse(aaa)
+                                })()
+                                   return true
+                              }
+            break; 
+            case 'tabOperate': { 
+              chrome.tabs.remove(message.tabId, ()=>{})
+              sendResponse('tab关闭成功')
+              }
+                break; 
+          default : ''    
+            break;                       
         }
+      }
       )
 //-----------------------------------------------------------------------------------------
 

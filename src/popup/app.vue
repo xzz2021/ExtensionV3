@@ -24,10 +24,10 @@
 </template>
 
 <script setup>
-import { userStore } from '../stores/userStore'//因为路径不同,所以需手动引入覆盖
-const userstore = userStore()
-const { version } = storeToRefs(userstore)
-
+// import { userStore } from '../stores/userStore'//因为路径不同,所以需手动引入覆盖
+// const userstore = userStore()
+// const { version } = storeToRefs(userstore)
+const version = VERSION
       const popData =  reactive(
         [
         {
