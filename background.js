@@ -19,18 +19,42 @@ import{ bgcApi as API } from './src/api/bgcApi/index'
 
 //--------------开发阶段---------编译后-------自动刷新runtime------然后自动刷新当前聚焦的tab页---------
 //---------优化刷新逻辑---------------------
-  chrome.tabs.onUpdated.addListener(
-    (tabId, changeInfo, tab) => {
-     if(tab.title == "xzz2022" && tab.status == "complete") {
-       chrome.tabs.query({active: true},([tab]) => {
-         console.log('-------tab: ----------------', tab);
-         if(tab.url.match(/tmall|taobao|1688|yangkeduo|pinduoduo|alibaba|jd/)){
-          chrome.runtime.reload()
-          chrome.tabs.reload()
-        }else{
-          chrome.runtime.reload()
-        }})}})
+//---------一一一一一一----------------此处为借助devserver的方案一-----------------------------------------
+  // chrome.tabs.onUpdated.addListener(
+  //   (tabId, changeInfo, tab) => {
+  //    if(tab.title == "xzz2022" && tab.status == "complete") {
+  //      chrome.tabs.query({active: true},([tab]) => {
+  //        if(tab.url.match(/tmall|taobao|1688|yangkeduo|pinduoduo|alibaba|jd/)){
+  //         chrome.runtime.reload()
+  //         chrome.tabs.reload()
+  //       }else{
+  //         chrome.runtime.reload()
+  //       }})}})
 //-------------------------------------------------------------------
+
+
+//-------------------------此处为自建websocket的方案二-----------------------------------------
+let ws = new WebSocket('ws://localhost:7777');
+
+ws.onopen = (e) => {
+  ws.send(JSON.stringify("bgc"))
+}
+
+ws.onclose = (e) => {
+  console.log('------------bgc--------断开------')
+}
+ws.onmessage = (e) => {
+  if(JSON.parse(e.data) == 'done'){
+  chrome.tabs.query({active: true},([tab]) => {
+    if(tab.url.match(/tmall|taobao|1688|yangkeduo|pinduoduo|alibaba|jd/)){
+     chrome.runtime.reload()
+     chrome.tabs.reload()
+   }else{
+     chrome.runtime.reload()
+   }})    
+  }
+}
+//-------------------------------------------------------------------------------
 
 
 //------------通过监听storage的变化----------监听登录状态的改变----------------如果改变发送事件----------
@@ -77,10 +101,8 @@ let matches = ["https://*.1688.com/*", "https://*.tmall.com/*", "https://*.jd.co
                                //       sendResponse('cookies set success')
                               }
             break;
-            case 'downloads': {
-                                 chrome.downloads.download({url: message.url},()=>{})
-                                 sendResponse('下载完成')
-                                }
+            case 'downloads': {chrome.downloads.download({url: message.url},()=>{})
+                               sendResponse('下载完成')}
            break;
             case 'tabQuery': { 
                               (async ()=> {
