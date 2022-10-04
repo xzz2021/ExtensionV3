@@ -111,4 +111,4 @@ s.onload = function() {
     "script-src": "unsafe-inline"
   }, */
 
-console.log('chrome: ', chrome);
+  

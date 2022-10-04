@@ -1,6 +1,7 @@
 // Generated using webpack-cli https://github.com/webpack/webpack-cli
 const proconfig = require('./webpack.pro.config.js')
 const devconfig = require('./webpack.dev.config.js')
+const watchconfig = require('./webpack.watch.config.js')
 const { merge } = require('webpack-merge')
 const path = require('path');
 const webpack = require('webpack')
@@ -193,8 +194,10 @@ module.exports = (env,args) => {
     //不传env----{ WEBPACK_SERVE: true }-----
     //build--------传env-----{ WEBPACK_BUNDLE: true, WEBPACK_BUILD: true, production: true }------
     // 根据env传递的值做判断
-    if (env.WEBPACK_SERVE) {
-        return merge(comconfig, devconfig)
+    // if (env.WEBPACK_SERVE) {
+        // return merge(comconfig, devconfig)
+    if ('watch') {
+        return merge(comconfig, watchconfig)
     
     }else{
         return merge(comconfig, proconfig)
