@@ -5,10 +5,6 @@ import { createPinia } from 'pinia'
 const pinia = createPinia()
 //-----------------------------------
 
-import md5 from 'blueimp-md5'
-
-// const hash = md5('value') 
-// console.log('hash: ', hash);
 // //---------------引入所有API挂载到全局----------
 import{ contentApi as API} from './src/api/contentApi/index'
 window.API = API
