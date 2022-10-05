@@ -20,6 +20,7 @@ class wsAutoReloadPlugin {
     compiler.hooks.done.tap(pluginName, (compilation) => {
       wss.clients.forEach(ws => {
         if(ws.id == 'bgc'){
+          console.log('------------编译完成-----------')
           ws.send(JSON.stringify('done'))
         }
       })})}}

@@ -19,6 +19,4 @@ onMounted(() => {
 </script>
 <style lang='scss' scoped>
 @import '../css/sass/orderpanel.scss';
-// @import '../../css/sass/orderpanel.scss';
-
 </style>

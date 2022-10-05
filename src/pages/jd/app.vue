@@ -201,7 +201,7 @@ const pictureOption  = reactive([
         {value: 'sku图下载', arg: 'sku'},
         {value: '详情图下载', arg: 'detail'},
       ])
-      const onDragstop = (e) => {
+const onDragstop = (e) => {
       let winHeight = window.innerHeight - 60
       let winWidth = window.innerWidth - 200
       if(e.top < 0 || e.left < 0 || e.top > winHeight || e.left > winWidth){
@@ -212,8 +212,6 @@ const pictureOption  = reactive([
       }else{
       jdx.value = e.left
       jdy.value = e.top
-      //  浏览器_set_storage('jdx', e.left);
-      //  浏览器_set_storage('jdy', e.top);
       }
     }
     const  OneClickDiagnosis = async (DiagnosisNum) => {

@@ -9,17 +9,11 @@ import{ bgcApi as API } from './src/api/bgcApi/index'
 //-------------1111挂载好之后监听网页更新------此网页为webdevserver监听的网页-------
 //-------------2222--网页更新后拿到更新的页面--即111的页面----因为如果是其他页面则不采取任何行动-----
 // ------------33333每次dev页面刷新-----同时----查询当前聚焦的tab页或者说活动的当前tab页-----------
-//-----------------4444如果不是dev页面----且不是浏览器的newtab页----------(???是否需要判断--扩展程序---页面)-------则执行刷新-------------------
-
-
+//------------4444如果不是dev页面----且不是浏览器的newtab页----------(???是否需要判断--扩展程序---页面)-------则执行刷新-------------------
 //---------最优策略其实是自建HotReloadPlugin----------借助devserver内部的websocket执行自定义函数-----------------------
-
 //-------------------或者摒弃devserver曲线----------直接自己建立一个websocket执行自定义函数-------后期学习改进-----
-
-
 //--------------开发阶段---------编译后-------自动刷新runtime------然后自动刷新当前聚焦的tab页---------
-//---------优化刷新逻辑---------------------
-//---------一一一一一一----------------此处为借助devserver的方案一-----------------------------------------
+//--------------------此处为借助devserver的方案一-----------------------------------------
   // chrome.tabs.onUpdated.addListener(
   //   (tabId, changeInfo, tab) => {
   //    if(tab.title == "xzz2022" && tab.status == "complete") {
@@ -37,11 +31,12 @@ import{ bgcApi as API } from './src/api/bgcApi/index'
 let ws = new WebSocket('ws://localhost:7777');
 
 ws.onopen = (e) => {
+  console.log('-------bg--------已连接------:', new Date())
   ws.send(JSON.stringify("bgc"))
 }
 
 ws.onclose = (e) => {
-  console.log('------------bgc--------断开------')
+  console.log('--------bg--------断开------:', new Date())
 }
 ws.onmessage = (e) => {
   if(JSON.parse(e.data) == 'done'){
@@ -85,7 +80,6 @@ let matches = ["https://*.1688.com/*", "https://*.tmall.com/*", "https://*.jd.co
       chrome.runtime.onMessage.addListener(
         (message, sender, sendResponse) => {
           // console.log('----------------message: ----------------', message)
-
           switch(message.type){
           case 'myfetch':   {
                              (async ()=> {
@@ -106,8 +100,8 @@ let matches = ["https://*.1688.com/*", "https://*.tmall.com/*", "https://*.jd.co
            break;
             case 'tabQuery': { 
                               (async ()=> {
-                                let aaa = await API.tabQuery(message.requirement)
-                                sendResponse(aaa)
+                                let tab = await API.tabQuery(message.requirement)
+                                sendResponse(tab)
                                 })()
                                    return true
                               }
