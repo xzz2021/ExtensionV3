@@ -1,6 +1,5 @@
 // 'use strict'默认启用
 import { createApp } from 'vue'
-
 //-------pinia----打包60k---------
 import { createPinia } from 'pinia'
 const pinia = createPinia()
@@ -74,7 +73,7 @@ import popup from './src/popup/app.vue'
 
 //-------------------版本2.0----------------------
 let loginUrl = url.match(/login|mms|passport/) != null
-let checkedUrl = url.match(/tmall|taobao|1688|yangkeduo|pinduoduo|alibaba|jd|lemak|localhost/)
+let checkedUrl = url.match(/tmall|taobao|1688|yangkeduo|pinduoduo|alibaba|jd|lemak/)
 loginUrl? checkedUrl = '': checkedUrl = checkedUrl ? checkedUrl[0] : ''
 //------------------------------------------------
 
@@ -90,8 +89,8 @@ switch (checkedUrl) {
   break;
   case 'lemak': createApp(popup).mount('#pop')
     break;
-  case 'localhost': createApp(popup).mount('#pop')
-    break;
+  // case 'localhost': createApp(popup).mount('#pop')
+  //   break;
   default: ''
     break;
 }

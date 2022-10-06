@@ -164,7 +164,7 @@
 
     <footer @click="showMain = !showMain">
       <div class="shrink"><i :class="!showMain? 'xzzicon-shrink': 'xzzicon-shrink2'"></i></div>
-    <el-button type="primary" >Primary</el-button>
+    <el-button type="primary">Primary</el-button>
     </footer>
     </div>
 </VueDragResize>
@@ -201,7 +201,7 @@ const pictureOption  = reactive([
         {value: 'sku图下载', arg: 'sku'},
         {value: '详情图下载', arg: 'detail'},
       ])
-      const onDragstop = (e) => {
+const onDragstop = (e) => {
       let winHeight = window.innerHeight - 60
       let winWidth = window.innerWidth - 200
       if(e.top < 0 || e.left < 0 || e.top > winHeight || e.left > winWidth){
@@ -212,8 +212,7 @@ const pictureOption  = reactive([
       }else{
       jdx.value = e.left
       jdy.value = e.top
-      //  浏览器_set_storage('jdx', e.left);
-      //  浏览器_set_storage('jdy', e.top);
+      API.Storage.set({jdx: e.left, jdy: e.top})
       }
     }
     const  OneClickDiagnosis = async (DiagnosisNum) => {
@@ -494,6 +493,11 @@ const pictureOption  = reactive([
       sendResponse({status: true})
       })
     getStorage()
+    let aaa = API.Storage.get(['jdx', 'jdy'])
+    console.log('aaa: ', aaa);
+     let { jdx, jdy } = API.Storage.get(['jdx', 'jdy']) || {}
+     console.log('jdy: ', jdy);
+     console.log('jdx: ', jdx);
     // let res = await API.sendMessage({type: 'tabQuery', requirement:{title: "xzz2022"}})
     // console.log('tab-----------------res: ', res);
     // let res2 = await API.sendMessage({ type: 'tabOperate', tabId: res.id,   action: 'remove'})

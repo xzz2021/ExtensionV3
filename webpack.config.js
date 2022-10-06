@@ -11,16 +11,10 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const VueLoaderPlugin = require('vue-loader').VueLoaderPlugin
 
-// const InstallPlugin = require('install-webpack-plugin');
 //实现elementplus自动按需加载
 const AutoImport = require('unplugin-auto-import/webpack')
 const Components = require('unplugin-vue-components/webpack')
 const { ElementPlusResolver } = require('unplugin-vue-components/resolvers')
-
-
-// const stylesHandler = MiniCssExtractPlugin.loader;  //作用是将js中的css提取处理成单独的css文件
-//--------此处process.env.NODE_ENV与浏览器同名,但值不同,浏览器以mode为准----也即以webbpack内部环境值为准-------
-// const isProduction = process.env.NODE_ENV == 'development'; //需安装cross-env--------
 
 
 
@@ -28,7 +22,6 @@ const comconfig = {
     // target: 'node',
     // entry: ['./main.js','./content.js','./inject.js'],    //数组形式会被整合打包到一个输出文件//单独导出需要使用对象
     entry: {
-        // popup: './src/popup/pop.js',
         background: './background.js',
         content: './content.js',
         inject: './inject.js'
@@ -162,11 +155,7 @@ const comconfig = {
                     {
                         test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,   //实现其他文件类型整合在js里而不是带hash输出独立文件
                         type: 'asset',
-                    },
-                    // {
-                    //     test: /\.(ts|tsx)$/i,
-                    //     use: [ 'babel-loader', 'ts-loader'],  
-                    // },
+                    }
                     
                 ]
             },
@@ -191,26 +180,17 @@ const comconfig = {
 
 
 module.exports = (env,args) => {
-    //不传env----{ WEBPACK_SERVE: true }-----
-    //build--------传env-----{ WEBPACK_BUNDLE: true, WEBPACK_BUILD: true, production: true }------
-    // 根据env传递的值做判断
-    // if (env.WEBPACK_SERVE) {
-        // return merge(comconfig, devconfig)
-    if ('watch') {
+    if (env.WEBPACK_WATCH) {
+        console.log('env: ', env);
         return merge(comconfig, watchconfig)
-    
+    }else if(env.WEBPACK_SERVE){
+        return merge(comconfig, devconfig)
     }else{
         return merge(comconfig, proconfig)
-        //------合并plugins方案-----------------
-        // let config = Object.assign(comconfig, proconfig, {plugins:[...comconfig.plugins,...proconfig.plugins]})
-        //----------直接替换默认com的plugins---------因为生产模式不需要监听页面------------
-        // let config = Object.assign(comconfig, proconfig)
-        // return config;
+    }
     //------此处定义可以结合merge整合,避免相同键覆写-------
         // return config;
-    }
-};
-
+}
 
 //TXT 文件或其他文件可以使用------raw-loader-------解析原始数据
 //----------原始数据转换成对应的es6Module--------
