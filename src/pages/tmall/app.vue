@@ -24,18 +24,16 @@ const { userid, userToken, version } = storeToRefs(userstore)
           })
       }
 }  */
-
 const storeData = async () => {
   // let msg = {type: 'myfetch', config: { method: 'GET',headers: { 'Content-Type':'text/plain; charset=UTF-8' },responseType: 'TEXT', url: 'https://item.taobao.com/item.htm?id=664861338483&ali_refid=a3_430582_1006:1124546563:N:nrFY4XWUtZ5nELwjyJKUOQ%3D%3D:0031cb2df770684c9f9dda83c8b93241&ali_trackid=1_0031cb2df770684c9f9dda83c8b93241&spm=a230r.1.14.6#detail'}}
-
   // let aa = await API.sendMessage(msg)
   // console.log('aa: ', aa)
   // console.log('aa: ', aa);
-  let bbb = await API.Storage.set({users: ['786464465'], userid: '99453645697'})
+  let bbb = await API.Storage.set({users: ['786464465', '8975875'], userid: '99453645697'})
   console.log('bbb: ', bbb);
 }
 const getStore = async () => {
- let aa = await API.Storage.get(['tyutu','users', 'userid'])
+ let aa = await API.Storage.get(['tyutu','users', 'userid', 'users'])
 
  console.log('aa: ', aa);
 }

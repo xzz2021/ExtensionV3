@@ -164,7 +164,7 @@
 
     <footer @click="showMain = !showMain">
       <div class="shrink"><i :class="!showMain? 'xzzicon-shrink': 'xzzicon-shrink2'"></i></div>
-    <el-button type="primary" >Primary</el-button>
+    <el-button type="primary">Primary</el-button>
     </footer>
     </div>
 </VueDragResize>
@@ -212,6 +212,7 @@ const onDragstop = (e) => {
       }else{
       jdx.value = e.left
       jdy.value = e.top
+      API.Storage.set({jdx: e.left, jdy: e.top})
       }
     }
     const  OneClickDiagnosis = async (DiagnosisNum) => {
@@ -492,6 +493,11 @@ const onDragstop = (e) => {
       sendResponse({status: true})
       })
     getStorage()
+    let aaa = API.Storage.get(['jdx', 'jdy'])
+    console.log('aaa: ', aaa);
+     let { jdx, jdy } = API.Storage.get(['jdx', 'jdy']) || {}
+     console.log('jdy: ', jdy);
+     console.log('jdx: ', jdx);
     // let res = await API.sendMessage({type: 'tabQuery', requirement:{title: "xzz2022"}})
     // console.log('tab-----------------res: ', res);
     // let res2 = await API.sendMessage({ type: 'tabOperate', tabId: res.id,   action: 'remove'})

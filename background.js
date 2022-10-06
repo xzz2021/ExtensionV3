@@ -28,27 +28,34 @@ import{ bgcApi as API } from './src/api/bgcApi/index'
 
 
 //-------------------------此处为自建websocket的方案二-----------------------------------------
-let ws = new WebSocket('ws://localhost:7777');
 
-ws.onopen = (e) => {
-  console.log('-------bg--------已连接------:', new Date())
-  ws.send(JSON.stringify("bgc"))
-}
+function wsInit(){
+  let ws = new WebSocket('ws://localhost:7777');
+          ws.onopen = (e) => {
+            console.log('-------bg--------已连接------:', new Date())
+            ws.send(JSON.stringify("bg"))
+          }
+          ws.onclose = (e) => {
+            console.log('--------bg--------断开------:', new Date())
+            setTimeout(() => {
+              wsInit()
+            }, 1000);
+          }
+          ws.onmessage = (e) => {
+            if(JSON.parse(e.data) == 'done'){
+            chrome.tabs.query({active: true},([tab]) => {
+              if(tab.url.match(/tmall|taobao|1688|yangkeduo|pinduoduo|alibaba|jd/)){
+               chrome.runtime.reload()
+               chrome.tabs.reload()
+             }else{
+               chrome.runtime.reload()
+             }})
+            }
+          }
+        }
+wsInit()
 
-ws.onclose = (e) => {
-  console.log('--------bg--------断开------:', new Date())
-}
-ws.onmessage = (e) => {
-  if(JSON.parse(e.data) == 'done'){
-  chrome.tabs.query({active: true},([tab]) => {
-    if(tab.url.match(/tmall|taobao|1688|yangkeduo|pinduoduo|alibaba|jd/)){
-     chrome.runtime.reload()
-     chrome.tabs.reload()
-   }else{
-     chrome.runtime.reload()
-   }})    
-  }
-}
+
 //-------------------------------------------------------------------------------
 
 

@@ -1,19 +1,20 @@
 const Storage = {
     set(obj){
-        return new Promise((resolve, reject) => {
+        return new Promise( (resolve, reject) => {
 
         if(Object.prototype.toString.call(obj) !== '[object Object]' && JSON.stringify(obj) === '{}'){
             resolve('设定失败:参数必须是object且不能为空')
         }else{
-
             let tip = '77'
+            let l = 1
             for(const key in obj) {
                 chrome.storage.local.set({[key]: obj[key]}, ()=> {
-                    tip += ` ${key}设定成功,值为${obj[key]} `
-                    console.log('tip: ', tip)
+                    console.log(`${l}:${key}设定成功,值为${JSON.stringify(obj[key])}`)
+                    tip += ` ${l}:${key}设定成功,值为${obj[key]} `
+                    l++
                 })
             }
-            console.log('tip222222: ', tip)
+            console.log('----l---------',l)
             resolve(tip)
         }
     })
