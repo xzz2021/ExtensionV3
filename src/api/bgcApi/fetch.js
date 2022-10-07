@@ -97,6 +97,9 @@ config = {
     if (ok) {
         let result;
         switch (responseType) {
+            case 'GBKHTML':
+                result = response.arrayBuffer();
+                break;
             case 'TEXT':
                 result = response.text();
                 break;
@@ -119,7 +122,14 @@ config = {
         // throw new TypeError('ERROR CODE 异常', status)
     }
 }).then(res => {
-    resolve(res)
+    let rt = config.responseType;
+    if (rt == 'GBKHTML'){
+        let decoder = new TextDecoder("gbk");
+        let result = decoder.decode(res);
+        resolve(result)
+    }else{
+        resolve(res)
+    }
 
 }).catch((reason) => {
     // if (reason && reason.code === 'STATUS ERROR') {
