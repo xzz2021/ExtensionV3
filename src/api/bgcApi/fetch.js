@@ -90,13 +90,17 @@ config = {
 //-----------------------配置代理url-------------------manifest.json的match配置对应的接口域名,则不需要代理服务器-----
 //  let url2 = `http://xzz2022.top:666/${url}`
  fetch(url, config).then((response) => {
-    // console.log('response: ', response);
+    console.log('response: ', response);
     let { status, statusText, ok } = response;
+    console.log(status, statusText, ok)
     if(!ok){
         return '网络请求异常:1.接口地址错误2.后端接口问题3.请求的地址未在manifest进行允许跨域配置'}
     if (ok) {
         let result;
         switch (responseType) {
+            case 'GBKJSON':
+                result = response.arrayBuffer();
+                break;
             case 'GBKHTML':
                 result = response.arrayBuffer();
                 break;
@@ -124,6 +128,10 @@ config = {
 }).then(res => {
     let rt = config.responseType;
     if (rt == 'GBKHTML'){
+        let decoder = new TextDecoder("gbk");
+        let result = decoder.decode(res);
+        resolve(result)
+    }else if(rt == 'GBKJSON'){
         let decoder = new TextDecoder("gbk");
         let result = decoder.decode(res);
         resolve(result)
