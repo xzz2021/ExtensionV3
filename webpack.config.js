@@ -143,7 +143,7 @@ const comconfig = {
                     },
                     {// **目前是style标签分别注入,且未压缩,需优化压缩整合到同一标签下,若整体css大于150K需再调整成link方式按需引入
                         test: /\.css$/i,
-                        use: [MiniCssExtractPlugin.loader,'css-loader'],  //实现样式代码整合在单独一个文件里, 可以取代style-loader
+                        use: [MiniCssExtractPlugin.loader,'css-loader', "postcss-loader"],  //实现样式代码整合在单独一个文件里, 可以取代style-loader
                         // use: ["style-loader", 'css-loader'],  
                     },
                     //此处可以引入移动端自适应px2rem-loader
