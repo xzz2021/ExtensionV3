@@ -42,6 +42,9 @@ function wsInit(){
               time < 10 && wsInit()
             }, 3000);
           }
+          ws.onerror = (e) => {
+            console.log('-------bg-----连接出错------:', new Date())
+          }
           ws.onmessage = (e) => {
             if(JSON.parse(e.data) == 'done'){
             chrome.tabs.query({active: true},([tab]) => {
@@ -54,7 +57,11 @@ function wsInit(){
             }
           }
         }
-wsInit()
+
+        setTimeout(() => {
+          wsInit()
+        }, 500)
+
 
 
 //-------------------------------------------------------------------------------

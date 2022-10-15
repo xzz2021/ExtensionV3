@@ -165,7 +165,7 @@
     <footer @click="showMain = !showMain">
       <div class="shrink"><i :class="!showMain? 'xzzicon-shrink': 'xzzicon-shrink2'"></i></div>
     <el-button type="primary">Primary</el-button>
-    <div class="text-red-400 ">6666666888</div>
+    <div class="text-red-400 ">6666</div>
     </footer>
     </div>
 </VueDragResize>
@@ -179,6 +179,8 @@
 
 <script setup>
 
+let aa = API.dayjs.format('YYYY-MM-DD HH:mm:ss')
+console.log('aa: ', aa);
 const userstore = userStore()
 const { userid, userToken, version } = storeToRefs(userstore)
 
