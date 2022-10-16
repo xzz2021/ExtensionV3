@@ -28,7 +28,7 @@ import{ bgcApi as API } from './src/api/bgcApi/index'
 
 
 //-------------------------此处为自建websocket的方案二-----------------------------------------
-
+let time = 0
 function wsInit(){
   let ws = new WebSocket('ws://localhost:7777');
           ws.onopen = (e) => {
@@ -38,8 +38,9 @@ function wsInit(){
           ws.onclose = (e) => {
             console.log('--------bg--------断开------:', new Date())
             setTimeout(() => {
-              wsInit()
-            }, 1000);
+              time++
+              time < 10 && wsInit()
+            }, 3000);
           }
           ws.onmessage = (e) => {
             if(JSON.parse(e.data) == 'done'){

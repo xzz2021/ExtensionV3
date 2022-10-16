@@ -165,6 +165,7 @@ body {
     margin: 5px 0 20px 0;
 
     .section {
+      box-sizing: content-box;
       text-align: center;
       margin: 0 auto;
       display: flex;
