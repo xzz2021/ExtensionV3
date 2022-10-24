@@ -1,6 +1,7 @@
 // Generated using webpack-cli https://github.com/webpack/webpack-cli
 
 const webpack = require('webpack')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin")
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -74,6 +75,9 @@ const proconfig = {
             //   },
            }
         ),
+        new MiniCssExtractPlugin({
+            filename: '[name].css'
+        }),
         //可以定义全局上下文的变量
         new webpack.DefinePlugin({
             // 此处解决vue未定义extension大量报错问题
@@ -84,6 +88,25 @@ const proconfig = {
           }),
 
     ],
+    module: {  
+        rules: [
+            {
+                oneOf:[
+                    {// **目前是style标签分别注入,且未压缩,需优化压缩整合到同一标签下,若整体css大于150K需再调整成link方式按需引入
+                        test: /\.css$/i,
+                        use: [MiniCssExtractPlugin.loader,'css-loader'],  //实现样式代码整合在单独一个文件里, 可以取代style-loader
+                        // use: ["style-loader", 'css-loader'],  
+                    },
+                    //此处可以引入移动端自适应px2rem-loader
+                    {
+                        test: /\.s[ac]ss$/i,
+                        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],  //实现样式代码整合在单独一个文件里, 可以取代style-loader
+                        // use: ["style-loader", 'css-loader','sass-loader'], 
+                    }
+                ]
+            },
+        ],
+    },
     // externals: {}, //在生产模式引入指定模块外链cdn的情况下,忽略指定的模块不进行打包
 
 }

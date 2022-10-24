@@ -483,6 +483,8 @@ const onDragstop = (e) => {
     chrome.storage.local.get(['userToken'], (result) =>{
       result != {} && (userstore.userToken = result.userToken)
     })
+
+    // let storageObj = API.Storage.get(['userid', 'userPhone', 'userToken'])
   }
   onMounted(() => {
     currentHref = window.location.href

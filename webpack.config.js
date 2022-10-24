@@ -8,7 +8,7 @@ const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+// const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const VueLoaderPlugin = require('vue-loader').VueLoaderPlugin
 
 //实现elementplus自动按需加载
@@ -52,9 +52,9 @@ const comconfig = {
             //     removeComments: true,
             //   },
         }), 
-        new MiniCssExtractPlugin({
-            filename: '[name].css'
-        }),
+        // new MiniCssExtractPlugin({
+        //     filename: '[name].css'
+        // }),
 
         new VueLoaderPlugin(),   // 引入vue解析插件
         
@@ -141,20 +141,21 @@ const comconfig = {
                             //   }]]
                         }
                     },
-                    {// **目前是style标签分别注入,且未压缩,需优化压缩整合到同一标签下,若整体css大于150K需再调整成link方式按需引入
-                        test: /\.css$/i,
-                        use: [MiniCssExtractPlugin.loader,'css-loader'],  //实现样式代码整合在单独一个文件里, 可以取代style-loader
-                        // use: ["style-loader", 'css-loader'],  
-                    },
-                    //此处可以引入移动端自适应px2rem-loader
-                    {
-                        test: /\.s[ac]ss$/i,
-                        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],  //实现样式代码整合在单独一个文件里, 可以取代style-loader
-                        // use: ["style-loader", 'css-loader','sass-loader'], 
-                    },
+                    // {// **目前是style标签分别注入,且未压缩,需优化压缩整合到同一标签下,若整体css大于150K需再调整成link方式按需引入
+                    //     test: /\.css$/i,
+                    //     use: [MiniCssExtractPlugin.loader,'css-loader'],  //实现样式代码整合在单独一个文件里, 可以取代style-loader
+                    //     // use: ["style-loader", 'css-loader'],  
+                    // },
+                    // //此处可以引入移动端自适应px2rem-loader
+                    // {
+                    //     test: /\.s[ac]ss$/i,
+                    //     use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],  //实现样式代码整合在单独一个文件里, 可以取代style-loader
+                    //     // use: ["style-loader", 'css-loader','sass-loader'], 
+                    // },
                     {
                         test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,   //实现其他文件类型整合在js里而不是带hash输出独立文件
                         type: 'asset',
+                        // use: 'url-loader?limit=16941'
                     }
                     
                 ]
