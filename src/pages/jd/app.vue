@@ -179,8 +179,8 @@
 
 <script setup>
 
-let aa = API.dayjs.format('YYYY-MM-DD HH:mm:ss')
-console.log('aa: ', aa);
+// let aa = API.dayjs.format('YYYY-MM-DD HH:mm:ss')
+// console.log('aa: ', aa);
 const userstore = userStore()
 const { userid, userToken, version } = storeToRefs(userstore)
 
@@ -487,7 +487,6 @@ const onDragstop = (e) => {
   onMounted(() => {
     currentHref = window.location.href
     curCookies.value = "{'" + document.cookie + "'}"
-    // console.log('window.location.href: ', window.location.href)
 
   })
    onBeforeMount(async () => {
@@ -497,10 +496,10 @@ const onDragstop = (e) => {
       })
     getStorage()
     let aaa = API.Storage.get(['jdx', 'jdy'])
-    console.log('aaa: ', aaa);
+    // console.log('aaa: ', aaa);
      let { jdx, jdy } = API.Storage.get(['jdx', 'jdy']) || {}
-     console.log('jdy: ', jdy);
-     console.log('jdx: ', jdx);
+    //  console.log('jdy: ', jdy);
+    //  console.log('jdx: ', jdx);
     // let res = await API.sendMessage({type: 'tabQuery', requirement:{title: "xzz2022"}})
     // console.log('tab-----------------res: ', res);
     // let res2 = await API.sendMessage({ type: 'tabOperate', tabId: res.id,   action: 'remove'})
