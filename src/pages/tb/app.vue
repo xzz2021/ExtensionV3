@@ -69,6 +69,8 @@ import { now } from 'lodash';
 const userstore = userStore()
 const { userid, userToken, version } = storeToRefs(userstore)
 
+// console.log('version: ', version.value);
+
 const dialogVisible = ref(true)
 // do not use same name with ref
 const ischeck = ref(false)

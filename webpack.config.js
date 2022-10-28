@@ -73,13 +73,14 @@ const comconfig = {
                 }
                 
               ],
-            resolvers: [ElementPlusResolver()],
+              // 这里自动引入组件,不可去除
+            resolvers: [ElementPlusResolver({importStyle: false})],
           }),
         Components({ 
             dirs:['src'],
             directoryAsNamespace: true,
             globalNamespaces: ['components', 'pages'],
-            resolvers: [ElementPlusResolver() ],
+            resolvers: [ElementPlusResolver({importStyle: false}) ],
             // allowOverrides: true,
             // include: [/src/],
             exclude: [/[\/]app.vue[\/]/],
@@ -87,8 +88,16 @@ const comconfig = {
         }),
         new webpack.ProvidePlugin({  // 在函数上下文环境中注入第三方库---缺点:无法全局window引用---使用expose-loader解决
         $: 'jquery',
+        jq: 'jquery',
         _: 'lodash'
         }),
+        // css: {
+        //     preprocessorOptions: {
+        //       scss: {
+        //         additionalData: `@use "@/style/element/index.scss" as *;` //关键
+        //       }
+        //     }
+        //   }
         // new InstallPlugin({
         //     dependencies: {
         //       peer: true,

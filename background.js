@@ -29,38 +29,49 @@ import{ bgcApi as API } from './src/api/bgcApi/index'
 
 //-------------------------此处为自建websocket的方案二-----------------------------------------
 let time = 0
+const ws = new WebSocket('ws://localhost:7777');
+ws.onopen = (e) => {
+  console.log('-------bg--------已连接------:', new Date())
+  ws.send(JSON.stringify("bg"))
+}
+
+ws.onmessage = (e) => {
+
+  if(JSON.parse(e.data) == 'done'){
+    console.log('-----bg收到------编译完成-------------')
+
+  chrome.tabs.query({active: true},([tab]) => {
+     chrome.runtime.reload()
+     chrome.tabs.reload()
+   })
+  // chrome.tabs.query({active: true},([tab]) => {
+  //   if(tab.url.match(/tmall|taobao|1688|yangkeduo|pinduoduo|alibaba|jd/)){
+  //    chrome.runtime.reload()
+  //    chrome.tabs.reload()
+  //  }else{
+  //    chrome.runtime.reload()
+  //  }})
+  }
+}
 function wsInit(){
-  let ws = new WebSocket('ws://localhost:7777');
-          ws.onopen = (e) => {
-            console.log('-------bg--------已连接------:', new Date())
-            ws.send(JSON.stringify("bg"))
-          }
           ws.onclose = (e) => {
             console.log('--------bg--------断开------:', new Date())
             setTimeout(() => {
               time++
-              time < 10 && wsInit()
-            }, 3000);
+              time < 1000 && wsInit()
+            }, 1000);
           }
           ws.onerror = (e) => {
             console.log('-------bg-----连接出错------:', new Date())
+            setTimeout(() => {
+              time++
+              time < 1000 && wsInit()
+            }, 1000);
           }
-          ws.onmessage = (e) => {
-            if(JSON.parse(e.data) == 'done'){
-            chrome.tabs.query({active: true},([tab]) => {
-              if(tab.url.match(/tmall|taobao|1688|yangkeduo|pinduoduo|alibaba|jd/)){
-               chrome.runtime.reload()
-               chrome.tabs.reload()
-             }else{
-               chrome.runtime.reload()
-             }})
-            }
-          }
+          
         }
 
-        setTimeout(() => {
-          wsInit()
-        }, 500)
+wsInit()
 
 
 
@@ -74,17 +85,17 @@ let matches = ["https://*.1688.com/*", "https://*.tmall.com/*", "https://*.jd.co
 //let matches = '<all_urls>'
       chrome.storage.onChanged.addListener(function (changes, namespace) {
         for (let [key, { oldValue, newValue }] of Object.entries(changes)) {
-          if(key == 'userid') {
+          if(key == 'userInfo') {
             chrome.tabs.query({url:matches},(tabs)=>{
               let l = tabs.length
               for(let i = 0; i < l; i++){
                 chrome.tabs.sendMessage(tabs[i].id, 'loginEvent', ()=> {})
               }})}
               //如果userid变化为空,也就是用户退出了登录,则清空userPhone和userToken
-              if(key == 'userid' && newValue == '') {
-                chrome.storage.local.set({userPhone: ''})
-                chrome.storage.local.set({userToken: ''})
-              }
+              // if(key == 'userid' && newValue == '') {
+              //   chrome.storage.local.set({userPhone: ''})
+              //   chrome.storage.local.set({userToken: ''})
+              // }
             }})
 //-----------------------------------------------------------------------
 

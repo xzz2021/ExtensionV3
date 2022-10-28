@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-09-30 16:00:59
  * @LastEditors: xzz2021
- * @LastEditTime: 2022-10-24 09:09:45
+ * @LastEditTime: 2022-10-27 17:52:42
  */
 
 const CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -43,7 +43,7 @@ const watchconfig = {
                   {
                       test: /\.s[ac]ss$/i,
                     //   use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],  //实现样式代码整合在单独一个文件里, 可以取代style-loader
-                      use: ["style-loader", 'css-loader','sass-loader'], 
+                      use: ["style-loader", 'css-loader','sass-loader'],
                   }
               ]
           },

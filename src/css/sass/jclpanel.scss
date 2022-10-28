@@ -12,11 +12,11 @@
     border-radius: 4px;
     header {
       .section {
-        display: flex;
-        align-items: center;
+        // display: flex;
+        // align-items: center;
         padding: 10px;
         background: linear-gradient(180deg, #ffad44 0%, #ff9712 100%);
-        border-radius: 4px 4px 0 0;
+        // border-radius: 4px 4px 0 0;
       }
     }
     main {
@@ -93,22 +93,20 @@
   
   // .el-dropdown-menu__item:hover {
   //   background-color: #ffa9391f;
-  //   color: $jclbg;
-  
+  //   color: #ff9712;
   // }
 
-  :deep(.el-dropdown-menu__item):hover {
-    background-color: #ffa9391f;
-    color: $jclbg;
-  }
+//   ::v-deep .el-dropdown [disabled] {
+//     color: #606266;
+// }
 
-//vue3面板过渡动画-----------可使用plus3内置动画
+//面板过渡动画
 .fade-enter-active, .fade-leave-active {
   overflow: hidden;
   max-height: 800px;
   transition: max-height 1s;
 }
-.fade-enter-from, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   max-height: 0;
 }
 
@@ -120,4 +118,11 @@
 
 :deep(.dragbox){
   background-color: #fff;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+:deep(.el-dropdown-menu__item):hover {
+  background-color: #ffa9391f;
+  color: $jclbg;
 }

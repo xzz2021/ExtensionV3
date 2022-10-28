@@ -27,14 +27,14 @@ const Storage = {
         }
             if(typeof strORarr == 'string'){
                 chrome.storage.local.get([strORarr], (res)=> {
-                    let r = res[strORarr] || '获取失败:数据不存在'
+                    let r = res[strORarr] || ''
                         resolve(r)
                   })
             }else {
                 let obj = {}
                 for(const val of strORarr) {
                     chrome.storage.local.get([val], (res)=> {
-                            obj[val] = res[val] || '数据不存在'
+                            obj[val] = res[val] || ''
                       })
                 }
                 resolve(obj)
