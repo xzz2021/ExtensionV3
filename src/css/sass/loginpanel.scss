@@ -1,14 +1,7 @@
 // @use 'root';
 @import 'vxeCommon';
 
-// ::v-deep .el-checkbox__inner{
-//   border-color: #ff9712;
-// }
 
-//  .el-dropdown-menu__item:hover {
-//   background-color: #ffa9391f !important;
-//   color: #ff9712 !important;
-// }
 :deep(.el-dialog){
   border-radius: 10px;
 }

@@ -28,46 +28,45 @@ import{ bgcApi as API } from './src/api/bgcApi/index'
 
 
 //-------------------------此处为自建websocket的方案二-----------------------------------------
-// let time = 0
-// const ws = new WebSocket('ws://localhost:7777');
-// ws.onopen = (e) => {
-//   console.log('-------bg--------已连接------:', new Date())
-//   ws.send(JSON.stringify("bg"))
-// }
-
-// ws.onmessage = (e) => {
-
-//   if(JSON.parse(e.data) == 'done'){
-//     console.log('-----bg收到------编译完成-------------')
-
-//   chrome.tabs.query({active: true},([tab]) => {
-//     if(tab.url.match(/tmall|taobao|1688|yangkeduo|pinduoduo|alibaba|jd/)){
-//      chrome.runtime.reload()
-//      chrome.tabs.reload()
-//    }else{
-//      chrome.runtime.reload()
-//    }})
-//   }
-// }
-// function wsInit(){
-//           ws.onclose = (e) => {
-//             console.log('--------bg--------断开------:', new Date())
-//             setTimeout(() => {
-//               time++
-//               time < 1000 && wsInit()
-//             }, 1000);
-//           }
-//           ws.onerror = (e) => {
-//             console.log('-------bg-----连接出错------:', new Date())
-//             setTimeout(() => {
-//               time++
-//               time < 1000 && wsInit()
-//             }, 1000);
-//           }
+const ws = new WebSocket('ws://localhost:7777');
+let time = 0
+function wsInit(){
+          ws.onopen = (e) => {
+            console.log('-------bg--------已连接------:', new Date())
+            ws.send(JSON.stringify("bg"))
+          }
           
-//         }
+          ws.onmessage = (e) => {
+          
+            if(JSON.parse(e.data) == 'done'){
+              console.log('-----bg收到------编译完成-------------')
+          
+            chrome.tabs.query({active: true},([tab]) => {
+              if(tab.url.match(/tmall|taobao|1688|yangkeduo|pinduoduo|alibaba|jd/)){
+              chrome.runtime.reload()
+              chrome.tabs.reload()
+            }else{
+              chrome.runtime.reload()
+            }})
+            }
+          }
+  ws.onclose = (e) => {
+            console.log('--------bg--------断开------:',e.code,'----------', new Date())
+            setTimeout(() => {
+              time++
+              time < 1000 && wsInit()
+            }, 1000)
+          }
+  ws.onerror = (e) => {
+            console.log('-------bg-----连接出错------:', new Date())
+            setTimeout(() => {
+              time++
+              time < 1000 && wsInit()
+            }, 1000);
+          }
+        }
 
-// wsInit()
+wsInit()
 
 
 

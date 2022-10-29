@@ -54,8 +54,14 @@
 //   }
 // }
 
-.el-dropdown [disabled] {
-  color: #606266;
+
+.el-input__wrapper:hover {
+  // box-shadow: 0 0 0 1px var(--el-input-hover-border-color) inset;
+  box-shadow: 0 0 0 1px #ff9712;
+}
+.el-dropdown-menu__item:hover {
+  background-color: #ffa9391f;
+  color: #ff9712;
 }
 
 .el-textarea__inner{

@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-09-30 16:00:59
  * @LastEditors: xzz2021
- * @LastEditTime: 2022-10-27 17:52:42
+ * @LastEditTime: 2022-10-29 15:37:16
  */
 
 const CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -23,7 +23,7 @@ const watchconfig = {
           __VUE_OPTIONS_API__: true,
           __VUE_PROD_DEVTOOLS__: false,
           "AUTHOR": JSON.stringify('xzz2022'),
-          "VERSION": JSON.stringify('0928')
+          "VERSION": JSON.stringify('1029')
         })
         
     ],
