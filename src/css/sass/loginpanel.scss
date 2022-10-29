@@ -1,140 +1,285 @@
-//因为loginpanel未配置scoped会在全局直接挂载,所以此处挂载css会直接生成
-@use 'root';
+// @use 'root';
+@import 'vxeCommon';
 
-.jclLogin {
-    position: fixed;
-    z-index: 100001;
-    left: 500px;
-    top: 100px;
-    .el-dialog {
-      // background: ;
-      border-radius: 5px;
-      // opacity: 0;
-      width: 380px;
-      .el-dialog__header {
-        border-radius: 5px;
-        margin: 0;
-        padding: 26px 0 12px 0;
-        background: linear-gradient(#ffebd6, #fff9f3);
+// ::v-deep .el-checkbox__inner{
+//   border-color: #ff9712;
+// }
 
-        .el-dialog__headerbtn {
-          top: 18px;
-          right: 10px;
-        }
-  
-        .el-dialog__title {
-          height: 26px;
-          font-size: 20px;
-          line-height: 30px;
-          color: #000000;
-        }
+//  .el-dropdown-menu__item:hover {
+//   background-color: #ffa9391f !important;
+//   color: #ff9712 !important;
+// }
+:deep(.el-dialog){
+  border-radius: 10px;
+}
+:deep(.el-dialog__header){
+  padding: 0;
+}
+:deep(.el-dialog__body){
+  padding: 16px;
+}
+
+
+
+.el-divider--horizontal{
+  margin: 0;
+}
+
+.mainSection{
+  display: flex;
+    .left{
+      margin-right: 16px;
+      .logo{
+        width: 372px;
+        height: 468px;
       }
-  
-  
-      .el-form {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-  
-        .el-form-item {
-          margin-bottom: 40px;
-          width: 320px;
-          // height: 50px !important;
-  
-          .el-form-item__content {
-            display: block;
-            .el-input {
-              height: 100%;
-              font-size: 14px;
-              color: #000000;
-              background: rgba(248, 248, 248, 0.226);
-            }
-  
-            .el-form-item__error {
-              height: 19px;
-              font-size: 14px;
-              line-height: 24px;
-              color: #ff4040;
-              margin-top: 8px;
-              left: 15px;
-            }
-          }
-        }
-  
-  
-        .submititem {
-          // margin: 20px 0 20px 0;
-          margin-bottom: 5px;
-  
-          .submitbtn {
-            width: 320px;
-            height: 40px;
-            background: rgba(255, 152, 18, 0.932);
-            border-radius: 4px;
-            font-size: 20px;
-            line-height: 40px;
-            color: #ffffff;
-            text-align: center;
+
+    }
+    .right{
+      padding: 50px;
+      .title{
+        // width: 167px;
+        height: 20px;
+        font-size: 20px;
+        font-family: Source Han Sans CN;
+        font-weight: 600;
+        line-height: 12px;
+        color: #000000;
+        margin-top: 12px;
+      }
+      .tip{
+        // width: 154px;
+        height: 14px;
+        font-size: 14px;
+        font-family: Source Han Sans CN;
+        font-weight: 400;
+        line-height: 12px;
+        color: #BBBBBB;
+        margin: 10px 0 40px 0
+        // opacity: 1;
+      }
+      .formBox{
+        position: relative;
+        @extend %flexColCen;
+        width: 300px;
+        .phoneSec{
+          position: relative;
+          width: 100%;
+          .dropdownBox{
+            position: absolute;
+            top: 12px;
+            right: 12px;
             cursor: pointer;
-            
           }
         }
-      }
-  
-  
-      .el-dialog__body {
-        background: linear-gradient(#fff9f3, #fffbf8);
-        border-radius: 5px;
-  
+        .el-form{
+          width: 100%;
+
+        }
+        .el-form-item {
+          margin-bottom: 30px;
       }
       .codeSec{
-        display: flex;
-      .codeinput{
-        border-right-style: none !important;
-      }
+        position: relative;
+        width: 100%;
       .getcode {
-        border-left-style: none;
-        // border-radius: 0 4px 4px 0;
-        // margin-left: 5px;
+        width: 83px;
+        position: absolute;
+        top: 5px;
+        right: 14px;
         color: #ff9712;
+        font-size: 16px;
+        font-family: MicrosoftYaHei;
+        line-height: 30px;
+        text-align: center;
+        cursor: pointer;
         &:hover{
           color: #ff9712;
           background-color: transparent;
-          border: 1px solid #ff9712;
+          // border: 1px solid #ff9712;
         }
         &:actived{
           color: #ff9712;
           background-color: transparent;
         }
       }
-    }
-      .el-button--warning.is-link {
-        --el-button-text-color: #ff9712;
-      }
-      .loginFail{
+      .fetchCode{
         position: absolute;
-        top: 227px;
-        left: 55px;
-        font-size: 14px;
-        line-height: 30px;
-        color: #ff0000;
+        top: 0;
+        right: 35px;
+        color: #ff9712;
+        font-size: 16px;
+        font-family: MicrosoftYaHei;
+        line-height: 40px;
       }
     }
-    .changeAccount {
-      margin: 0 auto;
-      width: 320px;
-      height: 40px;
-      background: rgba(255, 152, 18, 0.932);
-      border-radius: 4px;
-      font-size: 20px;
-      line-height: 40px;
-      color: #ffffff;
-      text-align: center;
-      cursor: pointer;
+    .submititem {
+      margin: 47px 0 10px 0;
+      .submitbtn {
+        // box-sizing: content-box;
+        width: 300px;
+        height: 40px;
+        background: rgba(255, 152, 18, 0.932);
+        border-radius: 4px;
+        font-size: 16px;
+        line-height: 40px;
+        color: #ffffff;
+        text-align: center;
+        font-family: Microsoft YaHei;
+        cursor: pointer;
+        // border: 1px solid #ff9712;
+        &:hover{
+          // border: 1px solid #ffffff;
+          background-color: #fcaf4c;
+
+        }
+        &:actived{
+          color: #f3f2f0;
+          background-color: #60dd41;
+        }
+        
+      }
     }
-  }
-  
-  // :deep(.){
+    .tipBox{
+      display: flex;
+      justify-content: space-between;
+      // line-height: 13px;
+      width: 100%;
+      .tip2{
+        // width: 182px;
+        // height: 19px;
+        // font-size: 14px;
+        font-family: Microsoft YaHei;
+        font-weight: 400;
+        line-height: 32px;
+        color: #CCCCCC;
+      }
+    }
+    .errorTip{
+      position: absolute;
+      top: 113px;
+      left: 2px;
+      font-family: MicrosoftYaHei;
+      color: #FF4040;
+    }
+      }
+    }
 
-  // }
+    .right2{
+      padding: 50px;
+      @extend %flexColCen;
+      .title{
+        width: 300px;
+     display: flex;
+     justify-content: space-between;
+      
+      .tip{
+        width: 80px;
+        height: 20px;
+        font-size: 20px;
+        font-family: Source Han Sans CN;
+        font-weight: 600;
+        line-height: 12px;
+        color: #000000;
+      }
+      .exchangeBtn{
+        // width: 84px;
+        // height: 19px;
+        font-size: 14px;
+        font-family: Microsoft YaHei;
+        font-weight: 400;
+        // line-height: 12px;
+        color: #FF9712;
+        cursor: pointer;
+      }
+    }
+    .phoneBox{
+      width: 300px;
+      height: 304px;
+      margin-top: 20px;
+      border: 1px solid #eee;
+      border-radius: 4px;
+      @extend %flexColCen;
+      overflow-y: scroll;
+      .listBox{
+        width: 280px;
+        height: 40px;
+        // border-bottom: 1px solid rgba(238,238,238,0.39);
+        &:hover{
+          // cursor: pointer;
+          background-color: rgba(248,248,248,0.39);
+        }
+        
+        .list{
+        height: 39px;
+          display: flex;
+          justify-content: space-between;
+          .phone{
+            // width: 90px;
+            // height: 19px;
+            font-size: 14px;
+            font-family: Microsoft YaHei;
+            font-weight: 400;
+            line-height: 40px;
+            color: #000000;
+            &:hover{
+              cursor: pointer;
+            }
+          }
+          .onecolor {
+            color: #ff9712;
+            &:hover{
+              cursor: default;
+            }
+          }
+          .deleteBtn{
+            display: none;
+            margin-right: 6px;
+            line-height: 40px;
+            &:hover{
+              cursor: pointer;
+            }
+          }
+          &:hover .deleteBtn{
+            display: block;
+          }
+        }
+      }
+      .one{
+        &:hover{
+          cursor: default;
+          background-color: rgb(255, 255, 255);
+        }
+    }
+    }
 
+    }
+
+}
+
+
+
+
+
+
+
+
+ .phoneBox::-webkit-scrollbar{
+        width:2px;
+        height:10px;
+        /**/
+      }
+      .phoneBox::-webkit-scrollbar-track{
+        background: rgb(239, 239, 239);
+        border-radius:2px;
+      }
+      .phoneBox::-webkit-scrollbar-thumb{
+        background: #bfbfbf;
+        border-radius:10px;
+      }
+      .phoneBox::-webkit-scrollbar-thumb:hover{
+        background: #333;
+      }
+      .phoneBox::-webkit-scrollbar-corner{
+        background: #179a16;
+      }

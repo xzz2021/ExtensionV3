@@ -2,7 +2,12 @@
 import { createApp } from 'vue'
 //-------pinia----打包60k---------
 import { createPinia } from 'pinia'
+
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+
 const pinia = createPinia()
+// https://github.com/prazdevs/pinia-plugin-persistedstate  //  pinia数据持久化,自动存取localstorage
+pinia.use(piniaPluginPersistedstate)
 //-----------------------------------
 
 // //---------------引入所有API挂载到全局----------
@@ -18,6 +23,10 @@ import 'vxe-table/lib/style.css'
 //-------------结合babel-loader配置按需加载后----打包体积只有100k
 //-------所以可以全局引入------jq(打包90k)+vue+ele+pinia---------
 
+//ElementPlus组件与样式分离,config里importStyle为false,然后单独引入带变量的css
+import './src/css/element-variables.scss'
+// import ElementPlus from 'element-plus'
+// import 'element-plus/dist/index.css'
 
 //引入自定义的所有css入口文件
 import './src/css/style'
@@ -94,6 +103,7 @@ switch (checkedUrl) {
   default: ''
     break;
 }
+
 
 //-----------------注入js到任意页面------------------
 

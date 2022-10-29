@@ -1,251 +1,503 @@
+<template>
+<div class="jclpanel" >
+    <VueDragResize :isActive="true" :w="180" :h="60" :x="lx" :y="ly" :z="22" v-if="reloadDrag" :isResizable="false" @dragstop="onDragstop" >
+      <!-- https://github.com/kirillmurashov/vue-drag-resize/tree/v2.0.3 -->
+    <div class="dragbox">
+    <header class="jclheader">
+      <div class="section">
+        <img
+          style="width: 107px; height: 40px"
+          src="https://junchenlunoffice.oss-cn-shenzhen.aliyuncs.com/plugs/logo1/logobg.png"
+          alt=""
+        />
+      </div>
+    </header>
+      <transition name="fade">
+    <!-- <el-collapse-transition> -->
+    <main class="jclmain" v-show="showMain">
+      <div>
+        <el-dropdown placement="right-start"  @command="OneClickDiagnosis">
+          <span class="el-dropdown-link">
+            <div class="jclicon"><i class="xzzicon-dianpu"></i></div>
+            <div class="title">店铺诊断</div>
+            <div class="arrow-right-czp"><i class="xzzicon-youjt"></i></div>
+          </span>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item v-for="item in diagnosisOption" :key="item.value" :command="item.value">
+                <div class="drop-menu">销售前{{ item.value }}商品</div>
+              </el-dropdown-item>
+              <el-dropdown-item>
+              <div class="drop-menu" style="text-align: center;" @click="scanRecord">浏览记录</div>
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+      </div>
+      <div>
+        <el-dropdown placement="right-start" @command="imgDownload">
+          <span class="el-dropdown-link">
+            <div class="jclicon"><i class="xzzicon-tupian"></i></div>
+            <div class="title" >图片下载</div>
+            <div class="arrow-right-czp"><i class=""></i></div>
+          </span>
+          <template #dropdown>
+             <el-dropdown-menu >
+              <el-dropdown-item :command="item.arg" v-for="item in pictureOption" :key="item.value">
+                <div class="drop-menu">
+                  {{ item.value }}
+                </div>
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+      </div>
+      <div>
+        <el-dropdown placement="right-start" @command="commentDownload">
+          <span class="el-dropdown-link">
+            <div class="jclicon"><i class="xzzicon-pingjia"></i></div>
+            <div class="title">有图评价下载</div>
+            <div class="arrow-right-czp"><i class="xzzicon-youjt"></i></div>
+          </span>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item v-for="item in commentOption" :key="item.value" :command="item.value">
+                <div class="drop-menu"> 评价前{{ item.value }} </div>
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+      </div>
+      <div>
+        <el-dropdown placement="right-start" @command="commentDownload1">
+          <span class="el-dropdown-link">
+            <div class="jclicon"><i class="xzzicon-pinglun"></i></div>
+            <div class="title">无图评价下载</div>
+            <div class="arrow-right-czp"><i class="xzzicon-youjt"></i></div>
+          </span>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item v-for="item in commentOption1" :key="item.value" :command="item.value">
+                <div class="drop-menu"> 评价前{{ item.value }} </div>
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+      </div>
+      <div>
+        <el-dropdown >
+          <span class="el-dropdown-link">
+            <div class="jclicon"><i class="xzzicon-spxz"></i></div>
+            <div class="title" @click="videoDownload">视频下载</div>
+            <div class="arrow-right-czp"><i class=""></i></div>
+          </span>
+        </el-dropdown>
+      </div>
+      <div>
+        <el-dropdown>
+          <span class="el-dropdown-link">
+            <div class="jclicon"><i class="xzzicon-dingdan"></i></div>
+            <div class="title" @click="show_ctrl()" @click.once="监听换行()" >订单备注</div>
+            <div class="arrow-right-czp"><i class=""></i></div>
+          </span>
+        </el-dropdown>
+      </div>
+       <div>
+        <el-dropdown>
+          <span class="el-dropdown-link">
+            <div class="jclicon"><i class="xzzicon-gjczhq"></i></div>
+            <div class="title" @click="keyWordTool">关键词组合器</div>
+            <div class="arrow-right-czp"><i class=""></i></div>
+          </span>
+        </el-dropdown>
+      </div>
+      <div>
+        <el-dropdown>
+          <span class="el-dropdown-link">
+            <div class="jclicon"><i class="xzzicon-shouye"></i></div>
+            <div class="title" @click="backToHome">回到首页</div>
+            <div class="arrow-right-czp"><i class=""></i></div>
+          </span>
+        </el-dropdown>
+      </div>
 
-<template >
-  <div class="cjzz">
-  <el-dialog v-model="dialogVisible" title="淘宝自然搜索" width="40%" :modal="false"  draggable >
-    
-    <el-form :model="form" label-width="110px">
-      <el-form-item label="商品ID或链接（淘宝/天猫）">
-        <el-input v-model="form.link" />
-      </el-form-item>
-      <br/>
-      <el-form-item label="关键词">
-        <el-input v-model="form.desc" type="textarea" rows="10"/>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="onSubmit">提交</el-button>
-      </el-form-item>
-    </el-form>
-  </el-dialog>
+        <div v-if="userid">
+          <el-dropdown placement="right-start">
+            <span class="el-dropdown-link">
+              <div class="jclicon"><i :class="userid ? 'xzzicon-exchange' : 'xzzicon-login'"></i></div>
+              <div  class="title">{{userPhone}}</div>
+              <div class="arrow-right-czp"><i class="xzzicon-youjt"></i></div>
+            </span>
+            <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item command="aa">
+                <div class="drop-menu" @click="goToLogin">切换账号</div>
+              </el-dropdown-item>
+              <el-dropdown-item command="bb">
+                <div class="drop-menu">操作记录</div>
+              </el-dropdown-item>
+              <el-dropdown-item command="cc">
+                <div class="drop-menu" >任务进程</div>
+              </el-dropdown-item>
+            </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+        </div>
 
-  <el-dialog  @close="clearData"  v-model="ischeck" title="查询中" width="40%" :modal="false" :show-close="false" draggable >
-    <div class="demo-progress">
-      <el-progress type="dashboard" :percentage="percentage" :color="colors" />
+        <div  v-else>
+              <el-dropdown>
+                <span class="el-dropdown-link">
+                  <div class="jclicon"><i class="xzzicon-login"></i>
+                  </div>
+                  <div  class="title" @click="goToLogin">账号登录</div>
+                  <div class="arrow-right-czp"><i class=""></i></div>
+                </span>
+              </el-dropdown>
+            </div>
+
+        <div v-if="userid">
+          <el-dropdown >
+            <span class="el-dropdown-link">
+              <div class="jclicon" ><i class="xzzicon-logout"></i></div>
+              <div class="title" @click="logout">退出登录</div>
+              <div class="arrow-right-czp"><i class=""></i></div>
+            </span>
+          </el-dropdown>
+        </div>
+        <div  class="version"> 版本:{{ version }} </div>
+
+    </main>
+    <!-- </el-collapse-transition> -->
+    </transition>
+
+    <footer @click="showMain = !showMain">
+      <div class="shrink"><i :class="!showMain? 'xzzicon-shrink': 'xzzicon-shrink2'"></i></div>
+    <!-- <el-button type="primary">Primary</el-button>
+    <div class="text-red-400 ">6666</div> -->
+    </footer>
     </div>
-  </el-dialog>
-
-  <el-dialog  @close="clearData2" v-model="isresult" title="搜索结果" width="40%" :modal="false"  draggable >
-    <el-table  :data="tableData" height="250" style="width: 100%">
-      <el-table-column prop="order" label="序号" width="180" />
-      <el-table-column prop="keyword" label="关键词" width="180" />
-      <el-table-column prop="location" label="排名位置（手淘）" width="240" />
-      <el-table-column prop="operation" label="操作" width="100" >
-        <template #default="scope">
-          <el-button link type="primary" size="small"  @click.prevent="showResult(scope.$index)">排名结果</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-  </el-dialog>
-
-  <el-dialog @close="clearData3" v-model="isrowdata" title="排名结果" width="60%" :modal="false"  draggable >
-    <el-table  :data="rowtableData" height="600" style="width: 100%">
-      <el-table-column prop="order" label="排名" width="60" />
-      <el-table-column prop="img" label="宝贝图片" width="100" >
-            <template #default="scope">
-               <img :src="scope.row.img" min-width="100" height="100"/>
-        </template>
-      </el-table-column>
-      <el-table-column prop="title" label="宝贝标题" width="150" />
-      <el-table-column prop="id" label="宝贝ID" width="120" />
-      <el-table-column prop="price" label="宝贝原价" width="120" />
-      <el-table-column prop="pricerate" label="宝贝促销价" width="120" />
-      <el-table-column prop="shopName" label="店铺" width="120" />
-      <el-table-column prop="sold" label="付款人数" width="120" />
-    </el-table>
-   <!--  <div>{{rowtableData}}</div> -->
-  </el-dialog>
-
-  
-</div>
-
+</VueDragResize>
+    </div>
+    <LoginPanel ref="loginref" />
+    <!-- <oneClickDiagnosis /> -->
+    <!-- <MyProgress :show="progressVisible" :percentage="percentage" /> -->
 </template>
+
 
 <script setup>
 
-import {getMessage, getPhoneUrl,checkNum} from './js/search.js'
-import {ref,reactive,onMounted} from 'vue'
-import { Minus, Plus } from '@element-plus/icons-vue'
-import { now } from 'lodash';
-
+// let aa = API.dayjs.format('YYYY-MM-DD HH:mm:ss')
+// console.log('aa: ', aa);
 const userstore = userStore()
-const { userid, userToken, version } = storeToRefs(userstore)
+const { location } = storeToRefs(userstore)
 
-const dialogVisible = ref(true)
-// do not use same name with ref
-const ischeck = ref(false)
-const isresult = ref(false)
-const isrowdata = ref(false)
-const form = reactive({
-  link: '',
-  desc: ''
-})
+//---------------单纯字符串变量不可使用reactive---------
+//-----ref定义的数据：操作数据需要.value，读取数据时模板中直接读取不需要
+let currentHref = ref('')
+let curCookies  = ref('')
+let showMain  = ref(true)
+const version = VERSION
+const userid = ref('')
+const userPhone = ref('')
 
-const percentage = ref(0)
-const colors = [
-  { color: '#5cb87a', percentage: 20 },
-  { color: '#1989fa', percentage: 40 },
-  { color: '#6f7ad3', percentage: 60 },
-  { color: '#e6a23c', percentage: 80 },
-  { color: '#f56c6c', percentage: 100 },
-]
+// let progressVisible = ref(false)
+// let percentage = ref(60)
+let {lx, ly} = location.value
 
-let tableData = reactive([]);
-let searchResult = reactive([]);
-let rowtableData = reactive([]);
+let reloadDrag = ref(true)
+const loginref = ref(null)
+const diagnosisOption = reactive([{value: 2}, {value: 5}, {value: 10}, {value: 20}])
+const commentOption = reactive([{value: 20}, {value: 50}, {value: 100}, {value: 200}])
+const commentOption1 = reactive([{value: 20}, {value: 50}, {value: 100}, {value: 200}])
+const pictureOption  = reactive([
+        {value: '全部下载(带目录)', arg: 'allwith'},
+        {value: '全部下载', arg: 'all'},
+        {value: '主图下载', arg: 'main'},
+        {value: 'sku图下载', arg: 'sku'},
+        {value: '详情图下载', arg: 'detail'},
+      ])
 
-const clearData =() => {
-  ischeck.value = false;
-  percentage.value = 0;
-}
-
-const clearData2 =() => {
-  isresult.value = false;
-  tableData.length = 0;
-}
-
-const clearData3 =() => {
-  isrowdata.value = false;
-  rowtableData.length = 0;
-}
-
-const showResult = (index) => {
-  // rowtableData = []
-  for(var i =0; i<searchResult.length;i++ ){
-      if(i == index){
-        let others = searchResult[i].others;
-        for(var j =0;j < others.length; j++){
-          let obj = others[j];
-          let order = obj.item_order;
-          let img = obj.item_img;
-          let title = obj.item_title;
-          let id = obj.item_id;
-          let price = obj.item_price;
-          let pricerate = obj.item_price_rate;
-          let shop = obj.item_shop;
-          let sold = obj.item_month_sold;
-          let nowobj = {
-            "order":order, 
-            "img":img,
-            "title":title, 
-            "id":id, 
-            "price":price, 
-            "pricerate":pricerate, 
-            "shopName":shop,
-            "sold":sold
-          }
-          rowtableData.push(nowobj)
+const onDragstop = (e) => {
+      let winHeight = window.innerHeight - 60
+      let winWidth = window.innerWidth - 200
+      if(e.top < 0 || e.left < 0 || e.top > winHeight || e.left > winWidth){
+        reloadDrag.value = false
+        setTimeout(() => {
+        reloadDrag.value = true
+        }, 100)
+      }else{
+        userstore.$patch((state)=>{
+          state.location = {lx: e.left, ly: e.top}
+        })
+      }
+    }
+    const  OneClickDiagnosis = async (DiagnosisNum) => {
+      if (this.userid == '') return this.$myBus.$emit('iwantlogin2');
+      if (!(this.currentHref.indexOf('item.jd') > 1)) {
+        return this.$message.error('请进入商品详情页,再点击开始诊断');
+      }
+      // this.taskData.push({taskName: '店铺诊断',
+      // progress: 0})
+      this.BUS.info_id = 0
+      this.BUS.progressPanel = true;
+      let config = {
+        method: 'post',
+        url: 'http://119.23.254.170:5000/api/jd/startCrawl',
+        data: {
+          url: this.currentHref,
+          account: this.userid,
+          cookies: this.cookies,
+          num: DiagnosisNum,
+        },
+      };
+      let res = await 浏览器_跨域axios(config);
+      // console.log('------------调用返回KEY成功--', res);
+      if (res.data.taskId != undefined) {
+        // console.log('res.data.taskId: ', res.data.taskId);
+        let config2 = {
+          method: 'post',
+          url: 'http://119.23.254.170:5000/api/jd/getCrawl2',
+          data: {taskId: res.data.taskId},
         }
+
+        //------11111----------------获取到完整数据才展示的方法-----------------------
+        //   let myInterval =  setInterval(async () => {
+        //    this.percentage >= 93 ? this.percentage = 100: this.percentage += Math.floor(30/DiagnosisNum)
+        //    let res2 = await 浏览器_跨域axios(config2)
+        //   // console.log('res2------------1111111: ', res2)
+        // if ( res2.data.detailData.length == DiagnosisNum ){
+        //   this.BUS.diagnosisData = res2.data
+        //   this.BUS.progressPanel = false
+        //   this.BUS.dialogShow = true
+        //   this.percentage = 0
+        //   clearInterval(myInterval)
+        //   // this.countdown = 30
+        // }
+        // if (this.countdown == 0){
+        //   //后端数据出现异常
+        //   clearInterval(myInterval)
+        //   this.BUS.progressPanel = false
+        //   this.countdown = 30
+        //   this.percentage = 0
+        // }
+        //   }, time2)
+        //---1111111----------------------------------------------------------------
+
+        //-------222222----------push累加方法-----------------------------------
+
+        const myInterval = setInterval(async () => {
+          this.percentage >= 90 ? '' : (this.percentage += Math.floor(20 / DiagnosisNum));
+          let res2 = await 浏览器_跨域axios(config2);
+          console.log('res2------------2222222: ', res2);
+          if (res2.data.detailData.length != 0) {
+            this.BUS.diagnosisData = res2.data;
+            this.BUS.progressPanel = false;
+            this.BUS.dialogShow = true;
+            this.percentage = 0;
+          }
+          if (res2.data.detailData.length == DiagnosisNum || res2.data.status == 'stop') {
+            clearInterval(myInterval);
+            this.BUS.diagnosisData = res2.data;
+            //--------------存储数据------------------
+              // console.log('-------------结束轮询-------------')
+
+            let config3 = {
+              method: 'post',
+              url: 'http://pddzd.junchenlun.com//?s=Jd.StoreBrowse.addRecord',
+              data: {
+                shop_name: this.BUS.diagnosisData.shopName,
+                user_id: this.userid,
+                token: this.userToken,
+                data: JSON.stringify(this.BUS.diagnosisData),
+              }, //qs将对象 序列化成URL的形式，以&进行拼接
+            }
+              // console.log('-------------开始存储数据--------------')
+              let res3 = await 浏览器_跨域axios(config3);
+              // console.log('-----------res3: --------------', res3);
+              if (res3.data.data.code == 0) {
+                console.log('数据存储成功');
+              } else {
+                console.log('数据存储失败');
+              }
+          }
+        }, DiagnosisNum * 5000);
+        //-------22222----------------------------
       }
+    }
+    const imgDownload = async (arg) =>{
+          if (userid == '') return API.emitter.emit('iwantlogin')
+      if (!(currentHref.indexOf('item.jd') > 1)) {
+        return this.ElMessage.error('请进入商品详情页,再点击开始下载');
+      }
+      let config = {
+        method: 'post',
+        url: '',
+        data: {
+          url: currentHref,
+          account: userid,
+          cookies: curCookies.value,
+          num: 66,
+        }, 
+      }
+      switch(arg){
+        case 'allwith': config.url = 'http://119.23.254.170:5000/api/jd/startPicture'
+          break
+        case 'all': config.url = 'http://119.23.254.170:5000/api/jd/startPictureNoDir'
+          break
+        case 'main': config.url = 'http://119.23.254.170:5000/api/jd/startPictureMain'
+          break
+        case 'sku': config.url = 'http://119.23.254.170:5000/api/jd/startPictureSku'
+          break
+        case 'detail': config.url = 'http://119.23.254.170:5000/api/jd/startPictureDetail'
+          break
+      }
+      // 'http://119.23.254.170:5000/api/jd/startCommentsLetter'
+      // this.BUS.progressPanel = true;
+      console.log('------开始请求key----------');
+      // console.log('config: ', config);
+      let msg = {type: 'myfetch', config}
+      let res = await  API.sendMessage(msg) //---------------------
+      console.log('------myfetchmyfetch--------res: ', res)
+      console.log('-------------taskId----有返回------------', res);
+      if (res.data.status == 'success') {
+        let config2 = {
+          method: 'post',
+          url: 'http://119.23.254.170:5000/api/jd/getPicture',
+          data: {
+            taskId: res.data.taskId,
+          }, //qs将对象 序列化成URL的形式，以&进行拼接
+        };
+        const myInterval = setInterval(async () => {
+          this.percentage >= 90 ? '' : (this.percentage += 9);
+          let res2 = await 浏览器_跨域axios(config2);
+          console.log('---------开始爬取------有返回------------', res2);
+          if (res2.data.status == 'stop' && res2.data.link != '') {
+            clearInterval(myInterval);
+            console.log('开始下载--------------');
+            浏览器_url表格链接下载(res2.data.link);
+            this.BUS.progressPanel = false;
+            this.percentage = 0;
+          }
+          if (res2.data.status == 'stop' && res2.data.link == '') {
+            clearInterval(myInterval)
+          this.percentage = 0
+          this.BUS.progressPanel = false
+            console.log("获取文件出错,请重新下载")}
+        }, 6000);
+      } else {
+        clearInterval(myInterval);
+        this.percentage = 0;
+        this.BUS.progressPanel = false;
+        console.log('获取task出错,请重新下载');
+      }
+    }
+    const commentDownload = async (num) =>{
+      if (this.userId == '') return this.$myBus.$emit('iwantlogin');
+      if (!(currentHref.value.indexOf('item.jd') > 1)) {
+        return this.$message.error('请进入商品详情页,再点击开始下载');
+      }
+      let config = {
+        method: 'post',
+        url: 'http://119.23.254.170:5000/api/jd/startComments',
+        data: {
+          url: currentHref.value,
+          account: this.userId,
+          cookies: this.cookies,
+          num,
+        }, //qs将对象 序列化成URL的形式，以&进行拼接
+      }
+      // 'http://119.23.254.170:5000/api/jd/startCommentsLetter'
+      this.BUS.progressPanel = true;
+      console.log('------开始请求key----------')
+      console.log('config: ', config);
+      let res = await 浏览器_跨域axios(config);
+      console.log('-----------res: ---------有返回------------', res)
+      if (res.data.status == 'success') {
+        let config2 = {
+          method: 'post',
+          url: 'http://119.23.254.170:5000/api/jd/getComments',
+          data: {
+            taskId: res.data.taskId,
+          }, //qs将对象 序列化成URL的形式，以&进行拼接
+        };
+        const myInterval = setInterval(async () => {
+          this.percentage >= 90 ? '' : (this.percentage += 9);
+          let res2 = await 浏览器_跨域axios(config2);
+          console.log('-----------res: ---111------有返回------------', res2)
+          if (res2.data.status == 'stop' && res2.data.link != '') {
+            clearInterval(myInterval);
+            console.log('开始下载--------------');
+            浏览器_url表格链接下载(res2.data.link);
+            this.BUS.progressPanel = false;
+            this.percentage = 0;
+          }
+          if (res2.data.status == 'stop' && res2.data.link == '') {
+            clearInterval(myInterval)
+          this.percentage = 0
+          this.BUS.progressPanel = false
+            console.log("获取文件出错,请重新下载")  }
+        }, 3000);
+      } else {
+        clearInterval(myInterval);
+        this.percentage = 0;
+        this.BUS.progressPanel = false;
+        console.log('获取task出错,请重新下载');
+      }
+    }
+    const commentDownload1 = async (num) =>{
+
+    }
+    const videoDownload = async () =>{
+    if (userid == '') return API.emitter.emit('iwantlogin')
+    if (!(currentHref.indexOf('item.jd') > 1)) {
+        return alert('请进入商品详情页,再点击开始下载')
+      }
+        $('.video-icon').click()
+        let url = $('video source').attr('src')
+        if(url == undefined) return  ElMessage.error({ message: '当前商品没有视频',  duration: 1500,})
+        let msg = {type: 'downloads', url}
+      let res = await  API.sendMessage(msg) 
+      // console.log('res:-------- ', res);
+      res && ElMessage.success({ message: `视频${res}`, duration: 2500,})
+    }
+
+    const keyWordTool = () =>{
+      API.emitter.emit('iwantkey')
+    }
+    const  backToHome =  () => {
+      if (userid.value == '') return ElMessage.error({ message: '请登录账号', duration: 1500 })
+      window.open('https://www.jd.com/')
+    }
+    const goToLogin = () => {
+      loginref.value.loginShow = true
+    }
+    const logout = () => {
+      API.Storage.remove('userInfo')
+      loginref.value.checkPhone = false
+      ElMessage.success('账号退出成功!')
+    }
+  const getUserInfo = async () => {
+    let userInfoStore  =  await  API.Storage.get('userInfo')
+      if(userInfoStore == '') return userid.value = ''
+        userid.value = userInfoStore.userid
+        let a  = userInfoStore.userPhone + ''
+      let b = a.substring(3,7)
+      userPhone.value = a.replace(b, '****')
   }
-  console.log(searchResult)
-  console.log(rowtableData)
-  isrowdata.value = true
-}
-
-const onSubmit = async () => {
-  let user_link = form.link;
-  let user_desc = form.desc;
-  let user_descs = user_desc.split('\n')
-  let data1 = await getMessage(user_link)
-  console.log(data1)
-  searchResult = await checkNum(user_link, user_descs)
-  console.log(searchResult)
-
-  ischeck.value = true;
-
-  let intertime = (user_descs.length*10*1000)/100;
-  setInterval(() => {
-    if(ischeck.value == true){
-      percentage.value += 1
-      if (percentage.value > 100) {
-          percentage.value = 100
-      }
-    }else{
-      percentage.value = 0
-    }
-    
-  }, intertime)
-
-  setTimeout(() => {
-    ischeck.value = false
-    isresult.value = true
-    //form.result = data2[0].location;
-    for (var i = 0; i< searchResult.length; i++){
-      let row = searchResult[i];
-      let order = i+1;
-      let keyword = row.key;
-      let locstr = row.location;
-      let rowobj = {"order":order, "keyword":keyword, "location":locstr}
-      tableData.push(rowobj)
-    }
-    
-  }, user_descs.length*10*1000);
-  
-}
-
-
-//let url = 'https://detail.tmall.com/item.htm?id=652257992182'
-//getMessage(url)
-
-//let data = await checkNum(url,['职业西服'])
-//console.log("--- app vue data ---:", data)
-//myajs()
-
-
-//自定义V-指令,避免短时间内重复点击--------------v-disClick="3"----------------
-/* const VdisClick={
-  mounted: (el, binding) =>{
-          el.addEventListener("click", function(){
-            el.setAttribute("disabled", "disabled")
-            el.setAttribute("style", "pointer-events: none")
-            setTimeout(() => {
-              el.removeAttribute("disabled")
-              el.removeAttribute("style")
-            }, binding.value * 1000);
-          })
-      }
-}  */
-
-
-
-  const goTOLogin = () => {
-      API.emitter.emit('iwantlogin')
-    }
-    const backToHome = () => {
-    }
-      const getStorage = () => {
-    chrome.storage.local.get(['userid'], (result) =>{
-      // console.log('result: ------tmtmtmt-------', result)
-      result == {} ? chrome.storage.local.set({userid: ''}) : userstore.userid = result.userid
-    })
-  }
-   onUpdated(() => {
-   })
-   onBeforeMount(() => {
+  onMounted(() => {
+    currentHref = window.location.href
+    curCookies.value = "{'" + document.cookie + "'}"
+  })
+   onBeforeMount(async () => {
     chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-      message == 'loginEvent'?   getStorage() : ''
+      message == 'loginEvent'? getUserInfo() : ''
       sendResponse({status: true})
       })
-    getStorage()
-
+    getUserInfo()
    })
+
 </script>
+<style lang="scss" scoped>
+@import "../../css/sass/jclpanel.scss";
 
-<style lang="scss" >
-// @import "../../css/sass/jclpanel.scss";
-
-.cjzz{
-  position: fixed;
-  z-index: 999999999;
-}
-.cjzz2{
-  position: fixed;
-  z-index: 999999999+3;
-}
-.demo-progress .el-progress--line {
-  margin-bottom: 15px;
-  width: 350px;
-}
-.demo-progress .el-progress--circle {
-  margin-right: 15px;
-}
 </style>
