@@ -14,64 +14,60 @@ import{ bgcApi as API } from './src/api/bgcApi/index'
 //-------------------或者摒弃devserver曲线----------直接自己建立一个websocket执行自定义函数-------后期学习改进-----
 //--------------开发阶段---------编译后-------自动刷新runtime------然后自动刷新当前聚焦的tab页---------
 //--------------------此处为借助devserver的方案一-----------------------------------------
-  // chrome.tabs.onUpdated.addListener(
-  //   (tabId, changeInfo, tab) => {
-  //    if(tab.title == "xzz2022" && tab.status == "complete") {
-  //      chrome.tabs.query({active: true},([tab]) => {
-  //        if(tab.url.match(/tmall|taobao|1688|yangkeduo|pinduoduo|alibaba|jd/)){
-  //         chrome.runtime.reload()
-  //         chrome.tabs.reload()
-  //       }else{
-  //         chrome.runtime.reload()
-  //       }})}})
+  chrome.tabs.onUpdated.addListener(
+    (tabId, changeInfo, tab) => {
+     if(tab.title == "xzz2022" && tab.status == "complete") {
+       chrome.tabs.query({active: true},([tab]) => {
+         if(tab.url.match(/tmall|taobao|1688|yangkeduo|pinduoduo|alibaba|jd/)){
+          chrome.runtime.reload()
+          chrome.tabs.reload()
+        }else{
+          chrome.runtime.reload()
+        }})}})
 //-------------------------------------------------------------------
 
 
 //-------------------------此处为自建websocket的方案二-----------------------------------------
-let time = 0
-const ws = new WebSocket('ws://localhost:7777');
-ws.onopen = (e) => {
-  console.log('-------bg--------已连接------:', new Date())
-  ws.send(JSON.stringify("bg"))
-}
+// let time = 0
+// const ws = new WebSocket('ws://localhost:7777');
+// ws.onopen = (e) => {
+//   console.log('-------bg--------已连接------:', new Date())
+//   ws.send(JSON.stringify("bg"))
+// }
 
-ws.onmessage = (e) => {
+// ws.onmessage = (e) => {
 
-  if(JSON.parse(e.data) == 'done'){
-    console.log('-----bg收到------编译完成-------------')
+//   if(JSON.parse(e.data) == 'done'){
+//     console.log('-----bg收到------编译完成-------------')
 
-  chrome.tabs.query({active: true},([tab]) => {
-     chrome.runtime.reload()
-     chrome.tabs.reload()
-   })
-  // chrome.tabs.query({active: true},([tab]) => {
-  //   if(tab.url.match(/tmall|taobao|1688|yangkeduo|pinduoduo|alibaba|jd/)){
-  //    chrome.runtime.reload()
-  //    chrome.tabs.reload()
-  //  }else{
-  //    chrome.runtime.reload()
-  //  }})
-  }
-}
-function wsInit(){
-          ws.onclose = (e) => {
-            console.log('--------bg--------断开------:', new Date())
-            setTimeout(() => {
-              time++
-              time < 1000 && wsInit()
-            }, 1000);
-          }
-          ws.onerror = (e) => {
-            console.log('-------bg-----连接出错------:', new Date())
-            setTimeout(() => {
-              time++
-              time < 1000 && wsInit()
-            }, 1000);
-          }
+//   chrome.tabs.query({active: true},([tab]) => {
+//     if(tab.url.match(/tmall|taobao|1688|yangkeduo|pinduoduo|alibaba|jd/)){
+//      chrome.runtime.reload()
+//      chrome.tabs.reload()
+//    }else{
+//      chrome.runtime.reload()
+//    }})
+//   }
+// }
+// function wsInit(){
+//           ws.onclose = (e) => {
+//             console.log('--------bg--------断开------:', new Date())
+//             setTimeout(() => {
+//               time++
+//               time < 1000 && wsInit()
+//             }, 1000);
+//           }
+//           ws.onerror = (e) => {
+//             console.log('-------bg-----连接出错------:', new Date())
+//             setTimeout(() => {
+//               time++
+//               time < 1000 && wsInit()
+//             }, 1000);
+//           }
           
-        }
+//         }
 
-wsInit()
+// wsInit()
 
 
 

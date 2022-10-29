@@ -49,7 +49,7 @@ import './src/css/style'
 //-------------------各平台实例引入----------------
 import app1688 from './src/pages/alibaba/app.vue'
 import apptmall from './src/pages/tmall/app.vue'
-// import apptb from './src/pages/tb/app.vue'
+import apptb from './src/pages/tb/app.vue'
 import appjd from './src/pages/jd/app.vue'
 
 //---------------------------------------------------------
@@ -94,8 +94,8 @@ switch (checkedUrl) {
     break;
   case 'tmall': createEntry(apptmall, 'markettmall')
     break;
-  // case 'taobao': createEntry(apptb, 'markettb')
-  // break;
+  case 'taobao': createEntry(apptb, 'markettb')
+  break;
   case 'lemak': createApp(popup).mount('#pop')
     break;
   // case 'localhost': createApp(popup).mount('#pop')

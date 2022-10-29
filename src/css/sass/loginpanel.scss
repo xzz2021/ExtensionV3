@@ -19,46 +19,6 @@
   padding: 16px;
 }
 
-// .el-dialog__headerbtn {
-//   top: 12px;
-//   right: 16px;
-//   font-size: 20px;
-// }
-
-// .el-icon--right {
-//   margin: 0px;
-// }
-
-:deep(.el-checkbox__inner){
-    border-color: #DCDFE6;
-    
-  &:hover{
-    border-color: #ff9712;
-  
-    }
-
-}
-// :deep(.el-checkbox__input.is-focus .el-checkbox__inner) {
-//   border-color: #DCDFE6;
-
-// }
-// :deep(.el-checkbox__input.is-checked+.el-checkbox__label) {
-//   color: #ccc;
-
-// }
-// :deep(.el-checkbox__input.is-checked .el-checkbox__inner, .el-checkbox__input.is-indeterminate .el-checkbox__inner) {
-//   background-color: #ff9712;
-//   border-color: #ff9712;
-// }
-
-// :deep(.el-checkbox__label) {
-//   font-size: 14px;
-//   font-family: Microsoft YaHei;
-//   font-weight: 400;
-//   line-height: 13px;
-//   color: #BBBBBB;
-// }
-
 
 
 .el-divider--horizontal{
@@ -274,7 +234,7 @@
           }
           .deleteBtn{
             display: none;
-            font-size: 18px;
+            margin-right: 6px;
             line-height: 40px;
             &:hover{
               cursor: pointer;

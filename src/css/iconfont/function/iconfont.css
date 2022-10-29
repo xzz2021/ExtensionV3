@@ -32,6 +32,10 @@ i[class*='funicon'] {
 .funicon-guanbi:before {
   content: "\e60f";
 }
+.funicon-loginguanbi:before {
+  font-size: 12px;
+  content: "\e60f";
+}
 
 .funicon-xiazai:before {
   content: "\e616";

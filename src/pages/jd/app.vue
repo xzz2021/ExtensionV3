@@ -12,7 +12,7 @@
         />
       </div>
     </header>
-      <transition name="fade">
+      <Transition name="fade">
     <!-- <el-collapse-transition> -->
     <main class="jclmain" v-show="showMain">
       <div>
@@ -125,7 +125,7 @@
           <el-dropdown placement="right-start">
             <span class="el-dropdown-link">
               <div class="jclicon"><i :class="userid ? 'xzzicon-exchange' : 'xzzicon-login'"></i></div>
-              <div  class="title">{{userAccount}}</div>
+              <div  class="title">{{userPhone}}</div>
               <div class="arrow-right-czp"><i class="xzzicon-youjt"></i></div>
             </span>
             <template #dropdown>
@@ -168,7 +168,7 @@
 
     </main>
     <!-- </el-collapse-transition> -->
-    </transition>
+    </Transition>
 
     <footer @click="showMain = !showMain">
       <div class="shrink"><i :class="!showMain? 'xzzicon-shrink': 'xzzicon-shrink2'"></i></div>
@@ -465,23 +465,24 @@ const onDragstop = (e) => {
       API.emitter.emit('iwantkey')
     }
     const  backToHome =  () => {
+      if (userid.value == '') return ElMessage.error({ message: '请登录账号', duration: 1500 })
       window.open('https://www.jd.com/')
     }
     const goToLogin = () => {
       loginref.value.loginShow = true
-      console.log('loginref.value.loginShow: ', loginref.value.loginShow);
     }
     const logout = () => {
-      chrome.storage.local.set({userInfo: {}})
+      API.Storage.remove('userInfo')
+      loginref.value.checkPhone = false
       ElMessage.success('账号退出成功!')
     }
   const getUserInfo = async () => {
-    let result = await API.Storage.get('userInfo')
-      if(result != ''){
-         userid.value = result.userid
-         userPhone.value = result.userPhone
-         }
-
+    let userInfoStore  =  await  API.Storage.get('userInfo')
+      if(userInfoStore == '') return userid.value = ''
+        userid.value = userInfoStore.userid
+        let a  = userInfoStore.userPhone + ''
+      let b = a.substring(3,7)
+      userPhone.value = a.replace(b, '****')
   }
   onMounted(() => {
     currentHref = window.location.href
