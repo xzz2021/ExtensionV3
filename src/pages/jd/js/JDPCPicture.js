@@ -1,5 +1,4 @@
 import JSZip from 'jszip';
-import dayjs from 'dayjs';
 import {saveAs} from 'file-saver';
 import { parseJSON } from 'jquery';
 
@@ -273,7 +272,7 @@ const downloadDtlImg = async (skuIdt) => {
     }
     img_list.length > 0 ? img_list : undefined;
     if(img_list != undefined && img_list.length > 0){
-        let timenum = dayjs().format('YYYYMMDD')
+        let timenum = API.dayjs.format('YYYYMMDD')
         let filename = timenum + '电脑端-' + skuIdt + '图片详情图下载'
         packageImages(img_list, "详情图", filename);
     }
@@ -354,7 +353,7 @@ const downloadAllImg1 = async () => {
 
 const downloadAllImg = async (skuId) => {
     let picAll = await downloadAllImg1()
-    let timenum = dayjs().format('YYYYMMDD')
+    let timenum = API.dayjs.format('YYYYMMDD')
     let filename = timenum + '电脑端-' + skuId + '图片全部下载'
     packageSkuImages(picAll, filename);
 }

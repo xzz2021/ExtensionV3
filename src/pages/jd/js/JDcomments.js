@@ -1,4 +1,4 @@
-import dayjs from 'dayjs'
+
 import { parseJSON } from 'jquery';
 import table2excel from 'js-table2excel'
 
@@ -254,7 +254,7 @@ const downLoadJDcommentPic = async (skuId, commentsNum, xlsxtitle) => {
             }
             
         }
-        let timenum = dayjs().format('YYYYMMDD')
+        let timenum = API.dayjs.format('YYYYMMDD')
         let excelName = timenum + '_' + skuId + '_有图评价'
 
         /* excelName = '有图评价.xlsx'    
@@ -296,7 +296,7 @@ const downLoadJDcommentNoPic = async (skuId, commentsNum, xlsxtitle) => {
             }
         ]
 
-        let timenum = dayjs().format('YYYYMMDD')
+        let timenum = API.dayjs.format('YYYYMMDD')
         let excelName = timenum + '_' + skuId + '_无图评价'
 
         /* let excelName = '无图评价.xlsx'    

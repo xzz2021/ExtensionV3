@@ -186,16 +186,15 @@
 
 <script setup>
 
-import dayjs from 'dayjs'
+
 import {videoDownloadczp} from './js/JDVideo.js'
 import {downLoadJDcommentPic, downLoadJDcommentNoPic} from './js/JDcomments.js'
 import { getMainImg, getSkuImg, packageImages, packageSkuImages, downloadDtlImg, downloadAllImg, getMainImgPhone, getSkuImgPhone, getDtlImgPhone, getAllImgPhone } from './js/JDPCPicture.js'
 import { getOrderList, setOrderList } from './js/JDorderTag.js'
 import { getVideoTitle, getSkuId} from './js/JDDetailData.js'
-import { VERSION } from 'lodash'
 
-// let aa = API.dayjs.format('YYYY-MM-DD HH:mm:ss')
-// console.log('aa: ', aa);
+
+
 const userstore = userStore()
 const { location } = storeToRefs(userstore)
 
@@ -235,6 +234,7 @@ const OneClickDiagnosis = async(num) =>{
 
 }
 
+API.te()
 
 // 图片下载 start
 const downLoadJDPicVue = async (type) => {
@@ -248,14 +248,14 @@ const downLoadJDPicVue = async (type) => {
         ElMessage.success({ message:"PC端-主图下载开始"});
         let mains = getMainImg();
         let skd = getSkuId(currentHref)
-        let timenum = dayjs().format('YYYYMMDD')
+        let timenum = API.dayjs.format('YYYYMMDD')
         let filename = timenum + '电脑端-' + skd + '图片主图下载'
         packageImages(mains, "主图", filename);
     }
     if ( type == "pc_sku") {
         ElMessage.success({ message:"PC端-SKU图下载开始"});
         let skus = getSkuImg();
-        let timenum = dayjs().format('YYYYMMDD')
+        let timenum = API.dayjs.format('YYYYMMDD')
         let skd = getSkuId(currentHref)
         let filename = timenum + '电脑端-' + skd + '图片SKU图下载'
         packageSkuImages(skus, filename);
@@ -270,7 +270,7 @@ const downLoadJDPicVue = async (type) => {
         ElMessage.success({ message:"移动端-主图下载开始"});
         let skd = getSkuId(currentHref)
         let phonemains = await getMainImgPhone(skd);
-        let timenum = dayjs().format('YYYYMMDD')
+        let timenum = API.dayjs.format('YYYYMMDD')
         let filename = timenum + '移动端-' + skd + '图片主图下载'
         packageImages(phonemains, "主图", filename);
     }
@@ -280,7 +280,7 @@ const downLoadJDPicVue = async (type) => {
         ElMessage.success({ message:"移动端-SKU图下载开始"});
         let skd = getSkuId(currentHref)
         let phoneskus = await getSkuImgPhone(skd);
-        let timenum = dayjs().format('YYYYMMDD')
+        let timenum = API.dayjs.format('YYYYMMDD')
         let filename = timenum + '移动端-' + skd + '图片SKU图下载'
         packageSkuImages(phoneskus, filename);
     }
@@ -289,7 +289,7 @@ const downLoadJDPicVue = async (type) => {
         ElMessage.success({ message:"移动端-详情图下载开始"});
         let skd = getSkuId(currentHref)
         let phonedtls = await getDtlImgPhone(skd);
-        let timenum = dayjs().format('YYYYMMDD')
+        let timenum = API.dayjs.format('YYYYMMDD')
         let filename = timenum + '移动端-' + skd + '图片详情图下载'
         packageImages(phonedtls, "详情图", filename);
     }
@@ -298,7 +298,7 @@ const downLoadJDPicVue = async (type) => {
         ElMessage.success({ message:"移动端-图片全部下载开始"});
         let skd = getSkuId(currentHref)
         let picAll = await getAllImgPhone(skd);
-        let timenum = dayjs().format('YYYYMMDD')
+        let timenum = API.dayjs.format('YYYYMMDD')
         let filename = timenum + '移动端-' + skd + '图片全部下载'
         packageSkuImages(picAll, filename);
     }
@@ -308,7 +308,7 @@ const downLoadJDPicVue = async (type) => {
 
 // 视频下载 start
 const downLoadJDVideoVue = async () => {
-  let timenum = dayjs().format('YYYYMMDD')
+  let timenum = API.dayjs.format('YYYYMMDD')
   let skd = getSkuId(currentHref)
   videoDownloadczp(currentHref, skd, timenum)
 
