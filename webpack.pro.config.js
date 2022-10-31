@@ -57,7 +57,7 @@ const proconfig = {
         new CopyWebpackPlugin({  //实现静态文件的直接复制
             patterns: [             // 需要拷贝的目录或者路径
             {from: 'public/logo.png', to: './logo.png'},
-            {from: 'public/manifest.json', to: './manifest.json'}
+            {from: 'public/manifestPro.json', to: './manifest.json'}
         ]}),
         // new MiniCssExtractPlugin(),    // 实现css文件打包
         // new OptimizeCssAssetsWebpackPlugin()

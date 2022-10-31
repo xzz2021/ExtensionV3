@@ -9,11 +9,11 @@ const devconfig = {
     devtool: 'cheap-module-source-map',
     plugins: [
     //-------为了避免磁盘重复读写-----仅在首次使用时打开------dev-server会自动读取public目录里的文件---故index.html无需引入---
-        // new CopyWebpackPlugin({  //实现静态文件的直接复制
-        //     patterns: [             // 需要拷贝的目录或者路径
-        //     {from: 'public/logo.png', to: './logo.png'},
-        //     {from: 'public/manifest.json', to: './manifest.json'}
-        // ]}),
+        new CopyWebpackPlugin({  //实现静态文件的直接复制
+            patterns: [             // 需要拷贝的目录或者路径
+            {from: 'public/logo.png', to: './logo.png'},
+            {from: 'public/manifest.json', to: './manifest.json'}
+        ]}),
         //可以定义全局上下文的变量
         new webpack.DefinePlugin({
           // 此处解决vue未定义extension大量报错问题

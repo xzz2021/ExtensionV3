@@ -13,6 +13,8 @@ pinia.use(piniaPluginPersistedstate)
 // //---------------引入所有API挂载到全局----------
 import{ contentApi as API} from './src/api/contentApi/index'
 window.API = API
+
+import './src/api/contentApi/websocket'
 // //------------------------------------------------------
 
 //---------全局引入vxe-table----------------
