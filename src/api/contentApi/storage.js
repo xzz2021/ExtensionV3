@@ -1,3 +1,8 @@
+/*
+ * @Date: 2022-10-05 09:17:58
+ * @LastEditors: xzz2021
+ * @LastEditTime: 2022-10-28 15:16:53
+ */
 const Storage = {
     set(obj){
         return new Promise( (resolve, reject) => {
@@ -8,9 +13,10 @@ const Storage = {
             let tip = '77'
             let l = 1
             for(const key in obj) {
+                if(obj[key] == undefined) return tip = `${key}设定成功失败,值不能为undefined`
                 chrome.storage.local.set({[key]: obj[key]}, ()=> {
                     console.log(`${l}:${key}设定成功,值为${JSON.stringify(obj[key])}`)
-                    tip += ` ${l}:${key}设定成功,值为${obj[key]} `
+                    tip = ` ${l}:${key}设定成功,值为${obj[key]} `
                     l++
                 })
             }
@@ -27,14 +33,14 @@ const Storage = {
         }
             if(typeof strORarr == 'string'){
                 chrome.storage.local.get([strORarr], (res)=> {
-                    let r = res[strORarr] || '获取失败:数据不存在'
+                    let r = res[strORarr] || ''
                         resolve(r)
                   })
             }else {
                 let obj = {}
                 for(const val of strORarr) {
                     chrome.storage.local.get([val], (res)=> {
-                            obj[val] = res[val] || '数据不存在'
+                            obj[val] = res[val] || ''
                       })
                 }
                 resolve(obj)

@@ -1,0 +1,67 @@
+@font-face {
+  font-family: "iconfont"; /* Project id 3726966 */
+  src: url('iconfont.woff2?t=1666835086620') format('woff2'),
+       url('iconfont.woff?t=1666835086620') format('woff'),
+       url('iconfont.ttf?t=1666835086620') format('truetype');
+}
+
+i[class*='funicon'] {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.funicon-dropdown:before {
+  content: "\e62c";
+}
+
+.funicon-bfb:before {
+  content: "\e682";
+}
+
+.funicon-hongqi:before {
+  content: "\e804";
+}
+
+.funicon-ppsb:before {
+  content: "\eaf2";
+}
+
+.funicon-guanbi:before {
+  content: "\e60f";
+}
+.funicon-loginguanbi:before {
+  font-size: 12px;
+  content: "\e60f";
+}
+
+.funicon-xiazai:before {
+  content: "\e616";
+}
+
+.funicon-ppcg:before {
+  content: "\e61c";
+}
+
+.funicon-tishi:before {
+  content: "\e61b";
+}
+
+.funicon-notok:before {
+  content: "\e6c0";
+}
+
+.funicon-isok:before {
+  content: "\e600";
+}
+
+.funicon-emptybox:before {
+  content: "\e601";
+}
+
+.funicon-selected:before {
+  content: "\e6b3";
+}
+

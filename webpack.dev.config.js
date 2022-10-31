@@ -9,11 +9,11 @@ const devconfig = {
     devtool: 'cheap-module-source-map',
     plugins: [
     //-------为了避免磁盘重复读写-----仅在首次使用时打开------dev-server会自动读取public目录里的文件---故index.html无需引入---
-        new CopyWebpackPlugin({  //实现静态文件的直接复制
-            patterns: [             // 需要拷贝的目录或者路径
-            {from: 'public/logo.png', to: './logo.png'},
-            {from: 'public/manifest.json', to: './manifest.json'}
-        ]}),
+        // new CopyWebpackPlugin({  //实现静态文件的直接复制
+        //     patterns: [             // 需要拷贝的目录或者路径
+        //     {from: 'public/logo.png', to: './logo.png'},
+        //     {from: 'public/manifest.json', to: './manifest.json'}
+        // ]}),
         //可以定义全局上下文的变量
         new webpack.DefinePlugin({
           // 此处解决vue未定义extension大量报错问题
@@ -25,6 +25,25 @@ const devconfig = {
     ],
     // watch: true,  // 监听源文件的变动,重新编译
     // watchOptions: {}, //
+    module: {  
+      rules: [
+          {
+              oneOf:[
+                  {// **目前是style标签分别注入,且未压缩,需优化压缩整合到同一标签下,若整体css大于150K需再调整成link方式按需引入
+                      test: /\.css$/i,
+                    //   use: [MiniCssExtractPlugin.loader,'css-loader'],  //实现样式代码整合在单独一个文件里, 可以取代style-loader
+                      use: ["style-loader", 'css-loader'],  
+                  },
+                  //此处可以引入移动端自适应px2rem-loader
+                  {
+                      test: /\.s[ac]ss$/i,
+                    //   use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],  //实现样式代码整合在单独一个文件里, 可以取代style-loader
+                      use: ["style-loader", 'css-loader','sass-loader'],
+                  }
+              ]
+          },
+      ],
+  },
     devServer: {
         // contentBase: path.join(__dirname, 'xzz2022'),   // 告诉服务器从哪里提供额外的内容(默认当前工作目录),类似web服务器放置图片资源等
         // static: {

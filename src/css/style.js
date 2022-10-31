@@ -1,3 +1,5 @@
-import './iconfont/iconfont.css'
+import './iconfont/logo/iconfont.css'
+import './iconfont/function/iconfont.css'
 import './normalize.css'
 import './basic.scss'
+// import './element-variables.scss'
