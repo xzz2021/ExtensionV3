@@ -19,8 +19,7 @@
       "https://*.taobao.com/*", "https://*.alibaba.com/*", "https://*.yangkeduo.com/*",
       "https://*.pingduoduo.com/*", "http://*.junchenlun.com/*", "https://www.google.com/"
     ],
-      "js": ["content.js"],
-      "css": ["content.css"]
+      "js": ["content.js"]
     }
   ],
   "web_accessible_resources": [{

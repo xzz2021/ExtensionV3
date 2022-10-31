@@ -34,11 +34,8 @@
     "copy-webpack-plugin": "^9.0.1",
     "css-loader": "^6.4.0",
     "css-minimizer-webpack-plugin": "^4.1.0",
-<<<<<<< HEAD
     "file-saver": "^2.0.5",
-=======
     "dayjs": "^1.11.5",
->>>>>>> main
     "html-webpack-plugin": "^5.3.2",
     "jquery": "^3.6.0",
     "js-table2excel": "^1.0.3",

@@ -129,16 +129,12 @@ config = {
         // throw new TypeError('ERROR CODE 异常', status)
     }
 }).then(res => {
-<<<<<<< HEAD
     let rt = config.responseType;
     if (rt == 'GBKHTML'){
         let decoder = new TextDecoder("gbk");
         let result = decoder.decode(res);
         resolve(result)
     }else if(rt == 'GBKJSON'){
-=======
-    if(config.responseType == 'GBKHTML'){
->>>>>>> main
         let decoder = new TextDecoder("gbk");
         let result = decoder.decode(res);
         resolve(result)

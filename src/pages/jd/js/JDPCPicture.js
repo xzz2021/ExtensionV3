@@ -1,5 +1,6 @@
 import JSZip from 'jszip';
-import {saveAs} from 'file-saver'
+import dayjs from 'dayjs';
+import {saveAs} from 'file-saver';
 import { parseJSON } from 'jquery';
 
 /* --- 移动端图片下载 start */
@@ -233,7 +234,7 @@ const getSkuId = (url) => {
 };
 
 // 下载PC端详情图
-const downloadDtlImg = async () => {
+const downloadDtlImg = async (skuIdt) => {
     let skuUrl = window.location.href;
     let mainSkuId = getmainSkuId();
     let skuId = getSkuId(skuUrl);
@@ -272,7 +273,9 @@ const downloadDtlImg = async () => {
     }
     img_list.length > 0 ? img_list : undefined;
     if(img_list != undefined && img_list.length > 0){
-        packageImages(img_list, "详情图", "PC端-详情图下载");
+        let timenum = dayjs().format('YYYYMMDD')
+        let filename = timenum + '电脑端-' + skuIdt + '图片详情图下载'
+        packageImages(img_list, "详情图", filename);
     }
 }
 
@@ -349,9 +352,11 @@ const downloadAllImg1 = async () => {
     return pic_all
 }
 
-const downloadAllImg = async () => {
+const downloadAllImg = async (skuId) => {
     let picAll = await downloadAllImg1()
-    packageSkuImages(picAll, "PC端-图片全部下载");
+    let timenum = dayjs().format('YYYYMMDD')
+    let filename = timenum + '电脑端-' + skuId + '图片全部下载'
+    packageSkuImages(picAll, filename);
 }
 
 /* --- PC端图片下载 end ---- */

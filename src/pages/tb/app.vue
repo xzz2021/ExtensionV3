@@ -186,42 +186,6 @@
 
 <script setup>
 
-// let aa = API.dayjs.format('YYYY-MM-DD HH:mm:ss')
-// console.log('aa: ', aa);
-const userstore = userStore()
-const { location } = storeToRefs(userstore)
-
-<<<<<<< HEAD
-
-const goTOLogin = () => {
-  API.emitter.emit('iwantlogin')
-}
-
-const backToHome = () => {
-
-}
-
-const getStorage = () => {
-  chrome.storage.local.get(['userid'], (result) =>{
-    result == {} ? chrome.storage.local.set({userid: ''}) : userstore.userid = result.userid
-  })
-}
-
-onUpdated(() => {
-})
-   
-onBeforeMount(() => {
-  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    message == 'loginEvent'?   getStorage() : ''
-    sendResponse({status: true})
-  })
-  getStorage()
-})
-
-
-
-</script>
-=======
 //---------------单纯字符串变量不可使用reactive---------
 //-----ref定义的数据：操作数据需要.value，读取数据时模板中直接读取不需要
 let currentHref = ref('')
@@ -526,7 +490,7 @@ const onDragstop = (e) => {
       })
     getUserInfo()
    })
->>>>>>> main
+
 
 </script>
 <style lang="scss" scoped>

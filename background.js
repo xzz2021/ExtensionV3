@@ -117,7 +117,7 @@ let matches = ["https://*.1688.com/*", "https://*.tmall.com/*", "https://*.jd.co
                                //       sendResponse('cookies set success')
                               }
             break;
-            case 'downloads': {chrome.downloads.download({url: message.url},()=>{})
+            case 'downloads': {chrome.downloads.download({url: message.url, filename: message.name},()=>{})
                                sendResponse('下载完成')}
            break;
             case 'tabQuery': { 

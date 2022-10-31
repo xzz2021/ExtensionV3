@@ -91,18 +91,9 @@ const compareSbdUrl = (id1, id2, id3) => {
 
 /* --- 搜本店链接构造 end --- */
 
-
-
-
-
-let skuUrl = window.location.href
-let skuId = getSkuId(skuUrl)
-let typeId = getTypeId()
+/* let typeId = getTypeId()
 let venderId = getVenderId()
 let shopId = getShopId()
-let shopSbdUrl = compareSbdUrl(typeId, venderId, shopId)
+let shopSbdUrl = compareSbdUrl(typeId, venderId, shopId) */
 
-let videoTitle = getVideoTitle()
-
-
-export {videoTitle, skuId, skuUrl, venderId, shopId, shopSbdUrl}
+export {getSkuId, getVideoTitle}

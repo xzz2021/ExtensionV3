@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import { parseJSON } from 'jquery';
 import table2excel from 'js-table2excel'
 
@@ -253,11 +254,14 @@ const downLoadJDcommentPic = async (skuId, commentsNum, xlsxtitle) => {
             }
             
         }
+        let timenum = dayjs().format('YYYYMMDD')
+        let excelName = timenum + '_' + skuId + '_有图评价'
 
-        let excelName = '有图评价.xlsx'    
+        /* excelName = '有图评价.xlsx'    
         if(xlsxtitle != undefined){
             excelName = "有图评价_" + xlsxtitle + ".xlsx"
-        }            //文件名称
+        }      */       //文件名称
+
         table2excel(column, datas, excelName)    //生成Excel表格，自动下载
         
 
@@ -291,11 +295,15 @@ const downLoadJDcommentNoPic = async (skuId, commentsNum, xlsxtitle) => {
               height: 150
             }
         ]
-        
-        let excelName = '无图评价.xlsx'    
+
+        let timenum = dayjs().format('YYYYMMDD')
+        let excelName = timenum + '_' + skuId + '_无图评价'
+
+        /* let excelName = '无图评价.xlsx'    
         if(xlsxtitle != undefined){
             excelName = "无图评价_" + xlsxtitle + ".xlsx"
-        }            //文件名称
+        }         */    
+        //文件名称
         table2excel(column, datas, excelName)    //生成Excel表格，自动下载
 
         
