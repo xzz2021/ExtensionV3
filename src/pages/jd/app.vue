@@ -192,7 +192,7 @@ import {videoDownloadczp} from './js/JDVideo.js'
 import {downLoadJDcommentPic, downLoadJDcommentNoPic} from './js/JDcomments.js'
 import { getMainImg, getSkuImg, packageImages, packageSkuImages, downloadDtlImg, downloadAllImg, getMainImgPhone, getSkuImgPhone, getDtlImgPhone, getAllImgPhone } from './js/JDPCPicture.js'
 import { getOrderList, setOrderList } from './js/JDorderTag.js'
-import { getVideoTitle, getSkuId} from './js/JDDetailData.js'
+import { getVideoTitle, getSkuId, diagnosisProduct} from './js/JDDetailData.js'
 
 
 
@@ -234,7 +234,7 @@ const commentOptionNoPic = reactive([{value: 20}, {value: 50}, {value: 100}, {va
 
 //店铺诊断
 const OneClickDiagnosis = async(num) =>{
-  console.log('---num---', num)
+  diagnosisProduct(num)
 
 }
 

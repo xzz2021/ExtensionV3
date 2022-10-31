@@ -1,3 +1,4 @@
+import { getActivePinia } from 'pinia'
 
 
 // 获取商品标题
@@ -89,11 +90,31 @@ const compareSbdUrl = (id1, id2, id3) => {
     }
 }
 
-/* --- 搜本店链接构造 end --- */
 
-/* let typeId = getTypeId()
-let venderId = getVenderId()
-let shopId = getShopId()
-let shopSbdUrl = compareSbdUrl(typeId, venderId, shopId) */
+const diagnosisProduct = async(num) =>{
+    console.log('---num---', num)
+    // 获取店铺名称
+    let shopName = API.zxp.getElmText('//*[@id="crumb-wrap"]/div/div[2]/div[2]/div[1]/div/a')
+    // 获取店铺评分-商品评价
+    let shopGoalprt = API.zxp.getElmText('//*[@id="crumb-wrap"]/div/div[2]/div[2]/div[6]/div/div/div[1]/a[1]/div[2]/em')
+    // 店铺评分-商品评价 - 分数
+    let shopGoalprtnum = API.zregs.number(shopGoalprt) != undefined ? API.zregs.number(shopGoalprt)[0] : undefined;
 
-export {getSkuId, getVideoTitle}
+
+
+    
+    
+    
+
+    // 获取搜本店连接
+    let typeId = getTypeId()
+    let venderId = getVenderId()
+    let shopId = getShopId()
+    let shopSbdUrl = compareSbdUrl(typeId, venderId, shopId)
+
+
+
+}
+
+
+export {getSkuId, getVideoTitle, diagnosisProduct}
