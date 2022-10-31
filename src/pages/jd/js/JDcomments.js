@@ -124,6 +124,7 @@ const getCommentsData = async (cnum, skuId, pic_flag) => {
                 }
             }
         }
+        await API.rest(2)
     }
     return sumData
 }
@@ -254,7 +255,7 @@ const downLoadJDcommentPic = async (skuId, commentsNum, xlsxtitle) => {
             }
             
         }
-        let timenum = API.dayjs.format('YYYYMMDD')
+        let timenum = API.ztime.ymd2()
         let excelName = timenum + '_' + skuId + '_有图评价'
 
         /* excelName = '有图评价.xlsx'    
@@ -296,7 +297,7 @@ const downLoadJDcommentNoPic = async (skuId, commentsNum, xlsxtitle) => {
             }
         ]
 
-        let timenum = API.dayjs.format('YYYYMMDD')
+        let timenum = API.ztime.ymd2()
         let excelName = timenum + '_' + skuId + '_无图评价'
 
         /* let excelName = '无图评价.xlsx'    

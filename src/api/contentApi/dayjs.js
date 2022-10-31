@@ -6,4 +6,25 @@
 // const dayjs = require('dayjs')
 import dayjs from "dayjs"
 
-export default {dayjs: dayjs()}
+class zTime{
+    constructor(){
+        this.nowtime = dayjs()
+    }
+
+    ymdhms(){
+        return dayjs().format('YYYY-MM-DD HH:mm:ss')
+    }
+
+    ymd(){
+        return dayjs().format('YYYY-MM-DD')
+    }
+
+    ymd2(){
+        return dayjs().format('YYYYMMDD')
+    }
+
+}
+
+let ztime = new zTime()
+
+export default {dayjs: dayjs(), ztime}

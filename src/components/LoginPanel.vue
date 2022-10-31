@@ -1,6 +1,6 @@
 <template>
   <div class="loginPanel">
-    <el-dialog :model-value="loginShow" width="820px" @closed="loginClose"  center>
+    <el-dialog :model-value="loginShow" width="820px" @closed="loginClose(ruleFormRef)"  center>
     <!-- <el-button type="primary">Prima233</el-button> -->
       <div class="mainSection">
         <div class="left">
@@ -200,26 +200,28 @@ const rules = reactive({
         getUserInfo()
         // location.reload();
     }
-     const loginClose = () =>{
+    const loginClose = async (ruleFormRef) =>{
       loginShow.value = false
       loginForm.value = { phone: null, code: '', keep: ['记住用户名'] }
-      checkPhone.value = userInfo.value != {}? true : false
-
+      checkPhone.value = userInfo.id ? true : false
+      ruleFormRef.resetFields()
+      ruleFormRef.clearValidate()
     }
     const getUserInfo = async () => {
       let userInfoStore  =  await  API.Storage.get('userInfo')
       // console.log('userInfoStore: ', userInfoStore);
       let userListStore  =  await  API.Storage.get('userList')
-      console.log('userListStore: ', userListStore);
+      // console.log('userListStore: ', userListStore);
       userList.self = userListStore || []
-      console.log('userList.self: ', userList.self);
-      if(userInfoStore == '') return
-        userInfo.value = userInfoStore
-      checkPhone.value = true
+      // console.log('userList.self: ', userList.self);
+        userInfo.value = userInfoStore || {}
+        // console.log('userInfo.value: ', userInfo.value);
+
+      checkPhone.value = userInfo.id ? true : false
       // console.log('userInfo.userid: ', userInfo.userid);
       // 去除当前账户的userList
       infoList.self  =  userList.self.filter(item => item.userid !=  userInfoStore.userid)
-      console.log('infoList: ', infoList.self)
+      // console.log('infoList: ', infoList.self)
     }
     onBeforeMount(async () => {
       getUserInfo()
