@@ -1,5 +1,8 @@
 <template>
 <div class="jclpanel" >
+  
+
+  
     <VueDragResize :isActive="true" :w="180" :h="60" :x="lx" :y="ly" :z="22" v-if="reloadDrag" :isResizable="false" @dragstop="onDragstop" >
       <!-- https://github.com/kirillmurashov/vue-drag-resize/tree/v2.0.3 -->
     <div class="dragbox">
@@ -198,6 +201,7 @@ import { getVideoTitle, getSkuId, diagnosisProduct} from './js/JDDetailData.js'
 
 const userstore = userStore()
 const { location } = storeToRefs(userstore)
+
 //---------------单纯字符串变量不可使用reactive---------
 //-----ref定义的数据：操作数据需要.value，读取数据时模板中直接读取不需要
 

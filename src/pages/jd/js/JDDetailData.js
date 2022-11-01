@@ -1,5 +1,3 @@
-import { getActivePinia } from 'pinia'
-
 
 // 获取商品标题
 const getSkuTitle = () => {
@@ -82,6 +80,10 @@ const getShopId = () => {
 // 组合成搜本店链接
 const compareSbdUrl = (id1, id2, id3) => {
     //https://mall.jd.com/advance_search-2277560-12030855-11748521-5-0-0-1-1-60.html?other=&isRedisstore=0
+    /* API.zcl.printList(
+        ['typeId', 'venderId', 'shopId'],
+        [id1, id2, id3]
+    ) */
     if (id1 != undefined && id2 != undefined && id3 != undefined){
         let url = "https://mall.jd.com/advance_search-" + id1 + "-" + id2 + "-" + id3 + "-5-0-0-1-1-60.html?other=&isRedisstore=0";
         return url;
@@ -90,27 +92,116 @@ const compareSbdUrl = (id1, id2, id3) => {
     }
 }
 
+// 获取店铺信息
+const getShopData = () => {
+    let result = {
+        '店铺名称' : '暂无数据',
+        '店铺链接' : '暂无数据',
+        '京东自营标记' : '暂无数据',
+        '店铺评分-商品评价-分数' : '暂无数据',
+        '店铺评分-商品评价-等级' : '暂无数据',
+        '店铺评分-物流履约-分数' : '暂无数据',
+        '店铺评分-物流履约-等级' : '暂无数据',
+        '店铺评分-售后服务-分数' : '暂无数据',
+        '店铺评分-售后服务-等级' : '暂无数据',
+        '搜本店链接' : '暂无数据'
+    }
 
-const diagnosisProduct = async(num) =>{
-    console.log('---num---', num)
     // 获取店铺名称
     let shopName = API.zxp.getElmText('//*[@id="crumb-wrap"]/div/div[2]/div[2]/div[1]/div/a')
-    // 获取店铺评分-商品评价
+    // 获取店铺连接
+    let shopUrl = API.zxp.getElmHref('//*[@id="crumb-wrap"]/div/div[2]/div[2]/div[1]/div/a', 'https:')
+    // 京东自营标记
+    let JDTag = API.zxp.getElmText('//*[@id="crumb-wrap"]/div/div[2]/div[1]/em') == undefined ? '非自营' : '自营';
+
+    // 获取店铺评分 - 商品评价
     let shopGoalprt = API.zxp.getElmText('//*[@id="crumb-wrap"]/div/div[2]/div[2]/div[6]/div/div/div[1]/a[1]/div[2]/em')
-    // 店铺评分-商品评价 - 分数
-    let shopGoalprtnum = API.zregs.number(shopGoalprt) != undefined ? API.zregs.number(shopGoalprt)[0] : undefined;
+    // 店铺评分 - 商品评价 - 分数
+    let shopGoalprtnum = API.zrg.numberOne(shopGoalprt, 0);
+    // 店铺评分 - 商品评价 - 等级
+    let shopGoalprtLevel = API.zrg.chineseOne(shopGoalprt, 0); 
 
+    // 获取店铺评分 - 物流履约
+    let shopGoalcar = API.zxp.getElmText('//*[@id="crumb-wrap"]/div/div[2]/div[2]/div[6]/div/div/div[1]/a[2]/div[2]/em')
+    // 店铺评分 - 物流履约 - 分数
+    let shopGoalcarnum = API.zrg.numberOne(shopGoalcar, 0);
+    // 店铺评分 - 物流履约 - 等级
+    let shopGoalcarLevel = API.zrg.chineseOne(shopGoalcar, 0);
 
-
-    
-    
-    
+    // 获取店铺评分 - 售后服务
+    let shopGoalserver = API.zxp.getElmText('//*[@id="crumb-wrap"]/div/div[2]/div[2]/div[6]/div/div/div[1]/a[3]/div[2]/em')
+    // 店铺评分 - 售后服务 - 分数
+    let shopGoalservernum = API.zrg.numberOne(shopGoalserver, 0);
+    // 店铺评分 - 售后服务 - 等级
+    let shopGoalserverLevel = API.zrg.chineseOne(shopGoalserver, 0);
 
     // 获取搜本店连接
     let typeId = getTypeId()
     let venderId = getVenderId()
     let shopId = getShopId()
     let shopSbdUrl = compareSbdUrl(typeId, venderId, shopId)
+
+    /* API.zcl.printList(
+        ['店铺名称', '店铺链接', '京东自营店铺', '商品评价分数', '商品评价等级', '物流履约分数', '物流履约等级', '售后服务分数', '售后服务等级', '搜本店链接'],
+        [shopName, shopUrl, JDTag, shopGoalprtnum, shopGoalprtLevel, shopGoalcarnum, shopGoalcarLevel, shopGoalservernum, shopGoalserverLevel, shopSbdUrl]
+    ) */
+
+    result = API.zjn.set(
+        result,
+        [
+            '店铺名称', 
+            '店铺链接',
+            '京东自营标记',
+            '店铺评分-商品评价-分数',
+            '店铺评分-商品评价-等级',
+            '店铺评分-物流履约-分数',
+            '店铺评分-物流履约-等级',
+            '店铺评分-售后服务-分数',
+            '店铺评分-售后服务-等级',
+            '搜本店链接'
+        ],
+        [
+            shopName, 
+            shopUrl, 
+            JDTag, 
+            shopGoalprtnum, 
+            shopGoalprtLevel, 
+            shopGoalcarnum, 
+            shopGoalcarLevel, 
+            shopGoalservernum, 
+            shopGoalserverLevel, 
+            shopSbdUrl
+        ]
+    )
+    API.zcl.print('当前店铺信息', result)
+    return result
+}
+
+
+
+const diagnosisProduct = async(num) =>{
+    API.zcl.print('店铺诊断数量', num)
+
+    // 店铺信息JSON
+    //let shopDataobj = getShopData();
+    // 获取搜本店链接
+    //let sbdUrl = API.zjn.get(shopDataobj, '搜本店链接')
+    //API.zcl.print('搜本店链接', sbdUrl)
+
+    //API.zsql.set(2, ['a','b','c'],[num, num+1, num+2])
+    //API.zsql.set(1, 'd',[num, num+1, num+2])
+
+    let n1 = await API.zsql.get('d')
+    API.zcl.print('n1', n1)
+
+    let n2 = await API.zsql.get(['a','b', 'c'])
+    API.zcl.print('n2', n2)
+    
+    /* await API.rest(1)
+    let n1 = await API.zsql.get(['a','b','c'])
+    API.zcl.print('n1', n1) */
+
+
 
 
 
