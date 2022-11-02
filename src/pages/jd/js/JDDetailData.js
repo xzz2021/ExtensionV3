@@ -188,14 +188,25 @@ const diagnosisProduct = async(num) =>{
     //let sbdUrl = API.zjn.get(shopDataobj, '搜本店链接')
     //API.zcl.print('搜本店链接', sbdUrl)
 
-    //API.zsql.set(2, ['a','b','c'],[num, num+1, num+2])
+    
+    //API.zsql.set(2, ['a','g'],[num, num+1])
+    //API.zsql.set(2, ['g'],[num+1])
     //API.zsql.set(1, 'd',[num, num+1, num+2])
 
-    let n1 = await API.zsql.get('d')
+    let n1 = await API.zsql.get('k')
     API.zcl.print('n1', n1)
-
-    let n2 = await API.zsql.get(['a','b', 'c'])
+    let n2 = await API.zsql.change('k',num)
     API.zcl.print('n2', n2)
+    let n3 = await API.zsql.get('k')
+    API.zcl.print('n3', n3)
+    
+    
+    //let n1 = await API.zsql.get(['f','g'])
+
+    //let n2 = await API.zsql.get('k')
+    //API.zcl.print('n2', n2)
+
+    
     
     /* await API.rest(1)
     let n1 = await API.zsql.get(['a','b','c'])
