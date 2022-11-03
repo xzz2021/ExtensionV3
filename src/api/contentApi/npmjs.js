@@ -4,6 +4,10 @@
  * @LastEditTime: 2022-10-15 14:18:52
  */
 // const dayjs = require('dayjs')
-import dayjs from "dayjs"
 
-export default {dayjs: dayjs()}
+// 此处定义所有外部引用的小模块
+import dayjs from "dayjs"
+import mitt from "mitt"
+
+
+export default {dayjs: dayjs(), emitter:mitt()}

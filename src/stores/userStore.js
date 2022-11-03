@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-09-15 11:21:04
  * @LastEditors: xzz2021
- * @LastEditTime: 2022-10-26 10:58:38
+ * @LastEditTime: 2022-11-02 14:41:08
  */
 import { defineStore } from 'pinia'
 
@@ -25,15 +25,20 @@ export const userStore = defineStore('userInfo', {
         //   timeStamp: ''
         // }],
         diagnosisShow: false,
-        diagnosisData: {shopUrl:'',shopName:'',sumData: [],detailData:[]}
+        diagnosisData: {shopUrl:'',shopName:'',sumData: [],detailData:[],timeTamp: '87234254585'}
       }
     },
-    persist: true,
-      actions: {
+    // persist: true, //持久化
+      actions: {  //支持异步
         increment() {
           this.count++
         },
     },
+    getters: {
+      diagnosisData2: (state) => {
+        return API.isExpired(state.diagnosisData.timeTamp, 5) ? diagnosisData : {}
+      }
+    }
   })
 
 

@@ -1,14 +1,15 @@
 /*
  * @Date: 2022-10-31 08:40:13
  * @LastEditors: xzz2021
- * @LastEditTime: 2022-10-31 13:51:34
+ * @LastEditTime: 2022-11-02 14:54:18
  */
 
-const rest = (time) => {
+const rest = (seconds) => {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
-            console.log(`I rest for ${time} seconds`)
-        }, time * 1000);
+            
+            resolve(`I rest for ${seconds} seconds`)
+        }, seconds * 1000);
     })
 }
 export default {rest}
