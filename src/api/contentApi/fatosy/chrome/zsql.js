@@ -6,6 +6,7 @@ class zSQL{
         this.str = ''
     }
 
+    
     /**
      * 新增在chrome.storage不存在的值
      * @param1 String 参数1 key
@@ -19,8 +20,8 @@ class zSQL{
                 if(temp[keys] != undefined){
                     return false
                 }else{
-                    this.set(keys, vals)
-                    return true
+                    let ar = await this.set(keys, vals)
+                    return ar
                 }
             }
         }
@@ -39,31 +40,29 @@ class zSQL{
                 if(temp[keys] == undefined){
                     return false
                 }else{
-                    this.set(keys, vals)
-                    return true
+                    let cr = await this.set(keys, vals)
+                    return cr
                 }
             }
         }
     }
 
-
     /**
      * 存储在chrome.storage
-     * @param1 String && Array 参数1 key
-     * @param2 ANY or Array 参数2 如果参数1为数组则两个参数都为数组且长度一致
+     * @param1 String  参数1 key
+     * @param2 ANY  参数2 值
      * @return 无返回
     */
-    set(keys, vals){
+    async set(keys, vals){
         
         if(typeof keys == 'string'){
             // 单个key存储
             chrome.storage.local.set({[keys]: vals}, function() {});
-        }else if(keys instanceof Array && vals instanceof Array && vals.length == keys.length){
-            // 多个Key存储
-            for(let i = 0; i < keys.length; i++){
-                let k = keys[i];
-                let v = vals[i];
-                chrome.storage.local.set({[k]: v}, function() {});
+            let sr = await this.get(keys);
+            if(sr != undefined && sr[keys] != undefined && sr[keys] == vals){
+                return true
+            }else{
+                return false
             }
         }
     }
@@ -135,6 +134,40 @@ class zSQL{
             }
         })
     }
+
+    /**
+     * 删除在chrome.storage里的值
+     * @param1 String   参数1 key
+     * @return 删除成功返回true 失败返回false
+    */
+    remove(keys){
+        return new Promise( (resolve, reject) => {
+            if(typeof keys == 'string'){
+                chrome.storage.local.remove(keys, function(res) {
+                });
+                let result = this.get(keys);
+                if(result[keys] != undefined){
+                    resolve(false)
+                }else{
+                    resolve(true)
+                }
+            }else{
+                resolve(false)
+            }
+        })
+    }
+
+    clear(){
+        return new Promise( (resolve, reject) => {
+            let result = false
+            chrome.storage.local.clear(function(res) {
+                result = true
+                resolve(result)
+            });
+            
+        })
+    }
+
 }
 
 

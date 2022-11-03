@@ -6,7 +6,7 @@
   "background": { 
     "service_worker": "background.js" 
   },
-  "permissions": ["storage", "activeTab", "tabs", "contextMenus", "scripting", "downloads"],
+  "permissions": ["storage", "activeTab", "tabs", "contextMenus", "scripting", "downloads", "cookies"],
   "action": {
     "default_title": "popup.html",
     "default_icon": "logo.png",

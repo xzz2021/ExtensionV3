@@ -181,41 +181,22 @@ const getShopData = () => {
 
 const diagnosisProduct = async(num) =>{
     API.zcl.print('店铺诊断数量', num)
-
     // 店铺信息JSON
     //let shopDataobj = getShopData();
     // 获取搜本店链接
     //let sbdUrl = API.zjn.get(shopDataobj, '搜本店链接')
     //API.zcl.print('搜本店链接', sbdUrl)
+    console.log(chrome)
+    let msg = {type: 'ztab', funcs:"add", config:{url:'https://www.jd.com', active:false}}
+    let t1 = await API.sendMessage(msg)
+    API.zcl.print('new tab', t1)
+    await API.rest(7)
+    let tid = t1['id']
+    let msg1 = {type: 'zinject', funcs:'add', config:{id:tid}}
+    let t2 = await API.sendMessage(msg1)
+    API.zcl.print('inject code', t2)
 
     
-    //API.zsql.set(2, ['a','g'],[num, num+1])
-    //API.zsql.set(2, ['g'],[num+1])
-    //API.zsql.set(1, 'd',[num, num+1, num+2])
-
-    let n1 = await API.zsql.get('k')
-    API.zcl.print('n1', n1)
-    let n2 = await API.zsql.change('k',num)
-    API.zcl.print('n2', n2)
-    let n3 = await API.zsql.get('k')
-    API.zcl.print('n3', n3)
-    
-    
-    //let n1 = await API.zsql.get(['f','g'])
-
-    //let n2 = await API.zsql.get('k')
-    //API.zcl.print('n2', n2)
-
-    
-    
-    /* await API.rest(1)
-    let n1 = await API.zsql.get(['a','b','c'])
-    API.zcl.print('n1', n1) */
-
-
-
-
-
 }
 
 
