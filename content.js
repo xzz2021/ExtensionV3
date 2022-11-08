@@ -3,7 +3,6 @@ import { createApp } from 'vue'
 //-------pinia----打包60k---------
 import { createPinia } from 'pinia'
 
-
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 
 const pinia = createPinia()

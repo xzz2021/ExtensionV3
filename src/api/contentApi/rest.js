@@ -6,13 +6,9 @@
 
 const rest = (time) => {
     return new Promise((resolve, reject) => {
-        //console.log(`start rest for ${time} seconds now: `, API.ztime.ymdhms())
         setTimeout(() => {
-            resolve()
-            //console.log(`end rest for ${time} seconds now: `, API.ztime.ymdhms())
+            console.log(`I rest for ${time} seconds`)
         }, time * 1000);
-    });
+    })
 }
-
-
 export default {rest}
