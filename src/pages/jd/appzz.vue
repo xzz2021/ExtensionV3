@@ -1,8 +1,5 @@
 <template>
 <div class="jclpanel" >
-  
-
-  
     <VueDragResize :isActive="true" :w="180" :h="60" :x="lx" :y="ly" :z="22" v-if="reloadDrag" :isResizable="false" @dragstop="onDragstop" >
       <!-- https://github.com/kirillmurashov/vue-drag-resize/tree/v2.0.3 -->
     <div class="dragbox">
@@ -195,13 +192,12 @@ import {videoDownloadczp} from './js/JDVideo.js'
 import {downLoadJDcommentPic, downLoadJDcommentNoPic} from './js/JDcomments.js'
 import { getMainImg, getSkuImg, packageImages, packageSkuImages, downloadDtlImg, downloadAllImg, getMainImgPhone, getSkuImgPhone, getDtlImgPhone, getAllImgPhone } from './js/JDPCPicture.js'
 import { getOrderList, setOrderList } from './js/JDorderTag.js'
-import { getVideoTitle, getSkuId, diagnosisProduct} from './js/JDDetailData.js'
+import { getVideoTitle, getSkuId} from './js/JDDetailData.js'
 
 
 
 const userstore = userStore()
 const { location } = storeToRefs(userstore)
-
 //---------------单纯字符串变量不可使用reactive---------
 //-----ref定义的数据：操作数据需要.value，读取数据时模板中直接读取不需要
 
@@ -211,9 +207,6 @@ let showMain  = ref(true)
 const version = VERSION
 const userid = ref('')
 const userPhone = ref('')
-
-
-
 
 // let progressVisible = ref(false)
 // let percentage = ref(60)
@@ -241,7 +234,7 @@ const commentOptionNoPic = reactive([{value: 20}, {value: 50}, {value: 100}, {va
 
 //店铺诊断
 const OneClickDiagnosis = async(num) =>{
-  diagnosisProduct(num)
+  console.log('---num---', num)
 
 }
 
