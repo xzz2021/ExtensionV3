@@ -1,34 +1,27 @@
 
-function test2(){
-    console.log('Hello World!');
-    return "hello"
-}
-
-
 class zInject{
     constructor(){
         this.code = 'console.log("Hello World!")'
     }
 
-    test(){
-        document.body.style.backgroundColor="black"
-        console.log('Hello World!');
-        return "hello"
-    }
-
-    add(tabid){
+    addfuncs(tabid, funcs){
+        // let msg1 = {type: 'zinject', funcs:'addfuncs', config:{id:tid, funcs:testasda()}}
         return new Promise( (resolve, reject) => {
             chrome.scripting.executeScript(
                 {
                 target: {tabId: tabid},
-                func: function test(){
-                        console.log('sadasjda')
-                        return 'dadah'
-                    },
+                function: funcs,
                 },
                 (res) => {
-                    console.log('result return: ' + res);
-                    resolve(res)
+                    let result = undefined;
+                    if(res != undefined && res[0].result != undefined){
+                        if(res[0].result == null){
+                            result = undefined
+                        }else{
+                            result = res[0].result
+                        }
+                    }
+                    resolve(result)
             });
         })
     }

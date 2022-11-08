@@ -1,3 +1,4 @@
+import { SelectProps } from 'element-plus/es/components/select-v2/src/defaults'
 
 // 获取商品标题
 const getSkuTitle = () => {
@@ -177,9 +178,14 @@ const getShopData = () => {
     return result
 }
 
+const testasda = () => {
+    console.log('Hello World zz !')
+    return 'Hello ZZ'
+}
 
 
 const diagnosisProduct = async(num) =>{
+    
     API.zcl.print('店铺诊断数量', num)
     // 店铺信息JSON
     //let shopDataobj = getShopData();
@@ -190,9 +196,12 @@ const diagnosisProduct = async(num) =>{
     let msg = {type: 'ztab', funcs:"add", config:{url:'https://www.jd.com', active:false}}
     let t1 = await API.sendMessage(msg)
     API.zcl.print('new tab', t1)
-    await API.rest(7)
+    await API.rest(2)
     let tid = t1['id']
-    let msg1 = {type: 'zinject', funcs:'add', config:{id:tid}}
+    API.zcl.print('new tab id', t1['id'])
+    console.log('testasda',testasda)
+
+    let msg1 = {type: 'zinject', funcs:'addfuncs', config:JSON.parse({"id":tid, function:testasda})}
     let t2 = await API.sendMessage(msg1)
     API.zcl.print('inject code', t2)
 

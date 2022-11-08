@@ -136,27 +136,22 @@ chrome.runtime.onMessage.addListener(
           let res = undefined
           let zos = message.funcs
           let mobj = message.config 
-          if(zos == 'add'){
+          console.log("message",message)
+          if(zos == 'addfuncs'){
             let tabid = mobj.id;
-            if(tabid != undefined && tabid != null){
-              //res = await API.zinject.add(tabid)
-              chrome.scripting.executeScript(
-                {
-                  target: {tabId: tabid},
-                  func: function test(){
-                          console.log('sadasjda')
-                          return 'dadah'
-                      },
-                },
-                (res) => {
-                    console.log('result return: ' + res);
-            });
+            let tabfunc = mobj.function;
+            console.log('tabfunc',tabfunc )
+            if(tabid != undefined && tabid != null && tabfunc != null){
+              res = await API.zinject.addfuncs(tabid, tabfunc)
+              sendResponse(res)
             }
           }
-          sendResponse(res)
+          
         })()
+        return true
       }
       break;
+
 
       // fatosy API end 
 
