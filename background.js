@@ -136,10 +136,18 @@ chrome.runtime.onMessage.addListener(
           let res = undefined
           let zos = message.funcs
           let mobj = message.config
-          if(zos == 'addfuncs'){
+          if(zos == 'JDsbd'){
+            let tabid = mobj.id;
+            let skuNum = mobj.skuNum;
+            if(tabid != undefined && tabid != null){
+              res = await API.zinject.addfuncargs(tabid, API.getJDSKULink, skuNum)
+              sendResponse(res)
+            }
+          }
+          else if(zos == 'JDskuPage'){
             let tabid = mobj.id;
             if(tabid != undefined && tabid != null){
-              res = await API.zinject.addfuncs(tabid, API.getallNUM)
+              res = await API.zinject.addfuncs(tabid, API.injectJDSkuPageData)
               sendResponse(res)
             }
           }
