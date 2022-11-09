@@ -15,7 +15,6 @@
   "author": "xzz2022",
   "license": "ISC",
   "dependencies": {
-    "@element-plus/icons-vue": "^2.0.10",
     "element-plus": "^2.2.12",
     "pinia": "^2.0.20",
     "pinia-plugin-persistedstate": "^2.3.0",

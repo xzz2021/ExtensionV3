@@ -8,8 +8,8 @@
 
 <script setup>
 
-const userstore = userStore()
-const { userid, userToken, version } = storeToRefs(userstore)
+// const userstore = userStore()
+// const { userid, userToken, version } = storeToRefs(userstore)
 
 //自定义V-指令,避免短时间内重复点击--------------v-disClick="3"----------------
 /* const VdisClick={

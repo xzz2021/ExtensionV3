@@ -197,7 +197,7 @@ const userPhone = ref('')
 
 // let progressVisible = ref(false)
 // let percentage = ref(60)
-let {lx, ly} = location.value
+// let {lx, ly} = location.value
 
 let reloadDrag = ref(true)
 const loginref = ref(null)

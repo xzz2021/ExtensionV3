@@ -4,7 +4,7 @@
 //---------------引入分文件的所有自定义api-----------
 import { bgcApi as API } from './src/api/bgcApi/index'
 //----------------------------------------------------------
-console.log(chrome)
+// console.log(chrome)
 
 //-------------1111挂载好之后监听网页更新------此网页为webdevserver监听的网页-------
 //-------------2222--网页更新后拿到更新的页面--即111的页面----因为如果是其他页面则不采取任何行动-----
@@ -139,7 +139,7 @@ chrome.runtime.onMessage.addListener(
           if(zos == 'addfuncs'){
             let tabid = mobj.id;
             if(tabid != undefined && tabid != null){
-              res = await API.zinject.addfuncs(tabid, API.testadd)
+              res = await API.zinject.addfuncs(tabid, API.getallNUM)
               sendResponse(res)
             }
           }

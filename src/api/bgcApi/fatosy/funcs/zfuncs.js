@@ -3,4 +3,10 @@ const testadd = () => {
     return "hello"
 }
 
-export default {testadd}
+
+const getallNUM = () => {
+    let num = document.getElementsByClassName('jTotal')[0].innerText
+    return num
+}
+
+export default {testadd, getallNUM}

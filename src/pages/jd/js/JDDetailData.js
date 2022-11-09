@@ -189,9 +189,8 @@ const diagnosisProduct = async(num) =>{
 
     console.log(chrome)
 
-    let msg = {type: 'ztab', funcs:"add", config:{url:'https://www.jd.com', active:false}}
+    let msg = {type: 'ztab', funcs:"add", config:{url:'https://mall.jd.com/advance_search-431163-1000004065-1000004065-5-0-0-1-1-60.html?other=&isRedisstore=0', active:false}}
     let t1 = await API.sendMessage(msg)
-    await API.rest(3)
     let tid = t1['id']
     let msg1 = {type: 'zinject', funcs:'addfuncs', config:{"id":tid}}
     let t2 = await API.sendMessage(msg1)
