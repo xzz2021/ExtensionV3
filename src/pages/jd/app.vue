@@ -190,6 +190,16 @@
 <script setup>
 
 
+//持久化的store数据
+const userstore = userStore()
+const { location } = storeToRefs(userstore)
+
+
+//各自平台的
+const store = piniaStore()
+const { count } = storeToRefs(store)
+console.log('count:-------------- ', count);
+console.log('location: ', location.value);
 
 import {videoDownloadczp} from './js/JDVideo.js'
 import {downLoadJDcommentPic, downLoadJDcommentNoPic} from './js/JDcomments.js'
@@ -198,9 +208,6 @@ import { getOrderList, setOrderList } from './js/JDorderTag.js'
 import { getVideoTitle, getSkuId, diagnosisProduct} from './js/JDDetailData.js'
 
 
-
-const userstore = userStore()
-const { location } = storeToRefs(userstore)
 //---------------单纯字符串变量不可使用reactive---------
 //-----ref定义的数据：操作数据需要.value，读取数据时模板中直接读取不需要
 
@@ -217,6 +224,7 @@ const userPhone = ref('')
 // let progressVisible = ref(false)
 // let percentage = ref(60)
 let {lx, ly} = location.value
+
 
 let reloadDrag = ref(true)
 const loginref = ref(null)
@@ -242,6 +250,7 @@ const onDragstop = (e) => {
         userstore.$patch((state)=>{
           state.location = {lx: e.left, ly: e.top}
         })
+        console.log('location.value: ', location.value)
       }
     }
     const  OneClickDiagnosis = async (DiagnosisNum) => {
