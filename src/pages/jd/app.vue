@@ -1,5 +1,8 @@
 <template>
 <div class="jclpanel" >
+  
+
+  
     <VueDragResize :isActive="true" :w="180" :h="60" :x="lx" :y="ly" :z="22" v-if="reloadDrag" :isResizable="false" @dragstop="onDragstop" >
       <!-- https://github.com/kirillmurashov/vue-drag-resize/tree/v2.0.3 -->
     <div class="dragbox">
@@ -35,11 +38,12 @@
         </el-dropdown>
       </div>
       <div>
-        <el-dropdown placement="right-start" @command="imgDownload">
+        <el-dropdown placement="right-start" @command="downLoadJDPicVue">
+
           <span class="el-dropdown-link">
             <div class="jclicon"><i class="xzzicon-tupian"></i></div>
             <div class="title" >图片下载</div>
-            <div class="arrow-right-czp"><i class=""></i></div>
+            <div class="arrow-right-czp"><i class="xzzicon-youjt"></i></div>
           </span>
           <template #dropdown>
              <el-dropdown-menu >
@@ -53,15 +57,15 @@
         </el-dropdown>
       </div>
       <div>
-        <el-dropdown placement="right-start" @command="commentDownload">
+        <el-dropdown placement="right-start" @command="downLoadJDcommentPicVue">
           <span class="el-dropdown-link">
-            <div class="jclicon"><i class="xzzicon-pingjia"></i></div>
+            <div class="jclicon"><i class="xzzicon-pinglun"></i></div>
             <div class="title">有图评价下载</div>
             <div class="arrow-right-czp"><i class="xzzicon-youjt"></i></div>
           </span>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item v-for="item in commentOption" :key="item.value" :command="item.value">
+              <el-dropdown-item v-for="item in commentOptionPic" :key="item.value" :command="item.value">
                 <div class="drop-menu"> 评价前{{ item.value }} </div>
               </el-dropdown-item>
             </el-dropdown-menu>
@@ -69,7 +73,7 @@
         </el-dropdown>
       </div>
       <div>
-        <el-dropdown placement="right-start" @command="commentDownload1">
+        <el-dropdown placement="right-start" @command="downLoadJDcommentNoPicVue">
           <span class="el-dropdown-link">
             <div class="jclicon"><i class="xzzicon-pinglun"></i></div>
             <div class="title">无图评价下载</div>
@@ -77,7 +81,7 @@
           </span>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item v-for="item in commentOption1" :key="item.value" :command="item.value">
+              <el-dropdown-item v-for="item in commentOptionNoPic" :key="item.value" :command="item.value">
                 <div class="drop-menu"> 评价前{{ item.value }} </div>
               </el-dropdown-item>
             </el-dropdown-menu>
@@ -88,16 +92,16 @@
         <el-dropdown >
           <span class="el-dropdown-link">
             <div class="jclicon"><i class="xzzicon-spxz"></i></div>
-            <div class="title" @click="videoDownload">视频下载</div>
+            <div class="title" @click="downLoadJDVideoVue">视频下载</div>
             <div class="arrow-right-czp"><i class=""></i></div>
           </span>
         </el-dropdown>
       </div>
       <div>
-        <el-dropdown>
+        <el-dropdown >
           <span class="el-dropdown-link">
             <div class="jclicon"><i class="xzzicon-dingdan"></i></div>
-            <div class="title" @click="show_ctrl()" @click.once="监听换行()" >订单备注</div>
+            <div class="title" @click="getOrderTagJDVue">订单备注</div>
             <div class="arrow-right-czp"><i class=""></i></div>
           </span>
         </el-dropdown>
@@ -183,31 +187,41 @@
     <!-- <MyProgress :show="progressVisible" :percentage="percentage" /> -->
 </template>
 
-
 <script setup>
-// let aa = API.dayjs.format('YYYY-MM-DD HH:mm:ss')
-// console.log('aa: ', aa);
+
+
+
+import {videoDownloadczp} from './js/JDVideo.js'
+import {downLoadJDcommentPic, downLoadJDcommentNoPic} from './js/JDcomments.js'
+import { getMainImg, getSkuImg, packageImages, packageSkuImages, downloadDtlImg, downloadAllImg, getMainImgPhone, getSkuImgPhone, getDtlImgPhone, getAllImgPhone } from './js/JDPCPicture.js'
+import { getOrderList, setOrderList } from './js/JDorderTag.js'
+import { getVideoTitle, getSkuId, diagnosisProduct} from './js/JDDetailData.js'
+
+
+
 const userstore = userStore()
 const { location } = storeToRefs(userstore)
-
-// console.log('userstore.diagnosisData2: ', userstore.diagnosisData2);
 //---------------单纯字符串变量不可使用reactive---------
 //-----ref定义的数据：操作数据需要.value，读取数据时模板中直接读取不需要
+
 let currentHref = ref('')
 let curCookies  = ref('')
 let showMain  = ref(true)
 const version = VERSION
 const userid = ref('')
 const userPhone = ref('')
+
+
+
+
 // let progressVisible = ref(false)
 // let percentage = ref(60)
 let {lx, ly} = location.value
 
 let reloadDrag = ref(true)
 const loginref = ref(null)
+
 const diagnosisOption = reactive([{value: 2}, {value: 5}, {value: 10}, {value: 20}])
-const commentOption = reactive([{value: 20}, {value: 50}, {value: 100}, {value: 200}])
-const commentOption1 = reactive([{value: 20}, {value: 50}, {value: 100}, {value: 200}])
 const pictureOption  = reactive([
         {value: '全部下载(带目录)', arg: 'allwith'},
         {value: '全部下载', arg: 'all'},
@@ -464,7 +478,7 @@ const onDragstop = (e) => {
       API.emitter.emit('iwantkey')
     }
     const  backToHome =  () => {
-      // if (userid.value == '') return ElMessage.error({ message: '请登录账号', duration: 1500 })
+      if (userid.value == '') return ElMessage.error({ message: '请登录账号', duration: 1500 })
       window.open('https://www.jd.com/')
     }
     const goToLogin = () => {
@@ -496,6 +510,7 @@ const onDragstop = (e) => {
    })
 
 </script>
+
 <style lang="scss" scoped>
 @import "../../css/sass/jclpanel.scss";
 

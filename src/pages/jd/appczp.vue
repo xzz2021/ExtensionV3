@@ -1,8 +1,8 @@
 <template>
-<div class="jclpanel" >
-    <VueDragResize :isActive="true" :w="180" :h="60" :x="lx" :y="ly" :z="22" v-if="reloadDrag" :isResizable="false" @dragstop="onDragstop" >
+<div class="导航栏 jclpanel" >
+    <VueDragResize :isActive="true" :w="180" :h="60" :x="jdx" :y="jdy" :z="22" v-if="reloadDrag" :isResizable="false" @dragstop="onDragstop" >
       <!-- https://github.com/kirillmurashov/vue-drag-resize/tree/v2.0.3 -->
-    <div class="dragbox">
+      <div class="dragbox">
     <header class="jclheader">
       <div class="section">
         <img
@@ -26,9 +26,6 @@
             <el-dropdown-menu>
               <el-dropdown-item v-for="item in diagnosisOption" :key="item.value" :command="item.value">
                 <div class="drop-menu">销售前{{ item.value }}商品</div>
-              </el-dropdown-item>
-              <el-dropdown-item>
-              <div class="drop-menu" style="text-align: center;" @click="scanRecord">浏览记录</div>
               </el-dropdown-item>
             </el-dropdown-menu>
           </template>
@@ -87,7 +84,7 @@
       <div>
         <el-dropdown >
           <span class="el-dropdown-link">
-            <div class="jclicon"><i class="xzzicon-spxz"></i></div>
+            <div class="jclicon"><i class="xzzicon-tupian"></i></div>
             <div class="title" @click="videoDownload">视频下载</div>
             <div class="arrow-right-czp"><i class=""></i></div>
           </span>
@@ -97,11 +94,32 @@
         <el-dropdown>
           <span class="el-dropdown-link">
             <div class="jclicon"><i class="xzzicon-dingdan"></i></div>
-            <div class="title" @click="show_ctrl()" @click.once="监听换行()" >订单备注</div>
+            <div class="title">订单备注</div>
             <div class="arrow-right-czp"><i class=""></i></div>
           </span>
         </el-dropdown>
       </div>
+      <div>
+        <el-dropdown>
+          <span class="el-dropdown-link">
+            <div class="jclicon"><i class="xzzicon-liulan"></i></div>
+            <div class="title">浏览记录</div>
+            <div class="arrow-right-czp"><i class=""></i></div>
+          </span>
+        </el-dropdown>
+      </div>
+      <!-- <div>
+        <el-dropdown>
+          <span class="el-dropdown-link">
+            <div class="jclicon"><i class="xzzicon-biaoti"></i></div>
+            <div class="title">标题工具</div>
+            <div class="arrow-right-czp"><i class=""></i></div>
+          </span>
+          <template #dropdown>
+            <el-dropdown-menu></el-dropdown-menu>
+          </template>
+        </el-dropdown>
+      </div> -->
        <div>
         <el-dropdown>
           <span class="el-dropdown-link">
@@ -120,41 +138,16 @@
           </span>
         </el-dropdown>
       </div>
-
-        <div v-if="userid">
-          <el-dropdown placement="right-start">
+      <div>
+          <el-dropdown >
             <span class="el-dropdown-link">
               <div class="jclicon"><i :class="userid ? 'xzzicon-exchange' : 'xzzicon-login'"></i></div>
-              <div  class="title">{{userPhone}}</div>
-              <div class="arrow-right-czp"><i class="xzzicon-youjt"></i></div>
+              <div v-if="userid" class="title" @click="changeAccount">切换账号</div>
+              <div v-else class="title" @click="goTOLogin">账号登录</div>
+              <div class="arrow-right-czp"><i class=""></i></div>
             </span>
-            <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item command="aa">
-                <div class="drop-menu" @click="goToLogin">切换账号</div>
-              </el-dropdown-item>
-              <el-dropdown-item command="bb">
-                <div class="drop-menu">操作记录</div>
-              </el-dropdown-item>
-              <el-dropdown-item command="cc">
-                <div class="drop-menu" >任务进程</div>
-              </el-dropdown-item>
-            </el-dropdown-menu>
-            </template>
           </el-dropdown>
         </div>
-
-        <div  v-else>
-              <el-dropdown>
-                <span class="el-dropdown-link">
-                  <div class="jclicon"><i class="xzzicon-login"></i>
-                  </div>
-                  <div  class="title" @click="goToLogin">账号登录</div>
-                  <div class="arrow-right-czp"><i class=""></i></div>
-                </span>
-              </el-dropdown>
-            </div>
-
         <div v-if="userid">
           <el-dropdown >
             <span class="el-dropdown-link">
@@ -164,43 +157,40 @@
             </span>
           </el-dropdown>
         </div>
-        <div  class="version"> 版本:{{ version }} </div>
-
+        <div  class="version"> {{ version }} </div>
     </main>
     <!-- </el-collapse-transition> -->
     </transition>
 
     <footer @click="showMain = !showMain">
       <div class="shrink"><i :class="!showMain? 'xzzicon-shrink': 'xzzicon-shrink2'"></i></div>
-    <!-- <el-button type="primary">Primary</el-button>
-    <div class="text-red-400 ">6666</div> -->
+    <el-button type="primary">Primary</el-button>
     </footer>
     </div>
 </VueDragResize>
     </div>
-    <LoginPanel ref="loginref" />
-    <!-- <oneClickDiagnosis /> -->
-    <!-- <MyProgress :show="progressVisible" :percentage="percentage" /> -->
+    <LoginPanel />
+    <MyProgress :show="progressVisible" :percentage="percentage" />
+    <!-- <WordsTool />
+    <OrderRemarks /> -->
 </template>
 
 
 <script setup>
+
+const userstore = userStore()
+const { userid, userToken, version } = storeToRefs(userstore)
 
 //---------------单纯字符串变量不可使用reactive---------
 //-----ref定义的数据：操作数据需要.value，读取数据时模板中直接读取不需要
 let currentHref = ref('')
 let curCookies  = ref('')
 let showMain  = ref(true)
-const version = VERSION
-const userid = ref('')
-const userPhone = ref('')
-
-// let progressVisible = ref(false)
-// let percentage = ref(60)
-let {lx, ly} = location.value
-
+let progressVisible = ref(false)
+let percentage = ref(60)
+let jdx = ref(60)
+let jdy = ref(120)
 let reloadDrag = ref(true)
-const loginref = ref(null)
 const diagnosisOption = reactive([{value: 2}, {value: 5}, {value: 10}, {value: 20}])
 const commentOption = reactive([{value: 20}, {value: 50}, {value: 100}, {value: 200}])
 const commentOption1 = reactive([{value: 20}, {value: 50}, {value: 100}, {value: 200}])
@@ -211,7 +201,6 @@ const pictureOption  = reactive([
         {value: 'sku图下载', arg: 'sku'},
         {value: '详情图下载', arg: 'detail'},
       ])
-
 const onDragstop = (e) => {
       let winHeight = window.innerHeight - 60
       let winWidth = window.innerWidth - 200
@@ -219,31 +208,29 @@ const onDragstop = (e) => {
         reloadDrag.value = false
         setTimeout(() => {
         reloadDrag.value = true
-        }, 100)
+        }, 100);
       }else{
-        userstore.$patch((state)=>{
-          state.location = {lx: e.left, ly: e.top}
-        })
+      jdx.value = e.left
+      jdy.value = e.top
+      API.Storage.set({jdx: e.left, jdy: e.top})
       }
     }
     const  OneClickDiagnosis = async (DiagnosisNum) => {
-      if (this.userid == '') return this.$myBus.$emit('iwantlogin2');
-      if (!(this.currentHref.indexOf('item.jd') > 1)) {
+      if (this.userId == '') return this.$myBus.$emit('iwantlogin');
+      if (!(currentHref.value.indexOf('item.jd') > 1)) {
         return this.$message.error('请进入商品详情页,再点击开始诊断');
       }
-      // this.taskData.push({taskName: '店铺诊断',
-      // progress: 0})
       this.BUS.info_id = 0
       this.BUS.progressPanel = true;
       let config = {
         method: 'post',
         url: 'http://119.23.254.170:5000/api/jd/startCrawl',
         data: {
-          url: this.currentHref,
-          account: this.userid,
+          url: currentHref.value,
+          account: this.userId,
           cookies: this.cookies,
           num: DiagnosisNum,
-        },
+        }, //qs将对象 序列化成URL的形式，以&进行拼接
       };
       let res = await 浏览器_跨域axios(config);
       // console.log('------------调用返回KEY成功--', res);
@@ -251,10 +238,15 @@ const onDragstop = (e) => {
         // console.log('res.data.taskId: ', res.data.taskId);
         let config2 = {
           method: 'post',
-          url: 'http://119.23.254.170:5000/api/jd/getCrawl2',
+          url: 'http://119.23.254.170:5000/api/jd/getCrawl',
           data: {taskId: res.data.taskId},
-        }
-
+          // data: qs.stringify( {taskId: res.data.taskId})
+        };
+        // let time1 = DiagnosisNum < 11? 70000 : 70000
+        // let time2 = DiagnosisNum < 11? 3000 : 5000
+        // setTimeout(() => {
+        //   this.countdown = 0
+        // }, 180*1000)
         //------11111----------------获取到完整数据才展示的方法-----------------------
         //   let myInterval =  setInterval(async () => {
         //    this.percentage >= 93 ? this.percentage = 100: this.percentage += Math.floor(30/DiagnosisNum)
@@ -290,33 +282,39 @@ const onDragstop = (e) => {
             this.BUS.dialogShow = true;
             this.percentage = 0;
           }
-          if (res2.data.detailData.length == DiagnosisNum || res2.data.status == 'stop') {
+          if (res2.data.detailData.length == DiagnosisNum || res2.data.status != '爬虫未结束') {
             clearInterval(myInterval);
             this.BUS.diagnosisData = res2.data;
             //--------------存储数据------------------
-              // console.log('-------------结束轮询-------------')
-
             let config3 = {
               method: 'post',
               url: 'http://pddzd.junchenlun.com//?s=Jd.StoreBrowse.addRecord',
               data: {
                 shop_name: this.BUS.diagnosisData.shopName,
-                user_id: this.userid,
+                user_id: this.userId,
                 token: this.userToken,
                 data: JSON.stringify(this.BUS.diagnosisData),
               }, //qs将对象 序列化成URL的形式，以&进行拼接
-            }
-              // console.log('-------------开始存储数据--------------')
+            };
+            if (res2.data.status != '爬虫未结束') {
               let res3 = await 浏览器_跨域axios(config3);
-              // console.log('-----------res3: --------------', res3);
+              console.log('-----------res3: --------------', res3);
               if (res3.data.data.code == 0) {
                 console.log('数据存储成功');
               } else {
                 console.log('数据存储失败');
               }
+            }
           }
-        }, DiagnosisNum * 5000);
-        //-------22222----------------------------
+          // if ( this.countdown == 0){
+          //   clearInterval(myInterval)
+          //   this.BUS.progressPanel = false
+          //   this.countdown = 90
+          //   this.percentage = 0
+          //   alert("数据获取超时,请重新诊断")
+          // }
+        }, 8000);
+        //-------22222---------------------------------------------
       }
     }
     const imgDownload = async (arg) =>{
@@ -460,37 +458,51 @@ const onDragstop = (e) => {
       API.emitter.emit('iwantkey')
     }
     const  backToHome =  () => {
-      if (userid.value == '') return ElMessage.error({ message: '请登录账号', duration: 1500 })
       window.open('https://www.jd.com/')
     }
-    const goToLogin = () => {
-      loginref.value.loginShow = true
+    const changeAccount = () => {
+      API.emitter.emit('iwantlogin')
+    }
+    const goTOLogin = () => {
+      API.emitter.emit('iwantlogin')
     }
     const logout = () => {
-      API.Storage.remove('userInfo')
-      loginref.value.checkPhone = false
+      chrome.storage.local.set({userid: ''})
       ElMessage.success('账号退出成功!')
     }
-  const getUserInfo = async () => {
-    let userInfoStore  =  await  API.Storage.get('userInfo')
-      if(userInfoStore == '') return userid.value = ''
-        userid.value = userInfoStore.userid
-        let a  = userInfoStore.userPhone + ''
-      let b = a.substring(3,7)
-      userPhone.value = a.replace(b, '****')
+  const getStorage = () => {
+    chrome.storage.local.get(['userid'], (result) =>{
+      result == {} ? chrome.storage.local.set({userid: ''}) : userstore.userid = result.userid
+    })
+    chrome.storage.local.get(['userPhone'], (result) =>{
+      result != {} && (userstore.userPhone = result.userPhone)
+    })
+    chrome.storage.local.get(['userToken'], (result) =>{
+      result != {} && (userstore.userToken = result.userToken)
+    })
   }
   onMounted(() => {
     currentHref = window.location.href
     curCookies.value = "{'" + document.cookie + "'}"
+    // console.log('window.location.href: ', window.location.href)
+
   })
    onBeforeMount(async () => {
     chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-      message == 'loginEvent'? getUserInfo() : ''
+      message == 'loginEvent'? getStorage() : ''
       sendResponse({status: true})
       })
-    getUserInfo()
+    getStorage()
+    let aaa = API.Storage.get(['jdx', 'jdy'])
+    console.log('aaa: ', aaa);
+     let { jdx, jdy } = API.Storage.get(['jdx', 'jdy']) || {}
+     console.log('jdy: ', jdy);
+     console.log('jdx: ', jdx);
+    // let res = await API.sendMessage({type: 'tabQuery', requirement:{title: "xzz2022"}})
+    // console.log('tab-----------------res: ', res);
+    // let res2 = await API.sendMessage({ type: 'tabOperate', tabId: res.id,   action: 'remove'})
+    // console.log('tab-----------------res: ', res2);
    })
-
 
 </script>
 <style lang="scss" scoped>
