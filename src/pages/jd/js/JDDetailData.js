@@ -178,12 +178,6 @@ const getShopData = () => {
     return result
 }
 
-const testasda = () => {
-    console.log('Hello World zz !')
-    return 'Hello ZZ'
-}
-
-
 const diagnosisProduct = async(num) =>{
     
     API.zcl.print('店铺诊断数量', num)
@@ -192,16 +186,14 @@ const diagnosisProduct = async(num) =>{
     // 获取搜本店链接
     //let sbdUrl = API.zjn.get(shopDataobj, '搜本店链接')
     //API.zcl.print('搜本店链接', sbdUrl)
+
     console.log(chrome)
+
     let msg = {type: 'ztab', funcs:"add", config:{url:'https://www.jd.com', active:false}}
     let t1 = await API.sendMessage(msg)
-    API.zcl.print('new tab', t1)
-    await API.rest(2)
+    await API.rest(3)
     let tid = t1['id']
-    API.zcl.print('new tab id', t1['id'])
-    console.log('testasda',testasda)
-
-    let msg1 = {type: 'zinject', funcs:'addfuncs', config:JSON.parse({"id":tid, function:testasda})}
+    let msg1 = {type: 'zinject', funcs:'addfuncs', config:{"id":tid}}
     let t2 = await API.sendMessage(msg1)
     API.zcl.print('inject code', t2)
 

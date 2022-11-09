@@ -5,7 +5,7 @@ class zInject{
     }
 
     addfuncs(tabid, funcs){
-        // let msg1 = {type: 'zinject', funcs:'addfuncs', config:{id:tid, funcs:testasda()}}
+        // let msg1 = {type: 'zinject', funcs:'addfuncs', config:{id:tid}}
         return new Promise( (resolve, reject) => {
             chrome.scripting.executeScript(
                 {
