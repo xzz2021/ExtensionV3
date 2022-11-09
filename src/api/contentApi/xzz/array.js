@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-11-02 14:49:31
  * @LastEditors: xzz2021
- * @LastEditTime: 2022-11-02 17:24:31
+ * @LastEditTime: 2022-11-05 11:55:02
  */
 
 
@@ -25,7 +25,7 @@ const getSubsets = (arr) => arr.reduce((prev, curr) => prev.concat(prev.map((k) 
 
 // 数组出现元素次数统计
 // countOccurrences(['a', 'b', 'a', 'c', 'a', 'b']); // { 'a': 3, 'b': 2, 'c': 1 }
-const countOccurrences = (arr) => arr.reduce((prev, curr) => ((prev[curr] = ++prev[curr] || 1), prev), {});
+const countOccurrences = (arr) => arr.reduce((prev, curr) => ((prev[curr] = ++prev[curr] || 1), prev), {})
 
 // 纯数字数组 统计总和
 // sum([4,6,4,3,9])  // 26
@@ -65,6 +65,17 @@ const intersperse = (a, s) => [...Array(2 * a.length - 1)].map((_, i) => (i % 2 
 //数组指定下标项互换value
 const swapItems = (a, i, j) => (a[i] && a[j] && [...a.slice(0, i), a[j], ...a.slice(i + 1, j), a[i], ...a.slice(j + 1)]) || a;
 
+
+
+// /检查数组是否包含匹配某些条件的值
+const contains = (arr, criteria) => arr.some((v) => criteria(v));
+const contains2 = (arr, criteria) => arr.some(criteria);
+const contains3 = (arr, criteria) => arr.filter(criteria).length > 0
+
+
+
+
+
 //数组内对象按指定键的值重新排序
 
 // sortBy([
@@ -83,7 +94,9 @@ const swapItems = (a, i, j) => (a[i] && a[j] && [...a.slice(0, i), a[j], ...a.sl
 const sortBy = (arr, k) => arr.concat().sort((a, b) => (a[k] > b[k] ? 1 : a[k] < b[k] ? -1 : 0));
 
 
-
+//提取数组内对象的指定键key返回对应的value生成新数组
+//参数为数组....指定属性键...
+const getAttrs = (array,attr) => { arr = array.map((item)=> item[attr])}
 
 
 //暂时想不到应用场景,以指定key返回相同value的集合

@@ -24,6 +24,7 @@ const isAtBottom = () => document.documentElement.clientHeight + window.scrollY 
 // 检验一个函数是否为异步async函数
 const isAsyncFunction = (v) => Object.prototype.toString.call(v) === '[object AsyncFunction]';
 
-
+//检验一个平面数组是否有重复值
+const hasDuplicateValues = (arr) => new Set(arr).size !== arr.length
 
 export default {isExpired}

@@ -25,10 +25,9 @@ import 'vxe-table/lib/style.css'
 //-------------结合babel-loader配置按需加载后----打包体积只有100k
 //-------所以可以全局引入------jq(打包90k)+vue+ele+pinia---------
 
-//ElementPlus组件与样式分离,config里importStyle为false,然后单独引入带变量的css
-import './src/css/element-variables.scss'
+
+//ElementPlus组件与样式分离,config里importStyle设为false,然后单独引入带变量的css与之合并
 // import ElementPlus from 'element-plus'
-// import 'element-plus/dist/index.css'
 
 //引入自定义的所有css入口文件
 import './src/css/style'

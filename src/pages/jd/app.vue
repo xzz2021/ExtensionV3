@@ -464,7 +464,7 @@ const onDragstop = (e) => {
       API.emitter.emit('iwantkey')
     }
     const  backToHome =  () => {
-      if (userid.value == '') return ElMessage.error({ message: '请登录账号', duration: 1500 })
+      // if (userid.value == '') return ElMessage.error({ message: '请登录账号', duration: 1500 })
       window.open('https://www.jd.com/')
     }
     const goToLogin = () => {

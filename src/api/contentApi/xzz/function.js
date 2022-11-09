@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-11-03 08:47:46
  * @LastEditors: xzz2021
- * @LastEditTime: 2022-11-03 09:18:56
+ * @LastEditTime: 2022-11-05 14:59:55
  */
 
 
@@ -40,8 +40,82 @@ const once = (fn) => ( (ran = false) => () => ran ? fn : ((ran = !ran), (fn = fn
 // incOnce(); // n = 1
 
 
+//将cookie转换成对象
+const cookies = document.cookie .split(';') .map((item) => item.split('=')) .reduce((acc, [k, v]) => (acc[k.trim().replace('"', '')] = v) && acc, {});
+
+//获取cookie指定键的值
+const cookie = (name) => `; ${document.cookie}`.split(`; ${name}=`).pop().split(';').shift();
+
+//投骰子投机得到1-6
+const throwdice = () => ~~(Math.random() * 6) + 1;
 
 
+//将get请求的url携带参数转换成对象
+
+const getUrlParams = (query) => Array.from(new URLSearchParams(query)).reduce((p, [k, v]) => Object.assign({}, p, { [k]: p[k] ? (Array.isArray(p[k]) ? p[k] : [p[k]]).concat(v) : v }), {});
+
+//将JWT的token解密------可能是node环境???????????
+const decode = (token) =>
+    decodeURIComponent(
+        atob(token.split('.')[1].replace('-', '+').replace('_', '/'))
+            .split('')
+            .map((c) => `%${('00' + c.charCodeAt(0).toString(16)).slice(-2)}`)
+            .join('')
+    );
+
+//加密一个url
+const encode = (url) => encodeURIComponent(url).replace(/!/g, '%21').replace(/~/g, '%7E').replace(/\*/g, '%2A').replace(/'/g, '%27').replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/%20/g, '+');
+
+
+//生成唯一的自增id
+const uid = (() => ((id = 0), () => id++))();
+// uid(); // 0
+// uid(); // 1
+// uid(); // 2
+// uid(); // 3
+
+
+
+//获取任意的变量类型
+const getTypeOf = (obj) => Object.prototype.toString.call(obj).match(/\[object (.*)\]/)[1];
+
+// getTypeOf({}); // Object
+// getTypeOf([]); // Array
+// getTypeOf((a, b) => a + b); // Function
+// getTypeOf(async () => {}); // AsyncFunction
+// getTypeOf(document); // HTMLDocument
+
+
+//按数组顺序执行promises函数,此处promises为多个promises函数组成的数组
+const run = (promisesArr) => promisesArr.reduce((p, c) => p.then((rp) => c.then((rc) => [...rp, rc])), Promise.resolve([]));
+
+
+//计算阶乘
+const factorial = (n) => (n <= 1 ? 1 : n * factorial(n - 1));
+
+
+//任意个数字求和
+const sum = (...args) => args.reduce((a, b) => a + b)
+
+
+//任意个数字求积
+const mul = (...args) => args.reduce((a, b) => a * b)
+
+//计算2个数的最大公约数
+const gcd = (a, b) => (b === 0 ? a : gcd(b, a % b))
+
+//字符串转数字
+const toNumber = (str) => +str
+
+
+//十进制数字转二进制
+const decToBi = (num) => (num === 0 ? 0 : (num % 2) + 10 * decToBi(~~(num / 2)))
+
+//将小数四舍五入保留指定位数,不传第2个参数则默认保留整数部分
+const round = (n, decimals = 0) => Number(`${Math.round(`${n}e${decimals}`)}e-${decimals}`)
+
+//将小数截取指定位数
+const toFixed = (n, fixed) => ~~(Math.pow(10, fixed) * n) / Math.pow(10, fixed)
 
 
 
