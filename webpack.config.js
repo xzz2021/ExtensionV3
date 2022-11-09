@@ -69,7 +69,8 @@ const comconfig = {
                 'vue',
                 'pinia',
                 {
-                    '../../stores/userStore':['userStore']
+                    // '../../stores/userStore':['userStore'],
+                    './piniaStore': ['piniaStore', 'userStore']
                 }
                 
               ],
