@@ -200,8 +200,14 @@ import { getVideoTitle, getSkuId, diagnosisProduct} from './js/JDDetailData.js'
 
 
 
+//持久化的store数据
 const userstore = userStore()
 const { location } = storeToRefs(userstore)
+
+
+//各自平台的
+const store = piniaStore()
+const { count } = storeToRefs(store)
 
 //---------------单纯字符串变量不可使用reactive---------
 //-----ref定义的数据：操作数据需要.value，读取数据时模板中直接读取不需要
