@@ -1,3 +1,13 @@
+const rest = (time) => {
+    return new Promise((resolve, reject) => {
+        //console.log(`start rest for ${time} seconds now: `, API.ztime.ymdhms())
+        setTimeout(() => {
+            resolve()
+            //console.log(`end rest for ${time} seconds now: `, API.ztime.ymdhms())
+        }, time * 1000);
+    });
+}
+
 /**
      * 自定义chrome浏览器tab页操作类
 */
@@ -15,9 +25,26 @@ class zTab{
     */
     add(url, actives){
         //let msg = {type: 'ztab', funcs:"add", config:{url:'https://www.baidu.com', active:false}}
-        return new Promise( (resolve, reject) => {
-            chrome.tabs.create({url,active:actives}, (res) => {
-                console.log(res)
+        return new Promise((resolve, reject) => {
+            chrome.tabs.create({url,active:actives}, async(res) => {
+                let flag = true;
+                let fcount = 0;
+                let tabstatus = await this.getById(res.id); 
+                while(flag){
+                    fcount += 1;
+                    tabstatus = await this.getById(res.id); 
+                    if(tabstatus != undefined){
+                        if(tabstatus.status == 'complete'){
+                            flag = false;
+                        }
+                    }else{
+                        flag = false;
+                    }
+                    if(fcount >= 10){
+                        flag = false;
+                    }
+                    await rest(1)
+                }
                 resolve(res)
             })
         })

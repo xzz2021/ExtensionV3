@@ -7,7 +7,11 @@
     "service_worker": "background.js" 
   },
   "permissions": ["storage", "activeTab", "tabs", "contextMenus", "scripting", "downloads", "cookies"],
-  "host_permissions":["https://*.jd.com/*"],
+  "host_permissions":[
+    "https://*.1688.com/*", "https://*.tmall.com/*", "https://*.jd.com/*",
+    "https://*.taobao.com/*", "https://*.alibaba.com/*", "https://*.yangkeduo.com/*",
+    "https://*.pingduoduo.com/*", "http://*.junchenlun.com/*", "https://www.google.com/"
+  ],
   "action": {
     "default_title": "popup.html",
     "default_icon": "logo.png",
@@ -26,9 +30,6 @@
   "web_accessible_resources": [{
     "resources": ["inject.js","content.js", "content.js.map", "inject.js.map", "jdi.js"],
     "matches": ["<all_urls>"]
-  }],
-  "content_security_policy": {
-    "script-src": "unsafe-inline"
-  }
+  }]
 }
 

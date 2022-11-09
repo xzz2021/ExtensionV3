@@ -124,7 +124,7 @@ const getCommentsData = async (cnum, skuId, pic_flag) => {
                 }
             }
         }
-        await API.rest(2)
+        await API.wait(1)
     }
     return sumData
 }
