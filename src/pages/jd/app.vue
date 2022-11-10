@@ -3,7 +3,7 @@
   
 
   
-    <VueDragResize :isActive="true" :w="180" :h="60" :x="lx" :y="ly" :z="22" v-if="reloadDrag" :isResizable="false" @dragstop="onDragstop" >
+    <VueDragResize :isActive="true" :w="180" :h="60" :x="location.lx" :y="location.ly" :z="22" v-if="reloadDrag" :isResizable="false" @dragstop="onDragstop" >
       <!-- https://github.com/kirillmurashov/vue-drag-resize/tree/v2.0.3 -->
     <div class="dragbox">
     <header class="jclheader">
@@ -224,7 +224,9 @@ const userPhone = ref('')
 
 // let progressVisible = ref(false)
 // let percentage = ref(60)
-let {lx, ly} = location.value
+
+//实时响应式获得数据需要直接绑定state的值,解构无法实时获得最新值,虽然可以用来操作,但最好使用$patch方式
+// let {lx, ly} = location.value
 
 let reloadDrag = ref(true)
 const loginref = ref(null)
@@ -383,7 +385,8 @@ const onDragstop = (e) => {
     }, 100)
   }else{
     userstore.$patch((state)=>{
-      state.location = {lx: e.left, ly: e.top}
+      state.location.lx = e.left
+      state.location.ly =  e.top
     })
   }
 }
