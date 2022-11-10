@@ -1,5 +1,6 @@
 # 全新的框架
 技术栈：vue3.2+scss+element-plus+vxe-table+chromeV3+webpack5
+
 部分依赖：jquery,lodash,pinia,websocket,
 
 ### 文件结构说明
@@ -15,5 +16,7 @@ api存放自定义封装的函数，bgcApi目录下会自动引入background.js�
 ### 开发命令
 ##### 脚手架有3种模式
 watch：会启用自定义的websocket监听编译并自动刷新；
+
 server：会启动webpack官方的dev-server，借由服务中转也能实现自动刷新；
+
 build：打包生产上线时使用，有特别针对优化配置，每次使用前要特别注意下修改manifestPro.json和webpack.pro.config.js配置文件
