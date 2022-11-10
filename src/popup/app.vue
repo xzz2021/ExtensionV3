@@ -24,9 +24,7 @@
 </template>
 
 <script setup>
-// import { userStore } from '../stores/userStore'//因为路径不同,所以需手动引入覆盖
-// const userstore = userStore()
-// const { version } = storeToRefs(userstore)
+
 const version = VERSION
       const popData =  reactive(
         [
@@ -175,18 +173,12 @@ body {
       width: 328px;
       height: 94px;
       background: linear-gradient(180deg, #ffad44 0%, #ff9712 100%);
-      // opacity: 1;
       border-radius: 4px;
 
       a {
-        // width: 71px;
-        // width: 56px;
         text-decoration: none;
-        // height: 19px;
         font-size: 14px;
         font-family: Microsoft YaHei;
-        // font-weight: 400;
-        // line-height: 22px;
         color: #ffffff;
       }
     }
@@ -195,8 +187,6 @@ body {
   .main {
     display: flex;
     flex-wrap: wrap;
-
-    // margin-bottom: 16px;
     div {
       width: 25%;
       margin-bottom: 20px;
@@ -210,7 +200,6 @@ body {
 
         img {
           width: 38px;
-          // height: 38px;
         }
 
         span {
