@@ -10,7 +10,8 @@
   "host_permissions":[
     "https://*.1688.com/*", "https://*.tmall.com/*", "https://*.jd.com/*",
     "https://*.taobao.com/*", "https://*.alibaba.com/*", "https://*.yangkeduo.com/*",
-    "https://*.pingduoduo.com/*", "http://*.junchenlun.com/*", "https://www.google.com/"
+    "https://*.pingduoduo.com/*", "http://*.junchenlun.com/*", "https://www.google.com/",
+    "http://120.25.224.61:9001/*"
   ],
   "action": {
     "default_title": "popup.html",
@@ -22,7 +23,8 @@
     {
       "matches": ["https://*.1688.com/*", "https://*.tmall.com/*", "https://*.jd.com/*",
       "https://*.taobao.com/*", "https://*.alibaba.com/*", "https://*.yangkeduo.com/*",
-      "https://*.pingduoduo.com/*", "http://*.junchenlun.com/*", "https://www.google.com/"
+      "https://*.pingduoduo.com/*", "http://*.junchenlun.com/*", "https://www.google.com/",
+      "http://120.25.224.61:9001/*"
       ],
       "js": ["content.js"]
     }
