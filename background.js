@@ -135,14 +135,11 @@ chrome.runtime.onMessage.addListener(
         (async () => {
           let res = undefined
           let zos = message.funcs
-          let mobj = message.config 
-          console.log("message",message)
+          let mobj = message.config
           if(zos == 'addfuncs'){
             let tabid = mobj.id;
-            let tabfunc = mobj.function;
-            console.log('tabfunc',tabfunc )
-            if(tabid != undefined && tabid != null && tabfunc != null){
-              res = await API.zinject.addfuncs(tabid, tabfunc)
+            if(tabid != undefined && tabid != null){
+              res = await API.zinject.addfuncs(tabid, API.getallNUM)
               sendResponse(res)
             }
           }
