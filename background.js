@@ -157,6 +157,15 @@ chrome.runtime.onMessage.addListener(
       }
       break;
 
+      case 'zfetch' : {
+        (async () => {
+          console.log(message)
+          let res = await API.zpost(message.url, message.datas)
+          sendResponse(res)
+        })()
+        return true
+      }
+      break;
 
       // fatosy API end 
 

@@ -1,12 +1,3 @@
-const rest = (time) => {
-    return new Promise((resolve, reject) => {
-        //console.log(`start rest for ${time} seconds now: `, API.ztime.ymdhms())
-        setTimeout(() => {
-            resolve()
-            //console.log(`end rest for ${time} seconds now: `, API.ztime.ymdhms())
-        }, time * 1000);
-    });
-}
 
 // 注入京东搜本店页面获取商品链接,页码,商品总数
 const getJDSKULink = (skunum) => {
@@ -70,36 +61,42 @@ const getJDSKULink = (skunum) => {
     return result
 }
 
-
 const injectJDSkuPageData = async() => {
-    let skuTitle = '暂无数据'
-    let skuPrice = '暂无数据'
-    let skuUrl = window.location.href;
-    let skuID = '暂无数据'
-    let activities = new Array()
-    let mainPicList = new Array()
-    let mainImgUrl = '暂无数据'
-    let videoUrl = '暂无数据'
-    let videoTime = 0
-    let skuPicList = new Array()
-    let dtlPicList = new Array()
-    let mainskuId = '暂无数据'
+    let result = {
+        "skuTitle" : '暂无数据',
+        "skuPrice" : '暂无数据',
+        "skuUrl" : window.location.href,
+        "skuID" : "暂无数据",
+        "activities" : [],
+        "mainPicList" : [],
+        "mainImgUrl" : "暂无数据",
+        "videoUrl" : "暂无数据",
+        "videoTime" : 0,
+        "skuPicList" : [],
+        "dtlPicList" : [],
+        "mainskuId" : '暂无数据',
+        "shopId" : '暂无数据',
+        "goodCommentTagList" : [],
+        "goodCommentRate" : '暂无数据',
+        "commentNum" : '暂无数据',
+        'commentPicNum': '暂无数据'
+    }
     
     // 获取商品ID
-    let regID = skuUrl.match(/item.jd.com\/.*?(\d+).html/)
+    let regID = result['skuUrl'].match(/item.jd.com\/.*?(\d+).html/)
     if(regID != null){
-        skuID = regID[1]
+        result['skuID'] = regID[1]
     }
 
     // 获取商品标题
     if(document.getElementsByClassName('sku-name')[0] != undefined){
-        skuTitle = document.getElementsByClassName('sku-name')[0].innerText;
+        result['skuTitle'] = document.getElementsByClassName('sku-name')[0].innerText;
     }
     // 获取商品价格
-    if(skuID != '暂无数据'){
-        let pcn = 'price J-p-' + skuID
+    if(result['skuID'] != '暂无数据'){
+        let pcn = 'price J-p-' + result['skuID']
         if(document.getElementsByClassName(pcn)[0] != undefined){
-            skuPrice = parseFloat(document.getElementsByClassName(pcn)[0].innerText)
+            result['skuPrice'] = parseFloat(document.getElementsByClassName(pcn)[0].innerText)
         }
     }
 
@@ -109,7 +106,7 @@ const injectJDSkuPageData = async() => {
         let yhjels = document.getElementsByClassName('quan-item')
         for(let i=0; i< yhjels.length; i++){
             let yhjstr = yhjels[i].innerText;
-            activities.push(yhjstr)
+            result['activities'].push(yhjstr)
         }
     }
     // 2 - 获取促销活动
@@ -117,7 +114,7 @@ const injectJDSkuPageData = async() => {
         let mjs = document.getElementsByClassName('prom-item');
         for(let i=0; i< mjs.length; i++){
             let mjstr = mjs[i].innerText;
-            activities.push(mjstr)
+            result['activities'].push(mjstr)
         }
     }
 
@@ -131,9 +128,9 @@ const injectJDSkuPageData = async() => {
                 if(skuregs != null){
                     skuimg = skuimg.replace(skuregs[0], '.com/n1/jfs')
                 }
-                mainPicList.push(skuimg)
+                result['mainPicList'].push(skuimg)
             }
-            mainImgUrl = mainPicList[0]
+            result['mainImgUrl'] = result['mainPicList'][0]
         }
     }
 
@@ -141,7 +138,7 @@ const injectJDSkuPageData = async() => {
     if(document.getElementsByClassName('video-icon').length > 0){
         document.getElementsByClassName('video-icon')[0].click()
         if(document.getElementsByTagName('video')[0].getElementsByTagName('source').length > 0){
-            videoUrl = document.getElementsByTagName('video')[0].getElementsByTagName('source')[0].attributes.src.value;
+            result['videoUrl'] = document.getElementsByTagName('video')[0].getElementsByTagName('source')[0].attributes.src.value;
         }
     }
 
@@ -155,7 +152,7 @@ const injectJDSkuPageData = async() => {
                 if(skuregs != null){
                     skuimg = skuimg.replace(skuregs[0], '.com/n1/jfs')
                 }
-                skuPicList.push(skuimg)
+                result['skuPicList'].push(skuimg)
             }
         }
     }
@@ -169,7 +166,7 @@ const injectJDSkuPageData = async() => {
                 let dtlimg = dtlList[i].getAttribute('data-lazyload')
                 //https://img10.360buyimg.com/imgzone/jfs/t1/145497/16/29555/843955/62f1fb8dEfb8c3302/2f0acfedeb9b1848.jpg.avif
                 dtlimg = 'https:' + dtlimg
-                dtlPicList.push(dtlimg)
+                result['dtlPicList'].push(dtlimg)
             }
         }
     }
@@ -177,11 +174,98 @@ const injectJDSkuPageData = async() => {
     // 获取mainskuid document.getElementsByTagName('html')[0].innerHTML.match(/mainSkuId:.*?(\d+)/)[1]
     let regsmain = document.getElementsByTagName('html')[0].innerHTML.match(/mainSkuId:.*?(\d+)/)
     if(regsmain != null){
-        mainskuId = regsmain[1]
+        result['mainskuId'] = regsmain[1]
     }
 
+    // 获取shopId
+    let regsshop = document.getElementsByTagName('html')[0].innerHTML.match(/shopId:.*?(\d+)/)
+    if(regsshop != null){
+        result['shopId'] = regsshop[1]
+    }
 
-    return dtlPicList
+    
+    /* // 获取评价数据
+    // 商品评价点击
+    if(document.getElementsByClassName('tab-main large').length != 0){
+        let pjbtn = null
+        for(let j = 0; j< document.getElementsByClassName('tab-main large').length; j++ ){
+            let comentbtns1 = document.getElementsByClassName('tab-main large')[j].getElementsByTagName('li')
+            for(let i = 0 ; i< comentbtns1.length; i++){
+                if(comentbtns1[i].innerText.indexOf('商品评价') > -1){
+                    comentbtns1[i].click()
+                    pjbtn = comentbtns1[i]
+                }
+            }
+        }
+
+
+        // 只看当前商品点击
+        if(document.getElementById('comm-curr-sku') != null){
+            console.log('2')
+            document.getElementById('comm-curr-sku').click()
+            // 好评标签获取
+            if(document.getElementsByClassName('tag-1').length != 0){
+                let commentTagList = document.getElementsByClassName('tag-1')
+                for(let i =0; i< commentTagList.length; i++){
+                    let ctags = commentTagList[i].innerText
+                    result['goodCommentTagList'].push(ctags)
+                }
+            }
+            // 好评率获取
+            if(document.getElementsByClassName('percent-con').length != 0){
+                result['goodCommentRate'] = document.getElementsByClassName('percent-con')[0].innerText
+            }
+            // 评价总数获取
+            if(document.getElementsByClassName('tab-main small').length != 0){
+                if(document.getElementsByClassName('tab-main small')[0].getElementsByTagName('li').length != 0){
+                    let cmtbtns = document.getElementsByClassName('tab-main small')[0].getElementsByTagName('li')
+                    for(let i = 0; i < cmtbtns.length; i++){
+                        let cmtbtnstr = cmtbtns[i].innerText;
+                        if(cmtbtnstr.indexOf('全部评价') > -1){
+                            let cmtregs = cmtbtnstr.match(/全部评价\((.*?)\)/)
+                            if(cmtregs != null){
+                                result['commentNum'] = cmtregs[1]
+                            }
+                        }
+                        if(cmtbtnstr.indexOf('晒图') > -1){
+                            let cmtregs = cmtbtnstr.match(/晒图\((.*?)\)/)
+                            if(cmtregs != null){
+                                let cmtregstr = cmtregs[1].replace('+', '')
+                                if(cmtregstr.indexOf('万') > -1){
+                                    let cmtregs2 = cmtregstr.match(/.*?(\d+)万/)
+                                    if(cmtregs2 != null){
+                                        let cmtregstr2 = parseInt(cmtregs2[1]) * 10000;
+                                        cmtregstr = cmtregstr2
+                                    }
+                                }else{
+                                    cmtregstr = parseInt(cmtregstr)
+                                }
+                                result['commentPicNum'] = cmtregstr
+                            }
+                        }
+                        if(cmtbtnstr.indexOf('视频') > -1){
+                            let cmtregs = cmtbtnstr.match(/视频晒单\((.*?)\)/)
+                            if(cmtregs != null){
+                                let cmtregstr = cmtregs[1].replace('+', '')
+                                if(cmtregstr.indexOf('万') > -1){
+                                    let cmtregs2 = cmtregstr.match(/.*?(\d+)万/)
+                                    if(cmtregs2 != null){
+                                        let cmtregstr2 = parseInt(cmtregs2[1]) * 10000;
+                                        cmtregstr = cmtregstr2
+                                    }
+                                }else{
+                                    cmtregstr = parseInt(cmtregstr)
+                                }
+                                result['commentPicNum'] = (result['commentPicNum'] + cmtregstr).toString() + '+'
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    } */
+
+    return result
 }
 
 export default {getJDSKULink, injectJDSkuPageData}
