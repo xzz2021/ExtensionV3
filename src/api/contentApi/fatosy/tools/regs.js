@@ -138,6 +138,24 @@ class zRegs{
         }
         return result
     }
+
+    checkTSchar(strs){
+        let arr = [',', '(', ')', '*', '[', ']', '=', '-', '*', '（', '）','【', '】','，','/','<', '>', '?', '？', '《', '》', '|', '}', '{', '@', '!', '！', '#', '$', '￥', '%', '^', '.', '&','-', '—','"', "'",':', '：',';', '；']
+        let count = 0
+        let charList = ''
+        for (let i = 0; i < arr.length; i++) {
+            let ele = arr[i]
+            if (strs.indexOf(ele) >= 0) {
+                count += 1
+                if(charList.indexOf(ele) == -1){
+                    charList = ele + ' ' + charList
+                }
+            }
+
+        }
+        return {"char_count":count, "chars":charList}
+
+    }
     
 
 }

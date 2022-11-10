@@ -174,7 +174,7 @@ const getShopData = () => {
             shopSbdUrl
         ]
     )
-    API.zcl.print('当前店铺信息', result)
+    //API.zcl.print('当前店铺信息', result)
     return result
 }
 
@@ -352,7 +352,7 @@ const getSkuPageData = async(pageUrl, num) => {
 }
 
 // 店铺诊断
-const diagnosisProduct2 = async(num) =>{
+const diagnosisProduct = async(num) =>{
 
     let JD_API_TEMP = {
         "time": API.ztime.ymdhms().toString(),
@@ -874,7 +874,7 @@ const diagnosisProduct2 = async(num) =>{
         }
         // 评价数
         if(pageData['commentNum'] != '暂无数据'){
-            dtlobj['commentDiagnosis'][6]['msg'] = "7.评价数: " + pageData['goodCommentRate'];
+            dtlobj['commentDiagnosis'][6]['msg'] = "7.评价数: " + pageData['commentNum'];
             let ratenum = parseInt(pageData['commentNum'].replace('+', ''))
             if(ratenum >= 10){
                 dtlobj['commentDiagnosis'][6]['desc'] = '合格'
@@ -894,7 +894,6 @@ const diagnosisProduct2 = async(num) =>{
         dtlobj['commodityInfo']['productId'] = pageData['skuID']
         // 商品价格
         dtlobj['commodityInfo']['price'] = pageData['skuPrice']
-
         // 详情图
         if(pageData['dtlPicList'].length > 0){
             if(pageData['dtlPicList'].length >= 5){
@@ -903,30 +902,160 @@ const diagnosisProduct2 = async(num) =>{
             }
             dtlobj['detailImg']['msg'] = "1、详情图片数量: " + pageData['dtlPicList'].length
         }
+        // 主图分辨率
+        if(pageData['mainImgUrl'] != '暂无数据'){
+            let mainwh = await API.zimg.getWH(pageData['mainImgUrl'])
+            let mainwhstr = mainwh.width.toString() + '*' + mainwh.height.toString();
+            dtlobj['mainImgDiagnosis'][0]['msg'] = "1、主图分辨率: " + mainwhstr;
+            if(mainwh.width >= 800 && mainwh.height>= 800){
+                dtlobj['mainImgDiagnosis'][0]['desc'] = "主图分辨率≥800*800"
+                dtlobj['mainImgDiagnosis'][0]['isok'] = true
+            }
+        }
+        // 主图数量
+        if(pageData['mainPicList'].length > 0){
+            dtlobj['mainImgDiagnosis'][1]['msg'] = "2、主图图片数量: " + pageData['mainPicList'].length;
+            if(pageData['mainPicList'].length >=5){
+                dtlobj['mainImgDiagnosis'][1]['desc'] = "图片数量≥5张";
+                dtlobj['mainImgDiagnosis'][1]['isok'] = true;
+            }
+        }
+        // 视频数量
+        if(pageData['videoUrl'] != '暂无数据'){
+            dtlobj['mainImgDiagnosis'][2]['desc'] = "有设置主图小视频";
+            dtlobj['mainImgDiagnosis'][2]['isok'] = true;
+            dtlobj['mainImgDiagnosis'][2]['msg'] = "3、主图小视频数量: 1";
+            dtlobj['mainImgDiagnosis'][2]['videoUrl'] = pageData['videoUrl']
+        }
+        //视频时长
+        if(pageData['videoTime'] != 0){
+            dtlobj['mainImgDiagnosis'][3]['data'] = pageData['videoTime'];
+            dtlobj['mainImgDiagnosis'][3]['msg'] = "4、主图小视频时长: " + pageData['videoTime'];
+            let pt = parseFloat(pageData['videoTime'])
+            if(pt >=10){
+                dtlobj['mainImgDiagnosis'][3]['desc'] = "主图小视频时长≥10s"
+                dtlobj['mainImgDiagnosis'][3]['isok'] = true
+            }
+        }
+        // 主图白底图检测
+        if(pageData['mainImgUrl'] != '暂无数据'){
+            let acmtUrl = 'http://120.25.224.61:9001/photo_white?url=https://img30.360buyimg.com/sku/jfs/t1/110075/5/32692/75992/6359f92cEc87aee0c/cb14e8fdc54edeb8.jpg'
+            let msg = {type: 'zfetch', funcs:"JDbdIMG", config:{url:acmtUrl}}
+            let jsondata = await API.sendMessage(msg)
+            if(jsondata.is_white_base_img != undefined){
+                
+                if(jsondata['is_white_base_img'] == 0){
+                    // 不是白底图
+                    dtlobj['mainImgDiagnosis'][4]['desc'] = "主图最后一张不为白底图"
+                    dtlobj['mainImgDiagnosis'][4]['imgUrl'] = pageData['mainImgUrl'];
+                    dtlobj['mainImgDiagnosis'][4]['isok'] = false
+                    dtlobj['mainImgDiagnosis'][4]['msg'] = "5、白底图: 否"
+                }else{
+                    // 是白底图
+                    dtlobj['mainImgDiagnosis'][4]['desc'] = "主图最后一张为白底图"
+                    dtlobj['mainImgDiagnosis'][4]['imgUrl'] = pageData['mainImgUrl'];
+                    dtlobj['mainImgDiagnosis'][4]['isok'] = true
+                    dtlobj['mainImgDiagnosis'][4]['msg'] = "5、白底图: 是"
+                }
+            }
+        }
+        // 主图重复图检测
+        if(pageData['mainPicList'].length > 0){
+            let acmtUrl = 'http://120.25.224.61:9001/main_images_check'
+            let msg = {type: 'zfetch', funcs:"JDReIMG", config:{url:acmtUrl, datas:pageData['mainPicList']}}
+            let jsondata = await API.sendMessage(msg)
+            if(jsondata.img_repeat_check != undefined){
+                dtlobj['mainImgDiagnosis'][5]['data'] = jsondata['img_repeat_check']['data'];
+                dtlobj['mainImgDiagnosis'][5]['desc'] = jsondata['img_repeat_check']['desc'];
+                dtlobj['mainImgDiagnosis'][5]['isok'] = jsondata['img_repeat_check']['isok'];
+                dtlobj['mainImgDiagnosis'][5]['msg'] = "6、" + jsondata['img_repeat_check']['msg'];
+        
+            }
+
+        }
+        //标题诊断
+        if(pageData['skuTitle'] != '暂无数据'){
+            let acmtUrl = "http://120.25.224.61:9001/word_02_info?user_id=1111&title=Apple iPhone 14 (A2884) 128GB 星光色 支持移动联通电信5G 双卡双待手机"
+            let msg = {type: 'zfetch', funcs:"JDTitleck", config:{url:acmtUrl}}
+            let jsondata = await API.sendMessage(msg)
+
+            // 标题字符数
+            dtlobj['titleDiagnosis'][0]['data'] = pageData['skuTitle'].length
+            dtlobj['titleDiagnosis'][0]['msg'] = "1、标题字符数: " + pageData['skuTitle'].length
+            if(pageData['skuTitle'].length >= 60){
+                dtlobj['titleDiagnosis'][0]['desc'] = "标题字符数≥60个"
+                dtlobj['titleDiagnosis'][0]['isok'] = true
+            }
+
+            // 特殊字符
+            let titlecheck = API.zrg.checkTSchar(pageData['skuTitle'])
+            dtlobj['titleDiagnosis'][1]['data'] = titlecheck['chars']
+            if(titlecheck['char_count'] > 0){
+                dtlobj['titleDiagnosis'][1]['msg'] = "2、标题特殊符号: 有" 
+                dtlobj['titleDiagnosis'][1]['isok'] = false
+                dtlobj['titleDiagnosis'][1]['desc'] = "标题含特殊字符: " + titlecheck['chars']
+            }else{
+                dtlobj['titleDiagnosis'][1]['msg'] = "2、标题特殊符号: 无" 
+                dtlobj['titleDiagnosis'][1]['isok'] = true
+                dtlobj['titleDiagnosis'][1]['desc'] = "标题不含特殊字符"
+            }
+            
+
+
+            // 空格
+            if(jsondata.word_space_check != undefined){
+                dtlobj['titleDiagnosis'][2]['data'] = jsondata['word_space_check']['data']
+                dtlobj['titleDiagnosis'][2]['desc'] = "标题含空格：" +  jsondata['word_space_check']['data']
+                if(jsondata['word_space_check']['data'] == 0){
+                    dtlobj['titleDiagnosis'][2]['isok'] = true
+                }else{
+                    dtlobj['titleDiagnosis'][2]['isok'] = false
+                }
+                dtlobj['titleDiagnosis'][2]['msg'] = "3、" + jsondata['word_space_check']['msg']
+            }
+
+            // 重复词
+            if(jsondata.word_repeat_check != undefined){
+                dtlobj['titleDiagnosis'][3]['data'] = jsondata['word_repeat_check']['data']
+                dtlobj['titleDiagnosis'][3]['desc'] = "标题重复词：" +  jsondata['word_repeat_check']['data']
+                if(jsondata['word_repeat_check']['isok'] == 1){
+                    dtlobj['titleDiagnosis'][3]['isok'] = true
+                }else{
+                    dtlobj['titleDiagnosis'][3]['isok'] = false
+                }
+                dtlobj['titleDiagnosis'][3]['msg'] = "4、" + jsondata['word_repeat_check']['msg']
+            }
+
+
+        }
+        // 活动数量
+        if(pageData['activities'].length > 0){
+            dtlobj['promotionsDiagnosis'][0]['desc'] = "活动数量: " + pageData['activities'].length
+            dtlobj['promotionsDiagnosis'][0]['isok'] = true
+            dtlobj['promotionsDiagnosis'][0]['msg'] = "活动数量: " + pageData['activities'].length
+        }else{
+            dtlobj['promotionsDiagnosis'][0]['desc'] = "活动数量: " + pageData['activities'].length
+            dtlobj['promotionsDiagnosis'][0]['isok'] = false
+            dtlobj['promotionsDiagnosis'][0]['msg'] = "活动数量: " + pageData['activities'].length
+        }
+        // 活动详情
+        if(pageData['activities'].length > 0){
+            let astrs = ''
+            for(let i = 0; i< pageData['activities'].length; i++){
+                astrs =  pageData['activities'][i] + ';' + astrs
+            }
+            dtlobj['promotionsDiagnosis'][1]['desc'] = "活动详情: " + astrs
+            dtlobj['promotionsDiagnosis'][1]['isok'] = true
+            dtlobj['promotionsDiagnosis'][1]['msg'] = "活动详情: " + astrs
+        }else{
+            dtlobj['promotionsDiagnosis'][1]['desc'] = "活动详情: 无"
+            dtlobj['promotionsDiagnosis'][1]['isok'] = false
+            dtlobj['promotionsDiagnosis'][1]['msg'] = "活动详情: 无"
+        }
+        API.zcl.print("dtlobj", dtlobj)
     }    
     
-    
-
-
 }
 
-
-const diagnosisProduct = async(num) =>{
-    console.log('as')
-    let URLList = [
-        'https://img13.360buyimg.com/n1/s450x450_jfs/t1/199162/36/26401/30450/63191e30E283ebb8c/80759c310e6247cb.jpg.avif',
-        'https://img30.360buyimg.com/sku/jfs/t1/110075/5/32692/75992/6359f92cEc87aee0c/cb14e8fdc54edeb8.jpg'
-    ]
-    let acmtUrl = 'http://120.25.224.61:9001/main_images_check'
-    let msg = {
-        type: 'zfetch',
-        "url": acmtUrl,
-        "datas":URLList
-    }
-    console.log('aa')
-    let jsondata = await API.sendMessage(msg)
-    console.log('s', jsondata)
-
-}
 
 export {getSkuId, getVideoTitle, diagnosisProduct}
