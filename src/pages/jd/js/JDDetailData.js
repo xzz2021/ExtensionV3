@@ -1,5 +1,6 @@
 import { parseJSON } from 'jquery';
 
+
 // 获取商品标题
 const getSkuTitle = () => {
     let title = $('.sku-name').text()
@@ -118,23 +119,23 @@ const getShopData = () => {
     // 获取店铺评分 - 商品评价
     let shopGoalprt = API.zxp.getElmText('//*[@id="crumb-wrap"]/div/div[2]/div[2]/div[6]/div/div/div[1]/a[1]/div[2]/em')
     // 店铺评分 - 商品评价 - 分数
-    let shopGoalprtnum = API.zrg.numberOne(shopGoalprt, 0);
+    let shopGoalprtnum = API.zrg.check(API.zrg.numberOne(shopGoalprt, 0));
     // 店铺评分 - 商品评价 - 等级
-    let shopGoalprtLevel = API.zrg.chineseOne(shopGoalprt, 0); 
+    let shopGoalprtLevel = API.zrg.check(API.zrg.chineseOne(shopGoalprt, 0)); 
 
     // 获取店铺评分 - 物流履约
     let shopGoalcar = API.zxp.getElmText('//*[@id="crumb-wrap"]/div/div[2]/div[2]/div[6]/div/div/div[1]/a[2]/div[2]/em')
     // 店铺评分 - 物流履约 - 分数
-    let shopGoalcarnum = API.zrg.numberOne(shopGoalcar, 0);
+    let shopGoalcarnum = API.zrg.check(API.zrg.numberOne(shopGoalcar, 0));
     // 店铺评分 - 物流履约 - 等级
-    let shopGoalcarLevel = API.zrg.chineseOne(shopGoalcar, 0);
+    let shopGoalcarLevel = API.zrg.check(API.zrg.chineseOne(shopGoalcar, 0));
 
     // 获取店铺评分 - 售后服务
     let shopGoalserver = API.zxp.getElmText('//*[@id="crumb-wrap"]/div/div[2]/div[2]/div[6]/div/div/div[1]/a[3]/div[2]/em')
     // 店铺评分 - 售后服务 - 分数
-    let shopGoalservernum = API.zrg.numberOne(shopGoalserver, 0);
+    let shopGoalservernum = API.zrg.check(API.zrg.numberOne(shopGoalserver, 0));
     // 店铺评分 - 售后服务 - 等级
-    let shopGoalserverLevel = API.zrg.chineseOne(shopGoalserver, 0);
+    let shopGoalserverLevel = API.zrg.check(API.zrg.chineseOne(shopGoalserver, 0));
 
     // 获取搜本店连接
     let typeId = getTypeId()
@@ -179,7 +180,7 @@ const getShopData = () => {
 }
 
 // 遍历搜本店获取所有商品链接信息
-const getSbdData = async(num) => {
+const getSbdData = async(num, diagnosisStatus, statusnum, store) => {
     let result = {
         "skuLinkList":[],
         "shopAllNum": 0
@@ -197,6 +198,9 @@ const getSbdData = async(num) => {
     let venderId = getVenderId()
     let shopId = getShopId()
     for(let i = 1; i <= allPage; i++){
+        store.$patch((state)=>{
+            state.diagnosisStatus += statusnum
+        })
         // 获取搜本店连接
         let shopSbdUrl = compareSbdUrl(typeId, venderId, shopId, i)
         if(shopSbdUrl != undefined){
@@ -292,7 +296,7 @@ const getSkuPageData = async(pageUrl, num) => {
 
         let jsondata = await API.sendMessage(msg)
         let jdatas = parseJSON(jsondata)
-
+  
         if(jdatas.hotCommentTagStatistics != undefined){
             if(jdatas.hotCommentTagStatistics instanceof Array){
                 for(let i = 0; i< jdatas.hotCommentTagStatistics.length; i++){
@@ -314,6 +318,31 @@ const getSkuPageData = async(pageUrl, num) => {
                 }else{
                     allcmtNum = parseInt(allcmtNum).toString() + '+'
                 }
+
+                //差评
+                let badcmtNum = jdatas.productCommentSummary.poorCountStr.toString().replace('+','');
+                if(badcmtNum.indexOf('万') > -1){
+                    let badcmtNum2 = badcmtNum.match(/.*?(\d+)万/)
+                    if(badcmtNum2 != null){
+                        let badcmtNum3 = parseInt(badcmtNum2[1]) * 10000;
+                        badcmtNum = badcmtNum3
+                    }
+                }else{
+                    badcmtNum = parseInt(badcmtNum)
+                }
+
+                //好评
+                let goodcmtNum = jdatas.productCommentSummary.goodCountStr.toString().replace('+','');
+                if(goodcmtNum.indexOf('万') > -1){
+                    let goodcmtNum2 = goodcmtNum.match(/.*?(\d+)万/)
+                    if(goodcmtNum2 != null){
+                        let goodcmtNum3 = parseInt(goodcmtNum2[1]) * 10000;
+                        goodcmtNum = goodcmtNum3
+                    }
+                }else{
+                    goodcmtNum = parseInt(goodcmtNum)
+                }
+
             
                 // 好评率
                 let goodrate = (parseFloat(jdatas.productCommentSummary.goodRate)*100).toString() + '%';
@@ -344,6 +373,8 @@ const getSkuPageData = async(pageUrl, num) => {
                 skupageJS['goodCommentRate'] = goodrate;
                 skupageJS['commentNum'] = allcmtNum;
                 skupageJS['commentPicNum'] = vidpicNum;
+                skupageJS['badComment'] = badcmtNum;
+                skupageJS['goodComment'] = goodcmtNum;
             }
         }
     }
@@ -352,159 +383,13 @@ const getSkuPageData = async(pageUrl, num) => {
 }
 
 // 店铺诊断
-const diagnosisProduct = async(num) =>{
+const diagnosisProduct = async(num, diagnosisStatus, statusnum, store) =>{
 
     let JD_API_TEMP = {
         "time": API.ztime.ymdhms().toString(),
         "shopName": "暂无数据",
         "shopUrl": "暂无数据",
-        "detailData": [
-            {
-                "commentTag": [
-                    {
-                        "desc": "不存在好评标签",
-                        "isok": false,
-                        "msg": "暂无数据",
-                        "tagType": "好评标签: "
-                    },
-                    {
-                        "desc": "不存在差评标签",
-                        "isok": false,
-                        "msg": "暂无此字段",
-                        "tagType": "差评标签: "
-                    }
-                ],
-                "commodityInfo": {
-                    "mainImg": "暂无数据",
-                    "title": "暂无数据",
-                    "url": "暂无数据",
-                    "discount": "促销价: 暂无此字段",
-                    "floorPrice": "最低价: 暂无此字段",
-                    "topPrice": "最高价: 暂无此字段",
-                    "productId": "商品ID: 暂无数据",
-                    "createTime": "创建时间:暂无此字段",
-                    "price": "价格: 暂无数据"
-                },
-                "detailImg": {
-                    "desc": "详情图片数量<5",
-                    "isok": false,
-                    "msg": "1、详情图片数量: 暂无数据"
-                },
-                "mainImgDiagnosis": [
-                    {
-                        "desc": "主图分辨率<800*800",
-                        "isok": false,
-                        "msg": "1、主图分辨率: 暂无数据"
-                    },
-                    {
-                        "desc": "图片数量<5张",
-                        "isok": false,
-                        "msg": "2、主图图片数量: 暂无数据"
-                    },
-                    {
-                        "desc": "没有设置主图小视频",
-                        "isok": false,
-                        "msg": "3、主图小视频数量: 暂无数据",
-                        "videoUrl": "暂无数据"
-                    },
-                    {
-                        "data": "",
-                        "desc": "主图小视频时长<10s",
-                        "isok": false,
-                        "msg": "4、主图小视频时长: 暂无数据"
-                    },
-                    {
-                        "desc": "主图最后一张不为白底图",
-                        "imgUrl": "暂无数据",
-                        "isok": false,
-                        "msg": "5、白底图: 暂无数据"
-                    },
-                    {
-                        "data":[],
-                        "desc": "主图无相似度高于99.5%的两张图",
-                        "isok": false,
-                        "msg": "6、重复图: 暂无数据"
-                    }
-                ],
-                "monthSales": "暂无此字段",
-                "shopId": "暂无数据",
-                "titleDiagnosis": [
-                    {
-                        "data": "暂无数据",
-                        "desc": "标题字符数<60个",
-                        "isok": false,
-                        "msg": "1、标题字符数: 暂无数据"
-                    },
-                    {
-                        "data": "暂无数据",
-                        "desc": "标题不含特殊字符: 暂无数据",
-                        "isok": false,
-                        "msg": "2、标题特殊符号: 无"
-                    },
-                    {
-                        "data": 0,
-                        "desc": "标题含空格：暂无数据",
-                        "isok": false,
-                        "msg": "3、标题含空格"
-                    },
-                    {
-                        "data": "暂无数据",
-                        "desc": "标题重复词：暂无数据",
-                        "isok": false,
-                        "msg": "4、重复词: 无"
-                    }
-                ],
-                "commentDiagnosis": [
-                    {
-                        "msg": "1.好评标签:暂无数据",
-                        "isok": false,
-                        "desc": "好评标签:暂无数据"
-                    },
-                    {
-                        "msg": "2.差评标签:暂无此字段",
-                        "isok": false,
-                        "desc": "差评标签:暂无此字段"
-                    },
-                    {
-                        "msg": "3.视频图片数:暂无数据",
-                        "isok": false,
-                        "desc": "视频图片数:暂无数据"
-                    },
-                    {
-                        "msg": "4.评价占比:暂无此字段",
-                        "isok": false,
-                        "desc": "评价占比:暂无此字段"
-                    },
-                    {
-                        "msg": "5.货品评分:暂无此字段",
-                        "isok": false,
-                        "desc": "标准:货品评分 >=4.5 分 合格  否则不合格"
-                    },
-                    {
-                        "msg": "6.好评率:暂无数据",
-                        "isok": false,
-                        "desc": "标准:好评率 >=90% 分 合格  否则不合格"
-                    },
-                    {
-                        "msg": "7.评价数:暂无数据",
-                        "isok": false,
-                        "desc": "标准:评价数 >=10 个 合格  否则不合格"
-                    }
-                ],
-                "promotionsDiagnosis": [
-                    {
-                        "desc": "活动数量:暂无数据",
-                        "isok": false,
-                        "msg": "活动数量:暂无数据"
-                    },
-                    {
-                        "desc": "活动详情:暂无数据",
-                        "isok": false,
-                        "msg": "活动详情:暂无数据"
-                    }
-                ]
-            }
-        ],
+        "detailData": [],
         "sumData": [
             {
                 "totalNum": "诊断数量: 0",
@@ -659,36 +544,40 @@ const diagnosisProduct = async(num) =>{
     API.zcl.print('店铺诊断数量', num)
     // 店铺信息JSON
     let shopDataobj = getShopData();
+
     // 获取搜本店链接
     //let sbdUrl = API.zjn.get(shopDataobj, '搜本店链接')
     JD_API_TEMP['shopName'] = API.zjn.get(shopDataobj, '店铺名称')
     JD_API_TEMP['shopUrl'] = API.zjn.get(shopDataobj, '店铺链接')
     if(API.zjn.get(shopDataobj, '京东自营标记') == '非自营'){
         // 商品评分
-        JD_API_TEMP['sumData']['sumScore'][0]['score'] = API.zjn.get(shopDataobj, '店铺评分-商品评价-分数');
-        JD_API_TEMP['sumData']['sumScore'][0]['desc'] = "比同行业平均水平: " + API.zjn.get(shopDataobj, '店铺评分-商品评价-等级');
+        JD_API_TEMP['sumData'][0]['sumScore'][0]['score'] = API.zjn.get(shopDataobj, '店铺评分-商品评价-分数');
+        JD_API_TEMP['sumData'][0]['sumScore'][0]['desc'] = "比同行业平均水平: " + API.zjn.get(shopDataobj, '店铺评分-商品评价-等级');
         if(API.zjn.get(shopDataobj, '店铺评分-商品评价-等级').indexOf('高') > -1){
-            JD_API_TEMP['sumData']['sumScore'][0]['isok'] = true
+            JD_API_TEMP['sumData'][0]['sumScore'][0]['isok'] = true
         }
         // 物流评分
-        JD_API_TEMP['sumData']['sumScore'][0]['score'] = API.zjn.get(shopDataobj, '店铺评分-物流履约-分数');
-        JD_API_TEMP['sumData']['sumScore'][0]['desc'] = "比同行业平均水平: " + API.zjn.get(shopDataobj, '店铺评分-物流履约-等级');
+        JD_API_TEMP['sumData'][0]['sumScore'][1]['score'] = API.zjn.get(shopDataobj, '店铺评分-物流履约-分数');
+        JD_API_TEMP['sumData'][0]['sumScore'][1]['desc'] = "比同行业平均水平: " + API.zjn.get(shopDataobj, '店铺评分-物流履约-等级');
         if(API.zjn.get(shopDataobj, '店铺评分-物流履约-等级').indexOf('高') > -1){
-            JD_API_TEMP['sumData']['sumScore'][0]['isok'] = true
+            JD_API_TEMP['sumData'][0]['sumScore'][1]['isok'] = true
         }
         // 售后评分
-        JD_API_TEMP['sumData']['sumScore'][0]['score'] = API.zjn.get(shopDataobj, '店铺评分-售后服务-分数');
-        JD_API_TEMP['sumData']['sumScore'][0]['desc'] = "比同行业平均水平: " + API.zjn.get(shopDataobj, '店铺评分-售后服务-等级');
+        JD_API_TEMP['sumData'][0]['sumScore'][2]['score'] = API.zjn.get(shopDataobj, '店铺评分-售后服务-分数');
+        JD_API_TEMP['sumData'][0]['sumScore'][2]['desc'] = "比同行业平均水平: " + API.zjn.get(shopDataobj, '店铺评分-售后服务-等级');
         if(API.zjn.get(shopDataobj, '店铺评分-售后服务-等级').indexOf('高') > -1){
-            JD_API_TEMP['sumData']['sumScore'][0]['isok'] = true
+            JD_API_TEMP['sumData'][0]['sumScore'][2]['isok'] = true
         }
     }
 
-    console.log(chrome)
     // 遍历搜本店页面,获取所有商品链接
-    let sbdData = await getSbdData(num)
+    let sbdData = await getSbdData(num, diagnosisStatus, statusnum, store)
     
     for(let i =0; i < num; i++){
+        store.$patch((state)=>{
+            state.diagnosisStatus += statusnum
+        })
+        // 默认的商品obj
         let dtlobj = {
             "commentTag": [
                 {
@@ -834,9 +723,10 @@ const diagnosisProduct = async(num) =>{
                 }
             ]
         }
+
         let skuUrl = sbdData.skuLinkList[i];
         let pageData = await getSkuPageData(skuUrl, i)
-        API.zcl.print("pageData", pageData)
+
         // 店铺ID
         dtlobj['shopId'] = pageData['shopId'];
         // 评价标签 -好评
@@ -882,7 +772,6 @@ const diagnosisProduct = async(num) =>{
             }else{
                 dtlobj['commentDiagnosis'][6]['desc'] = '不合格'
             }
-
         }
         // 主图链接
         dtlobj['commodityInfo']['mainImg'] = pageData['mainImgUrl']
@@ -899,8 +788,13 @@ const diagnosisProduct = async(num) =>{
             if(pageData['dtlPicList'].length >= 5){
                 dtlobj['detailImg']['desc'] = "详情图片数量≥5"
                 dtlobj['detailImg']['isok'] = true
+                JD_API_TEMP['sumData'][0]['detailImg']['okNum'] += 1
+            }else{
+                JD_API_TEMP['sumData'][0]['detailImg']['notNum'] += 1
             }
             dtlobj['detailImg']['msg'] = "1、详情图片数量: " + pageData['dtlPicList'].length
+        }else{
+            JD_API_TEMP['sumData'][0]['detailImg']['notNum'] += 1
         }
         // 主图分辨率
         if(pageData['mainImgUrl'] != '暂无数据'){
@@ -910,7 +804,12 @@ const diagnosisProduct = async(num) =>{
             if(mainwh.width >= 800 && mainwh.height>= 800){
                 dtlobj['mainImgDiagnosis'][0]['desc'] = "主图分辨率≥800*800"
                 dtlobj['mainImgDiagnosis'][0]['isok'] = true
+                JD_API_TEMP['sumData'][0]['sumMainImg'][0]['okNum'] += 1
+            }else{
+                JD_API_TEMP['sumData'][0]['sumMainImg'][0]['notNum'] += 1
             }
+        }else{
+            JD_API_TEMP['sumData'][0]['sumMainImg'][0]['notNum'] += 1
         }
         // 主图数量
         if(pageData['mainPicList'].length > 0){
@@ -918,7 +817,12 @@ const diagnosisProduct = async(num) =>{
             if(pageData['mainPicList'].length >=5){
                 dtlobj['mainImgDiagnosis'][1]['desc'] = "图片数量≥5张";
                 dtlobj['mainImgDiagnosis'][1]['isok'] = true;
+                JD_API_TEMP['sumData'][0]['sumMainImg'][1]['okNum'] += 1
+            }else{
+                JD_API_TEMP['sumData'][0]['sumMainImg'][1]['notNum'] += 1
             }
+        }else{
+            JD_API_TEMP['sumData'][0]['sumMainImg'][1]['notNum'] += 1
         }
         // 视频数量
         if(pageData['videoUrl'] != '暂无数据'){
@@ -926,6 +830,9 @@ const diagnosisProduct = async(num) =>{
             dtlobj['mainImgDiagnosis'][2]['isok'] = true;
             dtlobj['mainImgDiagnosis'][2]['msg'] = "3、主图小视频数量: 1";
             dtlobj['mainImgDiagnosis'][2]['videoUrl'] = pageData['videoUrl']
+            JD_API_TEMP['sumData'][0]['sumMainImg'][2]['okNum'] += 1
+        }else{
+            JD_API_TEMP['sumData'][0]['sumMainImg'][2]['notNum'] += 1
         }
         //视频时长
         if(pageData['videoTime'] != 0){
@@ -935,13 +842,23 @@ const diagnosisProduct = async(num) =>{
             if(pt >=10){
                 dtlobj['mainImgDiagnosis'][3]['desc'] = "主图小视频时长≥10s"
                 dtlobj['mainImgDiagnosis'][3]['isok'] = true
+                JD_API_TEMP['sumData'][0]['sumMainImg'][3]['okNum'] += 1
+            }else{
+                JD_API_TEMP['sumData'][0]['sumMainImg'][3]['notNum'] += 1
             }
+        }else{
+            JD_API_TEMP['sumData'][0]['sumMainImg'][3]['notNum'] += 1
         }
         // 主图白底图检测
         if(pageData['mainImgUrl'] != '暂无数据'){
             let acmtUrl = 'http://120.25.224.61:9001/photo_white?url=https://img30.360buyimg.com/sku/jfs/t1/110075/5/32692/75992/6359f92cEc87aee0c/cb14e8fdc54edeb8.jpg'
             let msg = {type: 'zfetch', funcs:"JDbdIMG", config:{url:acmtUrl}}
             let jsondata = await API.sendMessage(msg)
+            try{
+                jsondata = JSON.parse(jsondata)
+            }catch(e){
+                API.zcl.print('白底图转换JSON失败', e)
+            }
             if(jsondata.is_white_base_img != undefined){
                 
                 if(jsondata['is_white_base_img'] == 0){
@@ -950,41 +867,68 @@ const diagnosisProduct = async(num) =>{
                     dtlobj['mainImgDiagnosis'][4]['imgUrl'] = pageData['mainImgUrl'];
                     dtlobj['mainImgDiagnosis'][4]['isok'] = false
                     dtlobj['mainImgDiagnosis'][4]['msg'] = "5、白底图: 否"
+                    JD_API_TEMP['sumData'][0]['sumMainImg'][4]['notNum'] += 1
                 }else{
                     // 是白底图
                     dtlobj['mainImgDiagnosis'][4]['desc'] = "主图最后一张为白底图"
                     dtlobj['mainImgDiagnosis'][4]['imgUrl'] = pageData['mainImgUrl'];
                     dtlobj['mainImgDiagnosis'][4]['isok'] = true
                     dtlobj['mainImgDiagnosis'][4]['msg'] = "5、白底图: 是"
+                    JD_API_TEMP['sumData'][0]['sumMainImg'][4]['okNum'] += 1
                 }
+            }else{
+                JD_API_TEMP['sumData'][0]['sumMainImg'][4]['notNum'] += 1
             }
+        }else{
+            JD_API_TEMP['sumData'][0]['sumMainImg'][4]['notNum']
         }
         // 主图重复图检测
         if(pageData['mainPicList'].length > 0){
             let acmtUrl = 'http://120.25.224.61:9001/main_images_check'
             let msg = {type: 'zfetch', funcs:"JDReIMG", config:{url:acmtUrl, datas:pageData['mainPicList']}}
             let jsondata = await API.sendMessage(msg)
+            try{
+                jsondata = JSON.parse(jsondata)
+            }catch(e){
+                API.zcl.print('重复图转换JSON失败', e)
+            }
+       
             if(jsondata.img_repeat_check != undefined){
                 dtlobj['mainImgDiagnosis'][5]['data'] = jsondata['img_repeat_check']['data'];
                 dtlobj['mainImgDiagnosis'][5]['desc'] = jsondata['img_repeat_check']['desc'];
                 dtlobj['mainImgDiagnosis'][5]['isok'] = jsondata['img_repeat_check']['isok'];
                 dtlobj['mainImgDiagnosis'][5]['msg'] = "6、" + jsondata['img_repeat_check']['msg'];
-        
-            }
+                if(dtlobj['mainImgDiagnosis'][5]['isok'] == true){
+                    JD_API_TEMP['sumData'][0]['sumMainImg'][5]['okNum'] += 1
+                }else{
+                    JD_API_TEMP['sumData'][0]['sumMainImg'][5]['notNum'] += 1
+                }
 
+            }else{
+                JD_API_TEMP['sumData'][0]['sumMainImg'][5]['notNum'] += 1
+            }
+        }else{
+            JD_API_TEMP['sumData'][0]['sumMainImg'][5]['notNum'] += 1
         }
         //标题诊断
         if(pageData['skuTitle'] != '暂无数据'){
             let acmtUrl = "http://120.25.224.61:9001/word_02_info?user_id=1111&title=Apple iPhone 14 (A2884) 128GB 星光色 支持移动联通电信5G 双卡双待手机"
             let msg = {type: 'zfetch', funcs:"JDTitleck", config:{url:acmtUrl}}
             let jsondata = await API.sendMessage(msg)
-
+            try{
+                jsondata = JSON.parse(jsondata)
+            }catch(e){
+                API.zcl.print('标题诊断转换JSON失败', e)
+            }
             // 标题字符数
             dtlobj['titleDiagnosis'][0]['data'] = pageData['skuTitle'].length
             dtlobj['titleDiagnosis'][0]['msg'] = "1、标题字符数: " + pageData['skuTitle'].length
             if(pageData['skuTitle'].length >= 60){
                 dtlobj['titleDiagnosis'][0]['desc'] = "标题字符数≥60个"
                 dtlobj['titleDiagnosis'][0]['isok'] = true
+                JD_API_TEMP['sumData'][0]['sumTitle'][0]['okNum'] += 1
+            }else{
+                JD_API_TEMP['sumData'][0]['sumTitle'][0]['notNum'] += 1
             }
 
             // 特殊字符
@@ -994,24 +938,28 @@ const diagnosisProduct = async(num) =>{
                 dtlobj['titleDiagnosis'][1]['msg'] = "2、标题特殊符号: 有" 
                 dtlobj['titleDiagnosis'][1]['isok'] = false
                 dtlobj['titleDiagnosis'][1]['desc'] = "标题含特殊字符: " + titlecheck['chars']
+                JD_API_TEMP['sumData'][0]['sumTitle'][1]['notNum'] += 1
             }else{
                 dtlobj['titleDiagnosis'][1]['msg'] = "2、标题特殊符号: 无" 
                 dtlobj['titleDiagnosis'][1]['isok'] = true
                 dtlobj['titleDiagnosis'][1]['desc'] = "标题不含特殊字符"
+                JD_API_TEMP['sumData'][0]['sumTitle'][1]['okNum'] += 1
             }
             
-
-
             // 空格
             if(jsondata.word_space_check != undefined){
                 dtlobj['titleDiagnosis'][2]['data'] = jsondata['word_space_check']['data']
                 dtlobj['titleDiagnosis'][2]['desc'] = "标题含空格：" +  jsondata['word_space_check']['data']
                 if(jsondata['word_space_check']['data'] == 0){
                     dtlobj['titleDiagnosis'][2]['isok'] = true
+                    JD_API_TEMP['sumData'][0]['sumTitle'][2]['okNum'] += 1
                 }else{
                     dtlobj['titleDiagnosis'][2]['isok'] = false
+                    JD_API_TEMP['sumData'][0]['sumTitle'][2]['notNum'] += 1
                 }
                 dtlobj['titleDiagnosis'][2]['msg'] = "3、" + jsondata['word_space_check']['msg']
+            }else{
+                JD_API_TEMP['sumData'][0]['sumTitle'][2]['notNum'] += 1
             }
 
             // 重复词
@@ -1020,13 +968,22 @@ const diagnosisProduct = async(num) =>{
                 dtlobj['titleDiagnosis'][3]['desc'] = "标题重复词：" +  jsondata['word_repeat_check']['data']
                 if(jsondata['word_repeat_check']['isok'] == 1){
                     dtlobj['titleDiagnosis'][3]['isok'] = true
+                    JD_API_TEMP['sumData'][0]['sumTitle'][3]['okNum'] += 1
                 }else{
                     dtlobj['titleDiagnosis'][3]['isok'] = false
+                    JD_API_TEMP['sumData'][0]['sumTitle'][3]['notNum'] += 1
                 }
                 dtlobj['titleDiagnosis'][3]['msg'] = "4、" + jsondata['word_repeat_check']['msg']
+            }else{
+                JD_API_TEMP['sumData'][0]['sumTitle'][3]['notNum'] += 1
             }
 
 
+        }else{
+            JD_API_TEMP['sumData'][0]['sumTitle'][0]['notNum'] += 1
+            JD_API_TEMP['sumData'][0]['sumTitle'][1]['notNum'] += 1
+            JD_API_TEMP['sumData'][0]['sumTitle'][2]['notNum'] += 1
+            JD_API_TEMP['sumData'][0]['sumTitle'][3]['notNum'] += 1
         }
         // 活动数量
         if(pageData['activities'].length > 0){
@@ -1052,10 +1009,39 @@ const diagnosisProduct = async(num) =>{
             dtlobj['promotionsDiagnosis'][1]['isok'] = false
             dtlobj['promotionsDiagnosis'][1]['msg'] = "活动详情: 无"
         }
-        API.zcl.print("dtlobj", dtlobj)
+        // 好评
+        if(pageData['goodComment'] != '暂无数据'){
+            if(pageData['goodComment'] > 0){
+                JD_API_TEMP['sumData'][0]['commentNum'][0]['okNum'] += 1
+            }else{
+                JD_API_TEMP['sumData'][0]['commentNum'][0]['notNum'] += 1
+            }
+        }else{
+            JD_API_TEMP['sumData'][0]['commentNum'][0]['notNum'] += 1
+        }
+        // 差评
+        if(pageData['badComment'] != '暂无数据'){
+            if(pageData['badComment'] > 0){
+                JD_API_TEMP['sumData'][0]['commentNum'][1]['okNum'] += 1
+            }else{
+                JD_API_TEMP['sumData'][0]['commentNum'][1]['notNum'] += 1
+            }
+        }else{
+            JD_API_TEMP['sumData'][0]['commentNum'][1]['notNum'] += 1
+        }
+
+        JD_API_TEMP['detailData'].push(dtlobj)
     }    
-    
+
+    // 统计的赋值
+    JD_API_TEMP['sumData'][0]['totalNum'] = JD_API_TEMP['detailData'].length;
+
+    return JD_API_TEMP
 }
+
+
+// 压缩
+
 
 
 export {getSkuId, getVideoTitle, diagnosisProduct}

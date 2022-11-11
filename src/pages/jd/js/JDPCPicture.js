@@ -116,6 +116,8 @@ const getDtlImgPhone = async (skuId) => {
     return dtlImgList;
 }
 
+
+
 // 移动端全部下载
 const getAllImgPhone = async (skuId) => {
     // 主图
@@ -409,11 +411,17 @@ function packageImages(imgsSrc, imgName, zipName) {
             if (imgsSrc.length == imgBase64.length) {
                 for (var i = 0; i < imgsSrc.length; i++) {
                     // 文件名  数据
-                    let imgNames = imgName + "_" + i
+
+                    let imgNames =  imgName + "_" + i
                     //img.file(imgNames + imageSuffix[i], imgBase64[i], {
+                    /* zip.folder("详情图").file(imgNames + imageSuffix[i], imgBase64[i], {
+                        base64: true,
+                    }) */
+
                     zip.file(imgNames + imageSuffix[i], imgBase64[i], {
                         base64: true,
                     })
+
                 }
                 zip.generateAsync({
                     type: 'blob'

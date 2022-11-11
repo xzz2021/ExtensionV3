@@ -33,8 +33,6 @@ class zRegs{
             if(regs != null){
                 result = regs
             }
-        }else{
-            API.zcl.print('错误', '参数1不是String')
         }
         return result
     }
@@ -55,8 +53,6 @@ class zRegs{
                     result = regs[index]
                 }
             }
-        }else{
-            API.zcl.print('错误', '参数1不是String')
         }
         return result
     }
@@ -73,8 +69,6 @@ class zRegs{
             if(regs != null){
                 result = regs
             }
-        }else{
-            API.zcl.print('错误', '参数1不是String')
         }
         return result
     }
@@ -94,8 +88,6 @@ class zRegs{
                     result = regs[index]
                 }
             }
-        }else{
-            API.zcl.print('错误', '参数1不是String')
         }
         return result
     }
@@ -112,8 +104,6 @@ class zRegs{
             if(regs != null){
                 result = regs
             }
-        }else{
-            API.zcl.print('错误', '参数1不是String')
         }
         return result
     }
@@ -133,8 +123,6 @@ class zRegs{
                     result = regs[index]
                 }
             }
-        }else{
-            API.zcl.print('错误', '参数1不是String')
         }
         return result
     }
