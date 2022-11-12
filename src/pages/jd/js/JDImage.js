@@ -157,6 +157,7 @@ const getJDPCDtlPics = async() => {
             let img_url = img[i].match('.+\\.(jpg|png|gif)')[0]
             img_url = img_url.replace('image:url(', 'https:');
             img_url = img_url.replace('http:', 'https:');
+            img_url = img_url.replace('.avif', '');
             img_list.push(img_url);
         }
     }
@@ -411,38 +412,45 @@ const getJDYDdtlPics = async() => {
         
         let res2 = res1.replace(/\\"/g,'')
         //console.log(res2)
-        let regs = res2.match(/<img src=.*?(\S+) alt=>/gi)
-     
-        if(regs !=null){
-            
-            if(regs instanceof Array){
-                for(var i=0;i<regs.length; i++){
-                    let imgstr = regs[i].replace('<img src=',"");
-                    let imgUrl = imgstr.replace(' alt=>',"");
-                    dtlImgList.push(imgUrl);
-                }
+        let regs = res2.match(/http.*?jpg/gi)
+        if(regs != null){
+            for(var i=0;i<regs.length; i++){
+                let imgstr = regs[i].replace('.avif',"");
+                dtlImgList.push(imgstr);
             }
-        }else{
-            let regs = res2.match(/<img src=.*?(\S+)>/gi)
-            if(regs instanceof Array){
-                for(var i=0;i<regs.length; i++){
-                    let imgstr = regs[i].replace('<img src=',"");
-                    let imgUrl = imgstr.replace('/>',"");
-                    imgUrl = imgUrl.split(' ')[0]
-                    //console.log(imgUrl)
-                    dtlImgList.push(imgUrl);
-                }
+        }
+        let regs2 = res2.match(/http.*?png/gi)
+        if(regs2 != null){
+            for(var i=0;i<regs2.length; i++){
+                let imgstr = regs2[i].replace('.avif',"");
+                dtlImgList.push(imgstr);
+            }
+        }
+        let regs3 = res2.match(/http.*?gif/gi)
+        if(regs3 != null){
+            for(var i=0;i<regs3.length; i++){
+                let imgstr = regs3[i].replace('.avif',"");
+                dtlImgList.push(imgstr);
             }
         }
 
-        if(dtlImgList.length == 0){
-            let regs2 = res1.match(/sku(.*?)jpg/g) 
-            if(regs2.length > 0){
-                for(let k =0; k< regs2.length; k++){
-                    dtlImgList.push('https://img12.360buyimg.com/' + regs2[k])
-                }
-                
-            }
+        let regs4 = res1.match(/sku(.*?)jpg/g) 
+        if(regs4 != null){
+            for(let k =0; k< regs4.length; k++){
+                dtlImgList.push('https://img12.360buyimg.com/' + regs4[k])
+            } 
+        }
+        let regs5 = res1.match(/sku(.*?)png/g) 
+        if(regs5 != null){
+            for(let k =0; k< regs5.length; k++){
+                dtlImgList.push('https://img12.360buyimg.com/' + regs5[k])
+            } 
+        }
+        let regs6 = res1.match(/sku(.*?)gif/g) 
+        if(regs6 != null){
+            for(let k =0; k< regs6.length; k++){
+                dtlImgList.push('https://img12.360buyimg.com/' + regs6[k])
+            } 
         }
         
     });
