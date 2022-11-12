@@ -250,7 +250,7 @@ const getJDPCallPicsDir = async() => {
     return allPics
 }
 
-// 获取PC端全部下载
+// 下载PC端全部下载
 const dwdJDPCallPics = async() => {
     let result = await getJDPCallPics();
     let timenum = API.ztime.ymd2()
@@ -259,7 +259,7 @@ const dwdJDPCallPics = async() => {
     API.zzip.zipImage(result, filename)
 }
 
-// 获取PC端全部下载带文件夹
+// 下载PC端全部下载带文件夹
 const dwdJDPCallPicsDir = async() => {
     let result = await getJDPCallPicsDir();
     let timenum = API.ztime.ymd2()
@@ -434,22 +434,22 @@ const getJDYDdtlPics = async() => {
             }
         }
 
-        let regs4 = res1.match(/sku(.*?)jpg/g) 
+        let regs4 = res1.match(/sku\/jfs(.*?)jpg/g) 
         if(regs4 != null){
             for(let k =0; k< regs4.length; k++){
-                dtlImgList.push('https://img12.360buyimg.com/' + regs4[k])
+                dtlImgList.push('https://m.360buyimg.com/' + regs4[k])
             } 
         }
-        let regs5 = res1.match(/sku(.*?)png/g) 
+        let regs5 = res1.match(/sku\/jfs(.*?)png/g) 
         if(regs5 != null){
             for(let k =0; k< regs5.length; k++){
-                dtlImgList.push('https://img12.360buyimg.com/' + regs5[k])
+                dtlImgList.push('https://m.360buyimg.com/' + regs5[k])
             } 
         }
-        let regs6 = res1.match(/sku(.*?)gif/g) 
+        let regs6 = res1.match(/sku\/jfs(.*?)gif/g) 
         if(regs6 != null){
             for(let k =0; k< regs6.length; k++){
-                dtlImgList.push('https://img12.360buyimg.com/' + regs6[k])
+                dtlImgList.push('https://m.360buyimg.com/' + regs6[k])
             } 
         }
         
