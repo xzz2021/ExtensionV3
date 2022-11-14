@@ -20,7 +20,8 @@ const devconfig = {
           __VUE_OPTIONS_API__: true,
           __VUE_PROD_DEVTOOLS__: false,
           "AUTHOR": JSON.stringify('xzz2022'),
-          "VERSION": JSON.stringify('0928')
+          "VERSION": JSON.stringify('0928'),
+          'DEBUG': true
         })
     ],
     // watch: true,  // 监听源文件的变动,重新编译

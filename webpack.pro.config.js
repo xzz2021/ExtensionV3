@@ -84,7 +84,8 @@ const proconfig = {
             __VUE_OPTIONS_API__: true,
             __VUE_PROD_DEVTOOLS__: false,
             "AUTHOR": JSON.stringify('user'),
-            "VERSION": JSON.stringify('0928')
+            "VERSION": JSON.stringify('0928'),
+            'DEBUG': false
           }),
 
     ],

@@ -2,9 +2,9 @@
 @import 'variable.scss';
 
 .jclpanel {
-    position: fixed;
-    top: 30px;
-    left: 20px;
+    // position: fixed;
+    // top: 30px;
+    // left: 20px;
     z-index: 11111;
     background-color: $white;
     width: 180px;
@@ -28,26 +28,20 @@
         border-radius: 4px;
         background: rgba(255, 252, 246, 0.712);
   
-        .el-dropdown {
+        // .el-dropdown {
           .el-dropdown-link {
-            // background-color: rgb(101, 243, 124);
             display: flex;
             align-items: center;
+            color: #666;
             cursor: pointer;
-            
-            // margin-right: 20px;
             .jclicon {
               margin: 0 4px 0 10px;
               width: 16px;
-  
             }
             .title {
               text-align: left;
-              // background-color: rgb(238, 248, 98);
-              // margin-right: 14px;
               width: 94px;
               padding: 9px 10px 9px 0;
-              // height: 20px;
               font-size: 14px;
               font-family: $fontYaHei;
               font-weight: 400;
@@ -57,22 +51,18 @@
               font-size: 10px;
               width: 16px;
               margin-right: 10px;
-              // padding-right: 20px;
             }
             &:hover {
-              color: $jclbg !important;
+              color: #ff9712 !important;
               background-color: #ffa9391f;
             }
           }
-        }
+        // }
       }
       .version {
-        // margin: 12px 0;
-        // padding-top: 10px;
         margin: 0 auto;
         width: 74px;
         text-align: center;
-        // height: 20px;
         font-size: 14px;
         font-family: $fontYaHei;
         font-weight: 400;
@@ -127,3 +117,29 @@
   background-color: #ffa9391f;
   color: $jclbg;
 }
+//全局固定定位
+.jclBox{
+  position: fixed;
+  z-index: 9999;
+}
+
+:deep(.el-dropdown-item2 .el-dropdown){
+  width: 110px;
+  margin-right: -10px;
+}
+.title2{
+  font-family: $fontYaHei;
+  font-weight: 400;
+  // padding: 5px 10px;
+  width: 100px;
+
+}
+
+:deep(.el-dropdown-item2){
+  padding: 10px;
+  &:hover {
+    .title2{
+      color: #ff9712 !important;
+    }
+  }
+ }

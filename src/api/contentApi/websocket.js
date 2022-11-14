@@ -1,13 +1,13 @@
 /*
  * @Date: 2022-10-31 08:21:36
  * @LastEditors: xzz2021
- * @LastEditTime: 2022-10-31 14:01:00
+ * @LastEditTime: 2022-11-14 14:50:23
  */
 
 
-    const ws = new WebSocket('ws://localhost:7777')
-    let time = 0
-    function wsInit(){
+function wsInit(){
+      const ws = new WebSocket('ws://localhost:7777')
+      let time = 0
 
           ws.onopen = (e) => {
             console.log('-------bg--------已连接------:', new Date())
@@ -36,4 +36,4 @@
           }
         
         }
-wsInit()
+        DEBUG ? wsInit() : ''

@@ -192,7 +192,7 @@ const comconfig = {
 
 module.exports = (env,args) => {
     if (env.WEBPACK_WATCH) {
-        console.log('env: ', env);
+        // console.log('env: ', env)
         return merge(comconfig, watchconfig)
     }else if(env.WEBPACK_SERVE){
         return merge(comconfig, devconfig)

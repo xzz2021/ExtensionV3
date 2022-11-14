@@ -123,3 +123,8 @@ s.onload = function() {
   }, */
 
   
+
+  //---------------------导入调试的全局变量,生产模式会自动false-----------------------
+// import {getShow} from'./show'
+// let aa = getShow(DEBUG)
+// console.log('aa: ', aa);
