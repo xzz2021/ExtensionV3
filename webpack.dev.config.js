@@ -105,26 +105,3 @@ const devconfig = {
 
 module.exports = devconfig
 
-
-
-//-----webpack-dev-server----本质上是开了一个express服务器
-/*
-let express = require('express')
-let app = express()
-const  webpack = require('webpack')
-const webpackOptions = require('./webpack.config.js')
-const webpackDevMiddleware = require('webpack-dev-middleware')
-webpackOptions.mode = 'development'
-
-const compiler = webpack(webpackOptions)
-编译完会生成文件并交给中间件
-app.use(webpackDevMiddleware(compiler, {}))
-app.listen(8888)
-
-
-
-
-
-
-
-*/

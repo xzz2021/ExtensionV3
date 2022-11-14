@@ -11,7 +11,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 // const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const VueLoaderPlugin = require('vue-loader').VueLoaderPlugin
 
-//实现elementplus自动按需加载
+
 const AutoImport = require('unplugin-auto-import/webpack')
 const Components = require('unplugin-vue-components/webpack')
 const { ElementPlusResolver } = require('unplugin-vue-components/resolvers')
@@ -58,8 +58,7 @@ const comconfig = {
 
         new VueLoaderPlugin(),   // 引入vue解析插件
         
-        //实现elementplus自动按需加载-----以及任何其他自定义引入的自动按需引入-------
-        AutoImport({  // https://github.com/antfu/unplugin-auto-import/tree/main/src/presets
+        AutoImport({
             include: [
                 /\.[tj]sx?$/, // .ts, .tsx, .js, .jsx
                 /\.vue$/, /\.vue\?vue/, // .vue
@@ -69,7 +68,6 @@ const comconfig = {
                 'vue',
                 'pinia',
                 {
-                    // '../../stores/userStore':['userStore'],
                     './piniaStore': ['piniaStore', 'userStore']
                 }
                 
@@ -119,7 +117,7 @@ const comconfig = {
         rules: [
             {
                 oneOf:[
-                    // {  //将库(函数)挂载暴露到外部window-----------
+                    // {  //将库(函数)挂载暴露到外部window-------------对插件开发无效------因为顶层对象不同----------
                     //     test: require.resolve("jquery"),
                     //     loader: "expose-loader",
                     //     options: {
@@ -128,7 +126,7 @@ const comconfig = {
                     //         },
                     //     },
                     // },
-                    // {  //将库(函数)挂载暴露到外部window-----------
+                    // {  //将库(函数)挂载暴露到外部window-----------对插件开发无效------因为顶层对象不同----------
                     //     test: require.resolve("lodash"),
                     //     loader: "expose-loader",
                     //     options: {
