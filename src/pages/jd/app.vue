@@ -252,25 +252,23 @@
 </VueDragResize>
     </div>
     <LoginPanel ref="loginref" />
+    <JdScanRecord />
     <!-- <oneClickDiagnosis /> -->
     <!-- <MyProgress :show="progressVisible" :percentage="percentage" /> -->
 
-    <!-- <div class="test">
+    <div class="test">
       <el-button type="primary" @click="test1">test1</el-button>
       <el-button type="primary" @click="test2">test2</el-button>
-      <el-button type="primary" @click="test3">test3</el-button>
-    </div> -->
+      <!-- <el-button type="primary" @click="test3">test3</el-button> -->
+    </div>
 </template>
 
 <script setup>
-
 import {videoDownloadczp} from './js/JDVideo.js'
 import {downLoadJDcommentPic, downLoadJDcommentNoPic} from './js/JDcomments.js'
 import { getMainImg, getSkuImg, packageImages, packageSkuImages, downloadDtlImg, downloadAllImg, getMainImgPhone, getSkuImgPhone, getDtlImgPhone, getAllImgPhone } from './js/JDPCPicture.js'
 import { getOrderList, setOrderList } from './js/JDorderTag.js'
 import { getVideoTitle, getSkuId, diagnosisProduct} from './js/JDDetailData.js'
-
-
 
 
 //持久化的store数据
@@ -280,10 +278,16 @@ const { location } = storeToRefs(userstore)
 
 //各自平台的
 const store = piniaStore()
-const { count } = storeToRefs(store)
+const { info_id, scanData, scanShow } = storeToRefs(store)
 
+
+// const { proxy } = getCurrentInstance()
 //---------------单纯字符串变量不可使用reactive---------
 //-----ref定义的数据：操作数据需要.value，读取数据时模板中直接读取不需要
+
+//            console.log('wholeShow.scanShow: ', scanShow.value);
+
+// console.log('scanData.length: ', scanData.value.length)
 
 let currentHref = ref('')
 let curCookies  = ref('')
@@ -292,10 +296,11 @@ const version = VERSION
 const userid = ref('')
 const userPhone = ref('')
 
-
 const test1 = () => {
+  console.log('==========test')
   //v3可以直接滚动
-  API.scroll.stepEase(800,4)
+  // API.scroll.stepEase(800,4)
+  // proxy.xzz('================')
 }
 const test2 = () => {
   API.scroll.goToBottomEase()
@@ -486,7 +491,10 @@ const logout = () => {
 
 const getUserInfo = async () => {
 let userInfoStore  =  await  API.Storage.get('userInfo')
-  if(userInfoStore == '') return userid.value = ''
+  if(userInfoStore == '') return 
+  store.$patch((state)=>{
+      state.userInfo = userInfoStore
+    })
     userid.value = userInfoStore.userid
     let a  = userInfoStore.userPhone + ''
   let b = a.substring(3,7)
@@ -512,11 +520,11 @@ getUserInfo()
 <style lang="scss" scoped>
 @import "../../css/sass/jclpanel.scss";
 
-// .test2{
-//   position: fixed;
-//   top: 30%;
-//   left: 20%;
-//   background-color: #fff;
-// }
+.test{
+  position: fixed;
+  top: 30%;
+  left: 20%;
+  background-color: #fff;
+}
 
 </style>

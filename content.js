@@ -128,3 +128,28 @@ s.onload = function() {
 // import {getShow} from'./show'
 // let aa = getShow(DEBUG)
 // console.log('aa: ', aa);
+
+
+
+
+
+
+
+//class 的引入
+
+/* class app {
+  constructor(name){
+      this.name = name
+  }
+  speak(){
+      return 'my name is ' + this.name
+  }
+}
+
+export default app */
+
+// import app from './class'
+// let a = new app('xzz66666')
+// let ccc = a.speak()
+// console.log('ccc: ', ccc)
+

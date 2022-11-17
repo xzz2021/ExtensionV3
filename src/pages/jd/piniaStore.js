@@ -11,6 +11,10 @@ export const piniaStore = defineStore('selfInfo', {
     state: () => {
       return {
         count: 0,
+        info_id: 0,
+        scanShow: true,
+        diagnosisData: [],
+        scanData: ['uighigi','uitgiuig'],
         // userInfo: {
         //   userid: '',
         //   userToken: '',
@@ -23,8 +27,6 @@ export const piniaStore = defineStore('selfInfo', {
         //   userPhone: '',
         //   timeStamp: ''
         // }],
-        diagnosisShow: false,
-        diagnosisData: {shopUrl:'',shopName:'',sumData: [],detailData:[],timeTamp: '87234254585'}
       }
     },
     // persist: true, //持久化
