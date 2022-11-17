@@ -95,6 +95,7 @@ const injectJDSkuPageData = async() => {
     if(document.getElementsByClassName('sku-name')[0] != undefined){
         result['skuTitle'] = document.getElementsByClassName('sku-name')[0].innerText;
     }
+    
     // 获取商品价格
     if(result['skuID'] != '暂无数据'){
         let pcn = 'price J-p-' + result['skuID']

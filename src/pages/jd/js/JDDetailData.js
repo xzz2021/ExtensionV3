@@ -851,7 +851,7 @@ const diagnosisProduct = async(num, diagnosisStatus, statusnum, store) =>{
         }
         // 主图白底图检测
         if(pageData['mainImgUrl'] != '暂无数据'){
-            let acmtUrl = 'http://120.25.224.61:9001/photo_white?url=https://img30.360buyimg.com/sku/jfs/t1/110075/5/32692/75992/6359f92cEc87aee0c/cb14e8fdc54edeb8.jpg'
+            let acmtUrl = 'http://120.25.224.61:9001/photo_white?url='+ pageData['mainImgUrl']
             let msg = {type: 'zfetch', funcs:"JDbdIMG", config:{url:acmtUrl}}
             let jsondata = await API.sendMessage(msg)
             try{
@@ -912,7 +912,7 @@ const diagnosisProduct = async(num, diagnosisStatus, statusnum, store) =>{
         }
         //标题诊断
         if(pageData['skuTitle'] != '暂无数据'){
-            let acmtUrl = "http://120.25.224.61:9001/word_02_info?user_id=1111&title=Apple iPhone 14 (A2884) 128GB 星光色 支持移动联通电信5G 双卡双待手机"
+            let acmtUrl = "http://120.25.224.61:9001/word_02_info?user_id=1111&title=" + pageData['skuTitle']
             let msg = {type: 'zfetch', funcs:"JDTitleck", config:{url:acmtUrl}}
             let jsondata = await API.sendMessage(msg)
             try{
