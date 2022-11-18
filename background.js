@@ -159,9 +159,21 @@ chrome.runtime.onMessage.addListener(
 
       case 'zfetch' : {
         (async () => {
-          console.log(message)
-          let res = await API.zpost(message.url, message.datas)
-          sendResponse(res)
+          let res = undefined
+          let zos = message.funcs
+          let mobj = message.config
+          if(zos == 'JDReIMG'){
+            let res = await API.zfetch.getReimg(mobj.url, mobj.datas)
+            sendResponse(res)
+          }
+          else if(zos == 'JDbdIMG'){
+            let res = await API.zfetch.getBdimg(mobj.url)
+            sendResponse(res)
+          }
+          else if(zos == 'JDTitleck'){
+            let res = await API.zfetch.getTitlecheck(mobj.url)
+            sendResponse(res)
+          }
         })()
         return true
       }

@@ -33,8 +33,6 @@ class zRegs{
             if(regs != null){
                 result = regs
             }
-        }else{
-            API.zcl.print('错误', '参数1不是String')
         }
         return result
     }
@@ -55,8 +53,6 @@ class zRegs{
                     result = regs[index]
                 }
             }
-        }else{
-            API.zcl.print('错误', '参数1不是String')
         }
         return result
     }
@@ -73,8 +69,6 @@ class zRegs{
             if(regs != null){
                 result = regs
             }
-        }else{
-            API.zcl.print('错误', '参数1不是String')
         }
         return result
     }
@@ -94,8 +88,6 @@ class zRegs{
                     result = regs[index]
                 }
             }
-        }else{
-            API.zcl.print('错误', '参数1不是String')
         }
         return result
     }
@@ -112,8 +104,6 @@ class zRegs{
             if(regs != null){
                 result = regs
             }
-        }else{
-            API.zcl.print('错误', '参数1不是String')
         }
         return result
     }
@@ -133,10 +123,26 @@ class zRegs{
                     result = regs[index]
                 }
             }
-        }else{
-            API.zcl.print('错误', '参数1不是String')
         }
         return result
+    }
+
+    checkTSchar(strs){
+        let arr = [',', '(', ')', '*', '[', ']', '=', '-', '*', '（', '）','【', '】','，','/','<', '>', '?', '？', '《', '》', '|', '}', '{', '@', '!', '！', '#', '$', '￥', '%', '^', '.', '&','-', '—','"', "'",':', '：',';', '；']
+        let count = 0
+        let charList = ''
+        for (let i = 0; i < arr.length; i++) {
+            let ele = arr[i]
+            if (strs.indexOf(ele) >= 0) {
+                count += 1
+                if(charList.indexOf(ele) == -1){
+                    charList = ele + ' ' + charList
+                }
+            }
+
+        }
+        return {"char_count":count, "chars":charList}
+
     }
     
 
