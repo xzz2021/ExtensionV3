@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-11-05 15:11:47
  * @LastEditors: xzz2021
- * @LastEditTime: 2022-11-07 13:58:03
+ * @LastEditTime: 2022-11-10 17:47:52
  */
 
 
@@ -17,6 +17,11 @@ const isEmpty2 = (obj) => JSON.stringify(obj) === '{}'
 //浅拷贝对象
 const shallowCopy = obj => Object.assign({}, obj)
 // const shallowCopy2 = obj => {...obj}
+
+//简单数据类型浅拷贝会直接拷贝数据
+//复杂数据类型浅拷贝只是拷贝内存空间指向,修改数据会影响原始数据,因为是同一个内存空间(如内部存在不同属性值会直接覆盖,因为是直接改内存指向)
+//复杂数据类型直接赋值是浅拷贝,会改变其内存指向,而打点操作或者遍历则是深拷贝
+//深拷贝会直接完整复制所有数据(且内部不同属性都会保留,因为是在它自己的内存空间复制属性)
 
 //创建一个没有原型__proto__的空对象
 const map = Object.create(null)

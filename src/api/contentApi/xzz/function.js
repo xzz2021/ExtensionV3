@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-11-03 08:47:46
  * @LastEditors: xzz2021
- * @LastEditTime: 2022-11-05 14:59:55
+ * @LastEditTime: 2022-11-14 09:04:43
  */
 
 
@@ -132,3 +132,14 @@ const toFixed = (n, fixed) => ~~(Math.pow(10, fixed) * n) / Math.pow(10, fixed)
 // (fn, ...a) =>
 // (...b) =>
 //     fn(...a, ...b);
+
+
+// 等待document加载好再执行函数
+const ready = function (cb) {
+    // Check if the `document` is loaded completely
+    document.readyState === "loading"
+      ? document.addEventListener("DOMContentLoaded", function (e) {
+          cb()
+        })
+      : cb()
+  }

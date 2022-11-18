@@ -183,6 +183,7 @@ const rules = reactive({
           }
       getUserInfo()
       ruleFormRef.resetFields()
+      loginShow.value = false
       } else {
         $('.codeinput input').css('border','1px solid red')
         codeError.value = true

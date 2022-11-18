@@ -23,7 +23,8 @@ const watchconfig = {
           __VUE_OPTIONS_API__: true,
           __VUE_PROD_DEVTOOLS__: false,
           "AUTHOR": JSON.stringify('xzz2022'),
-          "VERSION": JSON.stringify('1029')
+          "VERSION": JSON.stringify('1029'),
+          'DEBUG': true
         })
         
     ],

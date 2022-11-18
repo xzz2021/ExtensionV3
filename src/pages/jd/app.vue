@@ -18,8 +18,9 @@
       <Transition name="fade">
     <!-- <el-collapse-transition> -->
     <main class="jclmain" v-show="showMain">
+
       <div>
-        <el-dropdown placement="right-start"  @command="OneClickDiagnosis">
+        <el-dropdown  placement="right-start"  @command="OneClickDiagnosis">
           <span class="el-dropdown-link">
             <div class="jclicon"><i class="xzzicon-dianpu"></i></div>
             <div class="title">店铺诊断</div>
@@ -28,35 +29,100 @@
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item v-for="item in diagnosisOption" :key="item.value" :command="item.value">
-                <div class="drop-menu">销售前{{ item.value }}商品</div>
+                <div class="">销售前{{ item.value }}商品</div>
               </el-dropdown-item>
               <el-dropdown-item>
-              <div class="drop-menu" style="text-align: center;" @click="scanRecord">浏览记录</div>
+              <div class="" style="text-align: center;" @click="scanRecord">浏览记录</div>
               </el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
       </div>
-      <div>
-        <el-dropdown placement="right-start" @command="downLoadJDPicVue">
 
+      <div>
+        <el-dropdown placement="right-start" ref="subDropdown2" >
           <span class="el-dropdown-link">
             <div class="jclicon"><i class="xzzicon-tupian"></i></div>
-            <div class="title" >图片下载</div>
+            <div class="title" >下载工具</div>
             <div class="arrow-right-czp"><i class="xzzicon-youjt"></i></div>
           </span>
+
           <template #dropdown>
-             <el-dropdown-menu >
-              <el-dropdown-item :command="item.arg" v-for="item in pictureOption" :key="item.value">
-                <div class="drop-menu">
-                  {{ item.value }}
-                </div>
+             <el-dropdown-menu class="el-dropdown-menu2">
+              <!-- 二级菜单开始 -->
+              <el-dropdown-item class="el-dropdown-item2">
+                <el-dropdown  placement="right-start" @command="downLoadJDPicVue">
+                      <div class="title2">图片下载</div>
+                  <template #dropdown>
+                    <el-dropdown-menu  @mouseenter.enter="() => { $refs.subDropdown2.handleOpen() }"
+                        @mouseleave.enter="() => { $refs.subDropdown2.handleClose() }">
+                    <el-dropdown-item :command="item.arg" v-for="item in pictureOption" :key="item.value">
+                      <div class="">
+                        {{ item.value }}
+                      </div>
+                    </el-dropdown-item>
+                    </el-dropdown-menu>
+                  </template>
+                </el-dropdown>
               </el-dropdown-item>
+                <!-- 二级菜单结束 -->
+
+                 <!-- 二级菜单开始 -->
+              <el-dropdown-item class="el-dropdown-item2">
+                <el-dropdown placement="right-start" @command="downLoadJDcommentPicVue">
+                      <div class="title2">有图评价下载</div>
+                  <template #dropdown>
+                    <el-dropdown-menu  @mouseenter.enter="() => { $refs.subDropdown2.handleOpen() }"
+                        @mouseleave.enter="() => { $refs.subDropdown2.handleClose() }">
+                    <el-dropdown-item :command="item.value" v-for="item in commentOptionPic" :key="item.value">
+                      <div>{{ item.value }}</div>
+                    </el-dropdown-item>
+                    </el-dropdown-menu>
+                  </template>
+                </el-dropdown>
+              </el-dropdown-item>
+                <!-- 二级菜单结束 -->
+
+                   <!-- 二级菜单开始 -->
+              <el-dropdown-item class="el-dropdown-item2">
+                <el-dropdown placement="right-start" @command="downLoadJDcommentNoPicVue">
+                      <div class="title2">无图评价下载</div>
+                  <template #dropdown>
+                    <el-dropdown-menu  @mouseenter.enter="() => {$refs.subDropdown2.handleOpen() }"
+                        @mouseleave.enter="() => { $refs.subDropdown2.handleClose() }">
+                    <el-dropdown-item :command="item.value" v-for="item in commentOptionNoPic" :key="item.value">
+                      <div class="">
+                        {{ item.value }}
+                      </div>
+                    </el-dropdown-item>
+                    </el-dropdown-menu>
+                  </template>
+                </el-dropdown>
+              </el-dropdown-item>
+                <!-- 二级菜单结束 -->
+
+              <el-dropdown-item  class="el-dropdown-item2">
+                <!-- <el-dropdown  > -->
+                <span class="el-dropdown-link">
+                  <div class="title2" @click="downLoadJDVideoVue">视频下载</div>
+                </span>
+                  <!-- <template #dropdown>
+                    <el-dropdown-menu  >
+                    <el-dropdown-item >
+                    </el-dropdown-item>
+                    </el-dropdown-menu>
+                  </template> -->
+
+                <!-- </el-dropdown> -->
+              </el-dropdown-item>
+
+
             </el-dropdown-menu>
           </template>
         </el-dropdown>
       </div>
-      <div>
+
+      <!-- <div>
         <el-dropdown placement="right-start" @command="downLoadJDcommentPicVue">
           <span class="el-dropdown-link">
             <div class="jclicon"><i class="xzzicon-pinglun"></i></div>
@@ -71,8 +137,9 @@
             </el-dropdown-menu>
           </template>
         </el-dropdown>
-      </div>
-      <div>
+      </div> -->
+
+      <!-- <div>
         <el-dropdown placement="right-start" @command="downLoadJDcommentNoPicVue">
           <span class="el-dropdown-link">
             <div class="jclicon"><i class="xzzicon-pinglun"></i></div>
@@ -87,8 +154,9 @@
             </el-dropdown-menu>
           </template>
         </el-dropdown>
-      </div>
-      <div>
+      </div> -->
+      
+      <!-- <div>
         <el-dropdown >
           <span class="el-dropdown-link">
             <div class="jclicon"><i class="xzzicon-spxz"></i></div>
@@ -96,7 +164,8 @@
             <div class="arrow-right-czp"><i class=""></i></div>
           </span>
         </el-dropdown>
-      </div>
+      </div> -->
+
       <div>
         <el-dropdown >
           <span class="el-dropdown-link">
@@ -116,13 +185,13 @@
         </el-dropdown>
       </div>
       <div>
-        <el-dropdown>
+        <!-- <el-dropdown> -->
           <span class="el-dropdown-link">
             <div class="jclicon"><i class="xzzicon-shouye"></i></div>
             <div class="title" @click="backToHome">回到首页</div>
             <div class="arrow-right-czp"><i class=""></i></div>
           </span>
-        </el-dropdown>
+        <!-- </el-dropdown> -->
       </div>
 
         <div v-if="userid">
@@ -138,7 +207,7 @@
                 <div class="drop-menu" @click="goToLogin">切换账号</div>
               </el-dropdown-item>
               <el-dropdown-item command="bb">
-                <div class="drop-menu">操作记录</div>
+                <div class="drop-menu" @click="test">操作记录</div>
               </el-dropdown-item>
               <el-dropdown-item command="cc">
                 <div class="drop-menu" >任务进程</div>
@@ -149,24 +218,24 @@
         </div>
 
         <div  v-else>
-              <el-dropdown>
+              <!-- <el-dropdown> -->
                 <span class="el-dropdown-link">
                   <div class="jclicon"><i class="xzzicon-login"></i>
                   </div>
                   <div  class="title" @click="goToLogin">账号登录</div>
                   <div class="arrow-right-czp"><i class=""></i></div>
                 </span>
-              </el-dropdown>
+              <!-- </el-dropdown> -->
             </div>
 
         <div v-if="userid">
-          <el-dropdown >
+          <!-- <el-dropdown > -->
             <span class="el-dropdown-link">
               <div class="jclicon" ><i class="xzzicon-logout"></i></div>
               <div class="title" @click="logout">退出登录</div>
               <div class="arrow-right-czp"><i class=""></i></div>
             </span>
-          </el-dropdown>
+          <!-- </el-dropdown> -->
         </div>
         <div  class="version">版本:{{ version }} </div>
 
@@ -185,11 +254,15 @@
     <LoginPanel ref="loginref" />
     <!-- <oneClickDiagnosis /> -->
     <!-- <MyProgress :show="progressVisible" :percentage="percentage" /> -->
+
+    <!-- <div class="test">
+      <el-button type="primary" @click="test1">test1</el-button>
+      <el-button type="primary" @click="test2">test2</el-button>
+      <el-button type="primary" @click="test3">test3</el-button>
+    </div> -->
 </template>
 
 <script setup>
-
-
 
 import {videoDownloadczp} from './js/JDVideo.js'
 import {downLoadJDcommentPic, downLoadJDcommentNoPic} from './js/JDcomments.js'
@@ -221,7 +294,13 @@ const userid = ref('')
 const userPhone = ref('')
 
 
-
+const test1 = () => {
+  //v3可以直接滚动
+  API.scroll.stepEase(800,4)
+}
+const test2 = () => {
+  API.scroll.goToBottomEase()
+}
 
 // let progressVisible = ref(false)
 // let percentage = ref(60)
@@ -361,7 +440,6 @@ const downLoadJDPicVue = async (type) => {
 
 // 视频下载 start
 const downLoadJDVideoVue = async () => {
-
   let timenum = API.ztime.ymd2()
   let skd = getSkuId(currentHref)
   videoDownloadczp(currentHref, skd, timenum)
@@ -468,5 +546,12 @@ getUserInfo()
 
 <style lang="scss" scoped>
 @import "../../css/sass/jclpanel.scss";
+
+// .test2{
+//   position: fixed;
+//   top: 30%;
+//   left: 20%;
+//   background-color: #fff;
+// }
 
 </style>

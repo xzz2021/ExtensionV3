@@ -13,6 +13,7 @@ import { bgcApi as API } from './src/api/bgcApi/index'
 //---------最优策略其实是自建HotReloadPlugin----------借助devserver内部的websocket执行自定义函数-----------------------
 //-------------------或者摒弃devserver曲线----------直接自己建立一个websocket执行自定义函数-------后期学习改进-----
 //--------------开发阶段---------编译后-------自动刷新runtime------然后自动刷新当前聚焦的tab页---------
+
 //--------------------此处为借助devserver的方案一-----------------------------------------
 chrome.tabs.onUpdated.addListener(
   (tabId, changeInfo, tab) => {
