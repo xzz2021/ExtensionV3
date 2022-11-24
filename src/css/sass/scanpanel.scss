@@ -1,7 +1,5 @@
 @import 'vxeCommon';
 
-
-
 .scanmodal{
   z-index: 9999;
 }
@@ -50,7 +48,7 @@
     .scanShop {
       width: 385px;
       font-size: 14px;
-      font-family: $fontYaHei;
+      font-family: Microsoft YaHei;
       line-height: 40px;
       color: #555555;
       display: flex;
@@ -73,7 +71,7 @@
     &:hover .scanTime,
     &:hover .scanShop {
       background: #ffa9391f;
-      color: $jclbg;
+      color: #ff9712;
       font-weight: bold;
     }
 

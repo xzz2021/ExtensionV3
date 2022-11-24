@@ -1,8 +1,6 @@
 <template>
 <div class="jclpanel" >
   
-
-  
     <VueDragResize :isActive="true" :w="180" :h="60" :x="location.lx" :y="location.ly" :z="22" v-if="reloadDrag" :isResizable="false" @dragstop="onDragstop" >
       <!-- https://github.com/kirillmurashov/vue-drag-resize/tree/v2.0.3 -->
     <div class="dragbox">
@@ -19,224 +17,35 @@
     <!-- <el-collapse-transition> -->
     <main class="jclmain" v-show="showMain">
 
-      <div>
-        <el-dropdown  placement="right-start"  @command="OneClickDiagnosis">
-          <span class="el-dropdown-link">
-            <div class="jclicon"><i class="xzzicon-dianpu"></i></div>
-            <div class="title">店铺诊断</div>
-            <div class="arrow-right-czp"><i class="xzzicon-youjt"></i></div>
-          </span>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item v-for="item in diagnosisOption" :key="item.value" :command="item.value">
-                <div class="">销售前{{ item.value }}商品</div>
-              </el-dropdown-item>
-              <el-dropdown-item>
-              <div class="" style="text-align: center;" @click="scanRecord">浏览记录</div>
-              </el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
-      </div>
-
-      <div>
-        <el-dropdown placement="right-start" ref="subDropdown2" >
-          <span class="el-dropdown-link">
-            <div class="jclicon"><i class="xzzicon-tupian"></i></div>
-            <div class="title" >下载工具</div>
-            <div class="arrow-right-czp"><i class="xzzicon-youjt"></i></div>
-          </span>
-
-          <template #dropdown>
-             <el-dropdown-menu class="el-dropdown-menu2">
-              <!-- 二级菜单开始 -->
-              <el-dropdown-item class="el-dropdown-item2">
-                <el-dropdown  placement="right-start" @command="downLoadJDPicVue">
-                      <div class="title2">图片下载</div>
-                  <template #dropdown>
-                    <el-dropdown-menu  @mouseenter.enter="() => { $refs.subDropdown2.handleOpen() }"
-                        @mouseleave.enter="() => { $refs.subDropdown2.handleClose() }">
-                    <el-dropdown-item :command="item.arg" v-for="item in pictureOption" :key="item.value">
-                      <div class="">
-                        {{ item.value }}
-                      </div>
-                    </el-dropdown-item>
-                    </el-dropdown-menu>
-                  </template>
-                </el-dropdown>
-              </el-dropdown-item>
-                <!-- 二级菜单结束 -->
-
-                 <!-- 二级菜单开始 -->
-              <el-dropdown-item class="el-dropdown-item2">
-                <el-dropdown placement="right-start" @command="downLoadJDcommentPicVue">
-                      <div class="title2">有图评价下载</div>
-                  <template #dropdown>
-                    <el-dropdown-menu  @mouseenter.enter="() => { $refs.subDropdown2.handleOpen() }"
-                        @mouseleave.enter="() => { $refs.subDropdown2.handleClose() }">
-                    <el-dropdown-item :command="item.value" v-for="item in commentOptionPic" :key="item.value">
-                      <div>{{ item.value }}</div>
-                    </el-dropdown-item>
-                    </el-dropdown-menu>
-                  </template>
-                </el-dropdown>
-              </el-dropdown-item>
-                <!-- 二级菜单结束 -->
-
-                   <!-- 二级菜单开始 -->
-              <el-dropdown-item class="el-dropdown-item2">
-                <el-dropdown placement="right-start" @command="downLoadJDcommentNoPicVue">
-                      <div class="title2">无图评价下载</div>
-                  <template #dropdown>
-                    <el-dropdown-menu  @mouseenter.enter="() => {$refs.subDropdown2.handleOpen() }"
-                        @mouseleave.enter="() => { $refs.subDropdown2.handleClose() }">
-                    <el-dropdown-item :command="item.value" v-for="item in commentOptionNoPic" :key="item.value">
-                      <div class="">
-                        {{ item.value }}
-                      </div>
-                    </el-dropdown-item>
-                    </el-dropdown-menu>
-                  </template>
-                </el-dropdown>
-              </el-dropdown-item>
-                <!-- 二级菜单结束 -->
-
-              <el-dropdown-item  class="el-dropdown-item2">
-                <!-- <el-dropdown  > -->
-                <span class="el-dropdown-link">
-                  <div class="title2" @click="downLoadJDVideoVue">视频下载</div>
-                </span>
-                  <!-- <template #dropdown>
-                    <el-dropdown-menu  >
-                    <el-dropdown-item >
-                    </el-dropdown-item>
-                    </el-dropdown-menu>
-                  </template> -->
-
-                <!-- </el-dropdown> -->
-              </el-dropdown-item>
-
-
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
-      </div>
-
-      <!-- <div>
-        <el-dropdown placement="right-start" @command="downLoadJDcommentPicVue">
-          <span class="el-dropdown-link">
-            <div class="jclicon"><i class="xzzicon-pinglun"></i></div>
-            <div class="title">有图评价下载</div>
-            <div class="arrow-right-czp"><i class="xzzicon-youjt"></i></div>
-          </span>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item v-for="item in commentOptionPic" :key="item.value" :command="item.value">
-                <div class="drop-menu"> 评价前{{ item.value }} </div>
-              </el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
-      </div> -->
-
-      <!-- <div>
-        <el-dropdown placement="right-start" @command="downLoadJDcommentNoPicVue">
-          <span class="el-dropdown-link">
-            <div class="jclicon"><i class="xzzicon-pinglun"></i></div>
-            <div class="title">无图评价下载</div>
-            <div class="arrow-right-czp"><i class="xzzicon-youjt"></i></div>
-          </span>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item v-for="item in commentOptionNoPic" :key="item.value" :command="item.value">
-                <div class="drop-menu"> 评价前{{ item.value }} </div>
-              </el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
-      </div> -->
-      
-      <!-- <div>
-        <el-dropdown >
-          <span class="el-dropdown-link">
-            <div class="jclicon"><i class="xzzicon-spxz"></i></div>
-            <div class="title" @click="downLoadJDVideoVue">视频下载</div>
-            <div class="arrow-right-czp"><i class=""></i></div>
-          </span>
-        </el-dropdown>
-      </div> -->
-
-      <div>
-        <el-dropdown >
-          <span class="el-dropdown-link">
-            <div class="jclicon"><i class="xzzicon-dingdan"></i></div>
-            <div class="title" @click="getOrderTagJDVue">订单备注</div>
-            <div class="arrow-right-czp"><i class=""></i></div>
-          </span>
-        </el-dropdown>
-      </div>
-       <div>
-        <el-dropdown>
-          <span class="el-dropdown-link">
-            <div class="jclicon"><i class="xzzicon-gjczhq"></i></div>
-            <div class="title" @click="keyWordTool">关键词组合器</div>
-            <div class="arrow-right-czp"><i class=""></i></div>
-          </span>
-        </el-dropdown>
-      </div>
-      <div>
-        <!-- <el-dropdown> -->
-          <span class="el-dropdown-link">
-            <div class="jclicon"><i class="xzzicon-shouye"></i></div>
-            <div class="title" @click="backToHome">回到首页</div>
-            <div class="arrow-right-czp"><i class=""></i></div>
-          </span>
-        <!-- </el-dropdown> -->
-      </div>
-
+    
         <div v-if="userid">
-          <el-dropdown placement="right-start">
+          <el-dropdown placement="right-start"  @command="accountManagement">
             <span class="el-dropdown-link">
-              <div class="jclicon"><i :class="userid ? 'xzzicon-exchange' : 'xzzicon-login'"></i></div>
+              <div class="jclicon"><i :class="userid ? 'xzzicon3-exchange' : 'xzzicon3-login'"></i></div>
               <div  class="title">{{userPhone}}</div>
-              <div class="arrow-right-czp"><i class="xzzicon-youjt"></i></div>
+              <div class="arrow-right-czp"><i class="xzzicon3-youjt"></i></div>
             </span>
             <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item command="aa">
-                <div class="drop-menu" @click="goToLogin">切换账号</div>
-              </el-dropdown-item>
-              <el-dropdown-item command="bb">
-                <div class="drop-menu" @click="test">操作记录</div>
-              </el-dropdown-item>
-              <el-dropdown-item command="cc">
-                <div class="drop-menu" >任务进程</div>
-              </el-dropdown-item>
+              <el-dropdown-item command="operate">操作记录</el-dropdown-item>
+              <el-dropdown-item command="progress">任务进程</el-dropdown-item>
+              <el-dropdown-item command="exchange">切换账号</el-dropdown-item>
+              <el-dropdown-item command="logout">退出登录</el-dropdown-item>
             </el-dropdown-menu>
             </template>
           </el-dropdown>
         </div>
 
         <div  v-else>
-              <!-- <el-dropdown> -->
-                <span class="el-dropdown-link">
-                  <div class="jclicon"><i class="xzzicon-login"></i>
-                  </div>
-                  <div  class="title" @click="goToLogin">账号登录</div>
+          <el-dropdown>
+                <span class="el-dropdown-link" @click="goToLogin">
+                  <div class="jclicon"><i class="xzzicon3-login"></i></div>
+                  <div  class="title" >账号登录</div>
                   <div class="arrow-right-czp"><i class=""></i></div>
                 </span>
-              <!-- </el-dropdown> -->
-            </div>
-
-        <div v-if="userid">
-          <!-- <el-dropdown > -->
-            <span class="el-dropdown-link">
-              <div class="jclicon" ><i class="xzzicon-logout"></i></div>
-              <div class="title" @click="logout">退出登录</div>
-              <div class="arrow-right-czp"><i class=""></i></div>
-            </span>
-          <!-- </el-dropdown> -->
+          </el-dropdown>
         </div>
+
         <div  class="version">版本:{{ version }} </div>
 
     </main>
@@ -244,18 +53,19 @@
     </Transition>
 
     <footer @click="showMain = !showMain">
-      <div class="shrink"><i :class="!showMain? 'xzzicon-shrink': 'xzzicon-shrink2'"></i></div>
-    <!-- <el-button type="primary">Primary</el-button>
-    <div class="text-red-400 ">6666</div> -->
+      <div class="shrink"><i :class="!showMain? 'xzzicon3-shrink': 'xzzicon3-shrink2'"></i></div>
     </footer>
     </div>
-</VueDragResize>
+    </VueDragResize>
     </div>
-    <LoginPanel ref="loginref" />
-    <JdScanRecord />
+    <loginPanel ref="loginref" />
+    <!-- <JdScanRecord /> -->
     <!-- <oneClickDiagnosis /> -->
     <!-- <MyProgress :show="progressVisible" :percentage="percentage" /> -->
-
+    <!-- <imageDownload ref="imageDownloadRef"/>
+    <commentDownload ref="commentDownloadRef" />
+    <keywordRanking ref="zrss" />
+    <shopDiagnosis ref="shopDiagnosisRef"/> -->
     <div class="test">
       <el-button type="primary" @click="test1">test1</el-button>
       <el-button type="primary" @click="test2">test2</el-button>
@@ -296,11 +106,12 @@ const version = VERSION
 const userid = ref('')
 const userPhone = ref('')
 
-const test1 = () => {
-  console.log('==========test')
+const test1 = async () => {
   //v3可以直接滚动
   // API.scroll.stepEase(800,4)
-  // proxy.xzz('================')
+   let url = "https://video3.pddpic.com/i1/2022-04-21/d2dd68e9f8ca0d10be126a5980ea40fc.mp4.f30.mp4"
+  let aaa =  await API.getVideoInfo(url)
+  console.log('a: ', aaa)
 }
 const test2 = () => {
   API.scroll.goToBottomEase()
@@ -500,11 +311,33 @@ let userInfoStore  =  await  API.Storage.get('userInfo')
   let b = a.substring(3,7)
   userPhone.value = a.replace(b, '****')
 }
+//------账号管理菜单函数-----------
+ const accountManagement = async (arg) => {
+      switch(arg){
+        case 'operate': this.$myBus.$emit('openOperateHistory')
+          break
+        case 'progress': this.openTaskprogress()
+          break
+        case 'exchange': loginref.value.loginShow = true
+          break
+        case 'logout': this.logout()
+          break
+        // case 'operate': this.$myBus.$emit('openOperateHistory')
+        //   break
+        default: ''
+          break
+      }
+    }
+
+  const  developing = async () => {
+      ElMessage.error({ message: `功能等待开发中`, duration: 3000, showClose: true });
+    }
 
 onMounted(() => {
 currentHref = window.location.href
 curCookies.value = document.cookie
 //curCookies.value = "{'" + document.cookie + "'}"
+// store.getUserinfo()
 })
 
 onBeforeMount(async () => {

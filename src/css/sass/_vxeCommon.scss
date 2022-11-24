@@ -1,29 +1,23 @@
 // 此处定义公共的vxe-modal样式
-@import 'variable.scss';
+// @import 'variable.scss';
 // @use 'variable';
 
-@mixin lh34 {
-  line-height: 34px;
-}
-@mixin curpoi {
-  cursor: pointer;
-}
 
 @mixin vxeTitle {
   height: 40px;
   // margin: 0 auto;
-  background: $jclbg;
+  background: #ff9712;
   border-radius: 6px 6px 0px 0px;
-  color: $white;
+  color: #fff;
   text-align: center;
   line-height: 40px;
   font-size: 18px;
 
 }
 
-@mixin flexColCen {
+
+%flexCen {
   display: flex;
-  flex-direction: column;
   align-items: center;
 }
 
@@ -33,11 +27,6 @@
   align-items: center;
 }
 
-%flexColLeft {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
 // 混入会重复编译   混入更适合带自定义变量传参使用
 // @mixin myBtn {
 //   width: 88px;
@@ -59,10 +48,10 @@
   width: 88px;
   height: 34px;
   cursor: pointer;
-  background: $jclbg;
+  background: #ff9712;
   border-radius: 4px;
   font-family: MicrosoftYaHei;
-  color: #ffffff;
+  color: #fff;
   text-align: center;
   font-size: 16px;
   &:active {
@@ -75,10 +64,10 @@
       font-size: 17px;
       font-weight: bold;
       line-height: 40px;
-      color: $white;
+      color: #fff;
   }
 :deep( .vxe-modal--header) {
-    background: $jclbg;
+    background: #ff9712;
     padding: 0 !important;
   }
   :deep( .vxe-modal--box) {
@@ -87,8 +76,15 @@
 
 :deep( .vxe-modal--close-btn){
   top: 12px ;
-  color: $white;
+  color: #fff;
   &:hover{
-    color: $white;
+    color: #fff;
+  }
+}
+
+:deep(.el-dropdown-menu__item){
+  &:hover{
+    background-color: #ffa9391f;
+    color: #ff9712;
   }
 }

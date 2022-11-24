@@ -33,10 +33,6 @@ const { info_id, scanData, scanShow, diagnosisData } = storeToRefs(store)
 
       const userToken = ref('')
       const userId = ref('')
-
-           console.log('wholeShow.scanShow:2222222222222 ', scanShow.value);
-
-
     const getScanData = async () => {
       scanShow.value = true;
       if (userId) {

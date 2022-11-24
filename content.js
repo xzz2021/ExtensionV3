@@ -61,7 +61,8 @@ function createEntry(myapp,id){
   const el = document.querySelector('body');
   if (el) {
     //  afterbegin 插入body内部最前面------afterend插入body外部后面
-      el.insertAdjacentHTML('afterend',`<div id="${id}"></div>`)
+    // 必须嵌入body内部,不然面板无法固定
+      el.insertAdjacentHTML('afterbegin',`<div id="${id}"></div>`)
       createApp(myapp).use(pinia).use(VXETable).mount(`#${id}`)
     }
 }

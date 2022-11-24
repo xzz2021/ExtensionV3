@@ -1,98 +1,63 @@
 
-@import 'variable.scss';
-
+@import 'vxeCommon';
 .jclpanel {
-    // position: fixed;
-    // top: 30px;
-    // left: 20px;
-    z-index: 11111;
-    background-color: $white;
-    width: 180px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 4px;
-    header {
-      .section {
-        // display: flex;
-        // align-items: center;
-        padding: 10px;
-        background: linear-gradient(180deg, #ffad44 0%, #ff9712 100%);
-        // border-radius: 4px 4px 0 0;
-      }
+  z-index: 6666;
+  position: fixed;
+  header {
+    .section {
+      padding: 10px;
+      background: linear-gradient(180deg, #ffad44 0%, #ff9712 100%);
     }
-    main {
-      display: flex;
-      flex-flow: column;
-      align-items: center;
+  }
+  .jclmain {
+      @extend %flexColCen;
       >div {
         margin: 5px 0;
-        border-radius: 4px;
-        background: rgba(255, 252, 246, 0.712);
-  
-        // .el-dropdown {
+        font-family: MicrosoftYaHei;
           .el-dropdown-link {
-            display: flex;
-            align-items: center;
+            height: 38px;
+            @extend %flexCen;
             color: #666;
             cursor: pointer;
             .jclicon {
-              margin: 0 4px 0 10px;
-              width: 16px;
+              margin-left: 10px;
             }
             .title {
-              text-align: left;
-              width: 94px;
-              padding: 9px 10px 9px 0;
-              font-size: 14px;
-              font-family: $fontYaHei;
-              font-weight: 400;
-              line-height: 20px;
+              width: 110px;
+              margin-left: 2px;
             }
             .arrow-right-czp {
-              font-size: 10px;
-              width: 16px;
-              margin-right: 10px;
+              margin: 0 10px 4px 0;
+              width: 12px;
             }
             &:hover {
               color: #ff9712 !important;
               background-color: #ffa9391f;
             }
           }
-        // }
+
       }
       .version {
         margin: 0 auto;
-        width: 74px;
-        text-align: center;
+        // text-align: center;
         font-size: 14px;
-        font-family: $fontYaHei;
-        font-weight: 400;
         line-height: 26px;
         color: #999999;
       }
     }
     footer{
-      // height: 20px;
       .shrink{
         text-align: center;
         &:hover{
-          color: $jclbg;
+          color: #ff9712;
         }
       }
     }
   }
   
-  // .el-dropdown-menu__item:hover {
-  //   background-color: #ffa9391f;
-  //   color: #ff9712;
-  // }
-
-//   ::v-deep .el-dropdown [disabled] {
-//     color: #606266;
-// }
 
 //面板过渡动画
 .fade-enter-active, .fade-leave-active {
-  // overflow: hidden;
   max-height: 800px;
   transition: max-height 1s;
 }
@@ -101,45 +66,56 @@
   max-height: 0;
 }
 
-
 //隐藏面板拖拽句柄
 .vdr.active:before {
   display:none;
 }
 
+//整个面板背景及圆角
 :deep(.dragbox){
   background-color: #fff;
   border-radius: 4px;
   overflow: hidden;
 }
 
-:deep(.el-dropdown-menu__item):hover {
-  background-color: #ffa9391f;
-  color: $jclbg;
-}
-//全局固定定位
-.jclBox{
-  position: fixed;
-  z-index: 9999;
+
+
+
+//二三级嵌套菜单面板
+
+// :deep(.el-dropdown-item2){
+//   .el-dropdown-link2{
+//     @extend %flexCen;
+//     justify-content: space-between;
+//   }
+// }
+
+
+.el-dropdown-link2{
+  height: 26px;
+  .title2{
+    width: 100px;
+  }
 }
 
-:deep(.el-dropdown-item2 .el-dropdown){
-  width: 110px;
-  margin-right: -10px;
-}
-.title2{
-  font-family: $fontYaHei;
-  font-weight: 400;
-  // padding: 5px 10px;
-  width: 100px;
-
-}
-
+//二三级菜单中间鼠标悬浮
 :deep(.el-dropdown-item2){
-  padding: 10px;
+
+  padding: 5px 10px;  // 改变次级菜单箭头位置
+  .el-dropdown-link2{
+    @extend %flexCen;
+    justify-content: space-between;
+  }
   &:hover {
-    .title2{
-      color: #ff9712 !important;
-    }
+      .title2{
+        color: #ff9712;
+      }
+      i{
+        color: #ff9712;
+      }
   }
  }
+//去除element菜单i默认参数
+ :deep(.el-dropdown-menu__item i ){
+  margin: 0 0 5px 0;
+}

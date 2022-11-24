@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-09-15 11:21:04
  * @LastEditors: xzz2021
- * @LastEditTime: 2022-11-09 09:19:35
+ * @LastEditTime: 2022-11-23 17:31:03
  */
 import { defineStore } from 'pinia'
 
@@ -34,6 +34,20 @@ export const piniaStore = defineStore('selfInfo', {
         increment() {
           this.count++
         },
+        //自动获取当前登录用户信息挂载到store里
+        async getUserinfo(){
+          this.userInfo = await API.Storage.get('userInfo')
+
+        },
+        //自动获取用户信息列表,即历史登录记录并挂载到store里
+        async getUserlist(){
+          this.userList = await API.Storage.get('userList')
+        },
+        //自动更新当前登录用户信息并挂载到store里,配合账号切换功能
+        // async updateUserinfo(){
+        //   let aaa = await API.Storage.get('userInfooo')
+        //   console.log('aaa: ', aaa == '');
+        // }
     },
     getters: {
       diagnosisData2: (state) => {
