@@ -13,11 +13,12 @@
   padding: 0 16px 16px 16px;
 }
 
-//按蓝湖调整关闭按钮
+//按蓝湖调整关闭按钮位置
 :deep(.el-dialog__headerbtn) {
   width: 36px;
   height: 36px;
   font-size: 20px;
+  right: 4px;
 }
 
 .el-divider--horizontal{
@@ -222,6 +223,7 @@
             color: #000000;
             &:hover{
               cursor: pointer;
+              color: #ff9712;
             }
           }
           .onecolor {
@@ -236,6 +238,7 @@
             line-height: 40px;
             &:hover{
               cursor: pointer;
+              color: #ff9712;
             }
           }
           &:hover .deleteBtn{

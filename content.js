@@ -46,7 +46,6 @@ import './src/css/style'
         //     })
         //   }
         // })
-        
 
 //-------------------各平台实例引入----------------
 import app1688 from './src/pages/alibaba/app.vue'
@@ -67,9 +66,7 @@ function createEntry(myapp,id){
     }
 }
 
-
 let url = location.host
-
 
 //-----popup页面----------
 import popup from './src/popup/app.vue'

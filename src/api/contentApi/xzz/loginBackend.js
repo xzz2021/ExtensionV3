@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-11-23 17:05:18
  * @LastEditors: xzz2021
- * @LastEditTime: 2022-11-23 17:11:28
+ * @LastEditTime: 2022-11-25 09:37:15
  */
 const getSmsCode  = async (obj) => {
     let config = {
@@ -21,4 +21,13 @@ const getSmsCode  = async (obj) => {
   }
 }
 
-export default {getSmsCode}
+
+const submitLogin  = async (obj) => {
+    let res =  await  API.sendMessage({type: 'myfetch', config:{url: '/?s=Home.Account.codelogin',body: obj }})  
+    // console.log('res: ', res);
+    if (res.ret == undefined) return ElMessage.error({ message: `登陆失败,后端接口异常,原因:${res}`, duration: 3000, showClose: true })
+    if (res.ret == 400) return ElMessage.error({ message: `登陆失败,原因:${res.msg}`, duration: 3000, showClose: true })
+    return res
+
+}
+export default {getSmsCode, submitLogin}

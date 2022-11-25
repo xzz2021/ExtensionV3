@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-09-15 11:21:04
  * @LastEditors: xzz2021
- * @LastEditTime: 2022-11-23 17:31:03
+ * @LastEditTime: 2022-11-24 17:40:03
  */
 import { defineStore } from 'pinia'
 
@@ -37,7 +37,6 @@ export const piniaStore = defineStore('selfInfo', {
         //自动获取当前登录用户信息挂载到store里
         async getUserinfo(){
           this.userInfo = await API.Storage.get('userInfo')
-
         },
         //自动获取用户信息列表,即历史登录记录并挂载到store里
         async getUserlist(){

@@ -6,9 +6,6 @@
         <div class="left">
           <img class="logo" src="https://junchenlunoffice.oss-cn-shenzhen.aliyuncs.com/plugs/logo1/loginLogo.png" alt="welcome to login">
         </div>
-
-
-
         <div v-if="checkPhone" class="right2">
           <div class="title">
             <div class="tip">切换账号</div>
@@ -22,7 +19,7 @@
               </div>
             <el-divider></el-divider>
             </div>
-            <div class="listBox" v-for="(item, index) in infoList.value" :key="index" >
+            <div class="listBox" v-for="(item, index) in infoList.self" :key="index" >
               <div class="list">
                 <div class="phone" @click="changeAccount(item)">{{item.userPhone}}</div>
                 <div class="deleteBtn" @click="deletePhone(item.userid)"><i class="funicon-loginguanbi"></i></div>
@@ -31,9 +28,7 @@
             </div>
             </div>
         </div>
-
         <div v-else class="right">
-        <!-- <div  class="right"> -->
           <div class="title">谋臣界-电商工具箱</div>
           <div class="tip">一个让运营工作更高效的平台</div>
           <div class="formBox">
@@ -41,12 +36,12 @@
               <el-form-item size="large" prop="phone">
                 <div class="phoneSec">
                   <el-input v-model.number="loginForm.phone" placeholder="手机号" maxlength="11" />
-                  <div class="dropBox" v-if="storelist.length">
+                  <div class="dropBox" v-if="storelist.self.length">
                     <el-dropdown @command="inputAccount" placement="bottom-end">
                         <span class="el-dropdown-link"><i class="funicon-dropdown listDropdown"></i></span>
                         <template  #dropdown>
                           <el-dropdown-menu >
-                            <el-dropdown-item v-for="(item, index) in storelist" :key="index" :command="item.userPhone">{{item.userPhone}}</el-dropdown-item>
+                            <el-dropdown-item v-for="(item, index) in storelist.self" :key="index" :command="item.userPhone">{{item.userPhone}}</el-dropdown-item>
                           </el-dropdown-menu>
                         </template>
                     </el-dropdown>
@@ -75,28 +70,25 @@
             <div class="errorTip" v-if="codeError">验证码错误</div>
           </div>
         </div>
-
-
       </div>
     </el-dialog>
-
   </div>
 </template>
 
 <script setup>
 
-
 const ruleFormRef = ref()
 let codetime = ref(0)
-let loginShow = ref(true)
+let loginShow = ref(false)
 let codeError = ref(false)
 let checkPhone = ref(false)
-let infoList = reactive([])
-let storelist = ref([])
+//----☆☆☆☆----数组最好以对象包裹,避免调用出错及丢失响应性----☆☆☆☆-------
+let infoList = reactive({self:[]})
+let storelist = reactive({self:[]})
 let userInfo = reactive({})
 let loginForm = reactive({ phone: null, code: '', keep: ['记住用户名'] })
 
-
+//校验规则
     const rules = reactive({
         phone: [
           { required: true, message: '请输入手机号', trigger: 'blur' },
@@ -111,10 +103,7 @@ let loginForm = reactive({ phone: null, code: '', keep: ['记住用户名'] })
     const inputAccount = (e) => {
       loginForm.phone = e
     }
-    //点击登录其他账号
-    //  const goToLogin = () =>{
-    //   checkPhone.value = false
-    // }
+    //获取验证码
     const getCode = async  (ruleFormRef) => {
       let isphoneValid
      await ruleFormRef.validateField(["phone"], (valid) => {  isphoneValid = valid })
@@ -129,27 +118,20 @@ let loginForm = reactive({ phone: null, code: '', keep: ['记住用户名'] })
       
       await API.getSmsCode({phone: loginForm.phone})
     }
-
+    //提交登录表单
     const submitForm = async (ruleFormRef) => {
       let isValid
       await ruleFormRef.validate((valid, fields) => { isValid = valid })
       if (!isValid) return ElMessage.error({ message: '输入有误,请重试!', duration: 1500 })
-
-      let res = await  API.sendMessage({type: 'myfetch', config:{url: '/?s=Home.Account.codelogin',body: loginForm }})  
-        let user_id = res.data.user_id || ''
-      if (user_id) {
-      let curUserInfo =  {userid: user_id, userToken: res.data.token, userPhone: loginForm.phone} 
+      let res = await  API.submitLogin(loginForm)  
+      // console.log('res:6666666666 ', res)
+      if(res.ret == undefined) return codeError.value = true
+      let curUserInfo =  {userid: res.data.user_id , userToken: res.data.token, userPhone: loginForm.phone} 
         await API.storeUserinfo(curUserInfo) // 存储账号信息  
-        await API.storeUserlist()     // 更新用户列表
+        await API.storeUserlist()   // 更新用户列表
         if(loginForm.keep[0] != '记住用户名'){ API.updateUserlist(curUserInfo.userid) }
         getUserInfo() //获取更新后的信息
-        ruleFormRef.resetFields()
         loginShow.value = false
-      } else {
-        $('.codeinput input').css('border','1px solid red')
-        codeError.value = true
-        ElMessage.error({ message: `登陆失败,原因:${res.data.msg}`, duration: 3000, showClose: true });
-      }
     }
     const deletePhone = async (userid) => {
       await API.updateUserlist(userid)
@@ -159,6 +141,7 @@ let loginForm = reactive({ phone: null, code: '', keep: ['记住用户名'] })
         await  API.Storage.set({userInfo: item})
         getUserInfo()
     }
+    //关闭面板恢复初始值
     const loginClose = async (ruleFormRef) =>{
       loginShow.value = false
       loginForm.value = { phone: null, code: '', keep: ['记住用户名'] }
@@ -166,11 +149,14 @@ let loginForm = reactive({ phone: null, code: '', keep: ['记住用户名'] })
       ruleFormRef.resetFields()
       ruleFormRef.clearValidate()
     }
+    //从获取用户信息
     const getUserInfo = async () => {
       userInfo.value  = await API.getUserinfo()
       let id = userInfo.value.userid
-      storelist.value  =  await  API.getUserlist()
-      infoList.value  =  storelist.value.filter(item => item.userid != id)
+      storelist.self  =  await  API.getUserlist()
+      //-------------------------------拿到空值---------------???????????
+      // console.log('storelist.length: ', storelist.length);  //-------reactive数组----即使赋值也会转换成代理对象数组
+      infoList.self  =  storelist.self.filter(item => item.userid != id)
       checkPhone.value = id ? true :  false
     }
     onBeforeMount(async () => {

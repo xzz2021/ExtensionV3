@@ -81,14 +81,14 @@ import { getOrderList, setOrderList } from './js/JDorderTag.js'
 import { getVideoTitle, getSkuId, diagnosisProduct} from './js/JDDetailData.js'
 
 
-//持久化的store数据
+//各平台持久化的store数据
 const userstore = userStore()
 const { location } = storeToRefs(userstore)
 
 
-//各自平台的
-const store = piniaStore()
-const { info_id, scanData, scanShow } = storeToRefs(store)
+//平台状态store
+const busStore = piniaStore()
+const { info_id, scanData, scanShow } = storeToRefs(busStore)
 
 
 // const { proxy } = getCurrentInstance()
@@ -301,9 +301,9 @@ const logout = () => {
 }
 
 const getUserInfo = async () => {
-let userInfoStore  =  await  API.Storage.get('userInfo')
-  if(userInfoStore == '') return 
-  store.$patch((state)=>{
+let userInfoStore  =  await  API.getUserinfo()
+  if(userInfoStore == {}) return 
+  busStore.$patch((state)=>{
       state.userInfo = userInfoStore
     })
     userid.value = userInfoStore.userid
