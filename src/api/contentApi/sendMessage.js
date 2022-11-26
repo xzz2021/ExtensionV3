@@ -1,3 +1,8 @@
+/*
+ * @Date: 2022-11-10 08:30:50
+ * @LastEditors: xzz2021
+ * @LastEditTime: 2022-11-26 14:02:10
+ */
 
 
 // 约定传送信息类型,根据类型执行相应函数
@@ -21,7 +26,6 @@ const sendMessage =  (message) => {
     return new Promise((resolve, reject) => {
         // let message = JSON.stringify(message)
         if(message.type == undefined) return reject('发送的请求消息类型不合法')
-        // if(message.type == undefined) return reject('发送的请求消息类型不合法')
         chrome.runtime.sendMessage( message, (response) => {
             // console.log('-----------option: -----response-------', response)
             resolve(response)

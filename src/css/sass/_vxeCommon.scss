@@ -27,6 +27,12 @@
   align-items: center;
 }
 
+%flexColLeft {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+}
+
 // 混入会重复编译   混入更适合带自定义变量传参使用
 // @mixin myBtn {
 //   width: 88px;

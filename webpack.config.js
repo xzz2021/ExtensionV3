@@ -17,7 +17,6 @@ const Components = require('unplugin-vue-components/webpack')
 const { ElementPlusResolver } = require('unplugin-vue-components/resolvers')
 
 
-
 const comconfig = {
     // target: 'node',
     // entry: ['./main.js','./content.js','./inject.js'],    //数组形式会被整合打包到一个输出文件//单独导出需要使用对象
@@ -79,6 +78,7 @@ const comconfig = {
             dirs:['src'],
             directoryAsNamespace: true,
             globalNamespaces: ['components', 'pages'],
+            // resolvers: [ElementPlusResolver() ],
             resolvers: [ElementPlusResolver({importStyle: false}) ],
             // allowOverrides: true,
             // include: [/src/],

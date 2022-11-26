@@ -32,7 +32,7 @@ import 'vxe-table/lib/style.css'
 
 //引入自定义的所有css入口文件
 import './src/css/style'
-//------------------------
+//----------------------
 
 
 
@@ -66,7 +66,7 @@ function createEntry(myapp,id){
     }
 }
 
-let url = location.host
+
 
 //-----popup页面----------
 import popup from './src/popup/app.vue'
@@ -81,8 +81,8 @@ import popup from './src/popup/app.vue'
 //----------------------------------------------------------------------------------
 
 //-------------------版本2.0----------------------
-let loginUrl = url.match(/login|mms|passport/) != null
-let checkedUrl = url.match(/tmall|taobao|1688|yangkeduo|pinduoduo|alibaba|jd|lemak/)
+let loginUrl = location.host.match(/login|mms|passport/) != null
+let checkedUrl = location.host.match(/tmall|taobao|1688|yangkeduo|pinduoduo|alibaba|jd|lemak/)
 loginUrl? checkedUrl = '': checkedUrl = checkedUrl ? checkedUrl[0] : ''
 //------------------------------------------------
 

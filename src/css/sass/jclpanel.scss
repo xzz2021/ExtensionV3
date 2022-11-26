@@ -1,7 +1,7 @@
 
 @import 'vxeCommon';
 .jclpanel {
-  z-index: 6666;
+  z-index: 99;
   position: fixed;
   header {
     .section {
@@ -93,6 +93,7 @@
 
 .el-dropdown-link2{
   height: 26px;
+  padding: 5px 5px; 
   .title2{
     width: 100px;
   }
@@ -101,7 +102,7 @@
 //二三级菜单中间鼠标悬浮
 :deep(.el-dropdown-item2){
 
-  padding: 5px 10px;  // 改变次级菜单箭头位置
+  padding:0 5px;  // 改变次级菜单范围
   .el-dropdown-link2{
     @extend %flexCen;
     justify-content: space-between;

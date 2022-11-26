@@ -1,29 +1,12 @@
 
-
+//全局变量改变
 // :root{
-//   $--el-color-primary: #ff9712;
-
+//   --el-color-primary: green;
 // }
 
 
-// /* 改变主题色变量 */
-// $--color-primary: #ff9712;
 
-// $--color-primary-light-3: #ffa52f;
-// $--color-primary-light-5: #fcb457;
-// $--color-primary-light-7: #fcc782;
-// $--color-primary-light-8: #fdddb4;
-// $--color-primary-light-9: #fff1e0;
-// $--color-primary-dark-2: #ee8e10;
 
-// $--border-color: #ff9712;
-// $--border-color-hover: #ff9712;
-
-// /* 改变 icon 字体路径变量，必需 */
-// $--font-path: '~element-ui/lib/theme-chalk/fonts';
-// // margin-right: math.div($--tooltip-arrow-size, 2)
-
-// @import "~element-ui/packages/theme-chalk/src/index";
 // /* 不可清除,补单关键词模块需要用到 */
 .el-message {  
     min-width: 30px !important;
@@ -31,18 +14,18 @@
     z-index: 9999 !important;
   }
   /* 不可清除,补单关键词模块需要用到 */
-  .el-select-dropdown__item.selected {
-    color:#ff9712;
-  }
-  .el-dialog__headerbtn:hover {
-    color: #ff9712;
-    .el-dialog__close{
-    color: #ff9712;
-    &:hover{
-      color: #ff9712;
-    }
-}
-}
+//   .el-select-dropdown__item.selected {
+//     color:#ff9712;
+//   }
+//   .el-dialog__headerbtn:hover {
+//     color: #ff9712;
+//     .el-dialog__close{
+//     color: #ff9712;
+//     &:hover{
+//       color: #ff9712;
+//     }
+// }
+// }
 
 // .el-input__inner{
 //   &:focus{
@@ -55,20 +38,21 @@
 // }
 
 
-.el-input__wrapper:hover {
-  // box-shadow: 0 0 0 1px var(--el-input-hover-border-color) inset;
-  box-shadow: 0 0 0 1px #ff9712;
-}
-.el-dropdown-menu__item:hover {
-  background-color: #ffa9391f;
-  color: #ff9712;
-}
+// .el-input__wrapper:hover {
+//   box-shadow: 0 0 0 1px #ff9712;
+// }
+// .el-dropdown-menu__item:hover {
+//   background-color: #ffa9391f;
+//   color: #ff9712;
+// }
 
 .el-textarea__inner{
   resize: none;
 }
 
 // div:has()
+
+//滚动条样式重写
 textarea,.vxe-modal--content,.el-table__body-wrapper, .keyWordSection, .arrListSection{
 
 &::-webkit-scrollbar{
@@ -90,5 +74,4 @@ textarea,.vxe-modal--content,.el-table__body-wrapper, .keyWordSection, .arrListS
 &::-webkit-scrollbar-corner{
   background: #179a16;
 }
-  
 }

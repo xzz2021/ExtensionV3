@@ -16,7 +16,22 @@
       <Transition name="fade">
     <!-- <el-collapse-transition> -->
     <main class="jclmain" v-show="showMain">
-
+      <div>
+        <el-dropdown  placement="right-start"  @command="OneClickDiagnosis">
+          <span class="el-dropdown-link">
+            <div class="jclicon"><i class="xzzicon3-dianpu"></i></div>
+            <div class="title">店铺诊断</div>
+            <div class="arrow-right-czp"><i class="xzzicon3-youjt"></i></div>
+          </span>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item v-for="item in diagnosisOption" :key="item.value" :command="item.value">销售前{{ item.value }}商品
+              </el-dropdown-item>
+              <el-dropdown-item command="scanRecord"><div style="text-align: center;">浏览记录</div></el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+      </div>
     
         <div v-if="userid">
           <el-dropdown placement="right-start"  @command="accountManagement">
@@ -59,7 +74,8 @@
     </VueDragResize>
     </div>
     <loginPanel ref="loginref" />
-    <!-- <JdScanRecord /> -->
+    <jdScanRecord ref="ScanRecordRef"/>
+    <jdShopDiagnosis ref="shopDiagnosisRef" />
     <!-- <oneClickDiagnosis /> -->
     <!-- <MyProgress :show="progressVisible" :percentage="percentage" /> -->
     <!-- <imageDownload ref="imageDownloadRef"/>
@@ -71,6 +87,7 @@
       <el-button type="primary" @click="test2">test2</el-button>
       <!-- <el-button type="primary" @click="test3">test3</el-button> -->
     </div>
+    <jdChildComponent />
 </template>
 
 <script setup>
@@ -88,16 +105,14 @@ const { location } = storeToRefs(userstore)
 
 //平台状态store
 const busStore = piniaStore()
-const { info_id, scanData, scanShow } = storeToRefs(busStore)
+//storeToRefs增加响应性,使用了proxy,所以需要用.value拿到值
+const { info_id, scanData, scanShow, currentHref2 } = storeToRefs(busStore) 
 
 
 // const { proxy } = getCurrentInstance()
 //---------------单纯字符串变量不可使用reactive---------
 //-----ref定义的数据：操作数据需要.value，读取数据时模板中直接读取不需要
 
-//            console.log('wholeShow.scanShow: ', scanShow.value);
-
-// console.log('scanData.length: ', scanData.value.length)
 
 let currentHref = ref('')
 let curCookies  = ref('')
@@ -109,22 +124,23 @@ const userPhone = ref('')
 const test1 = async () => {
   //v3可以直接滚动
   // API.scroll.stepEase(800,4)
-   let url = "https://video3.pddpic.com/i1/2022-04-21/d2dd68e9f8ca0d10be126a5980ea40fc.mp4.f30.mp4"
-  let aaa =  await API.getVideoInfo(url)
-  console.log('a: ', aaa)
+  //  let url = "https://video3.pddpic.com/i1/2022-04-21/d2dd68e9f8ca0d10be126a5980ea40fc.mp4.f30.mp4"
+  // let aaa =  await API.getVideoInfo(url)
+  // console.log('a: ', aaa)
 }
 const test2 = () => {
   API.scroll.goToBottomEase()
 }
 
-// let progressVisible = ref(false)
-// let percentage = ref(60)
 
 //实时响应式获得数据需要直接绑定state的值,解构无法实时获得最新值,虽然可以用来操作,但最好使用$patch方式
 // let {lx, ly} = location.value
 
 let reloadDrag = ref(true)
+// 子组件要声明才能拿到
 const loginref = ref(null)
+const scanRecordRef = ref(null)
+const shopDiagnosisRef = ref(null)
 
 const diagnosisOption = reactive([{value: 2}, {value: 5}, {value: 10}, {value: 20}])
 const pictureOption  = reactive([
@@ -143,10 +159,12 @@ const commentOptionNoPic = reactive([{value: 20}, {value: 50}, {value: 100}, {va
 
 
 
-//店铺诊断
+//店铺诊断及历史记录
 const OneClickDiagnosis = async(num) =>{
-  diagnosisProduct(num)
-
+  console.log('num: ', num);
+  if(num =='scanRecord') return scanRecordRef.value.getScanData(num)
+  // diagnosisProduct(num)
+  shopDiagnosisRef.value.startDiagnosis(num)
 }
 
 // 图片下载 start
@@ -155,7 +173,6 @@ const downLoadJDPicVue = async (type) => {
         ElMessage.success({ message:"PC端-图片全部下载开始"});
         let skd = getSkuId(currentHref)
         downloadAllImg(skd);
-
     }
     if ( type == "pc_main"){
         ElMessage.success({ message:"PC端-主图下载开始"});
@@ -358,6 +375,7 @@ getUserInfo()
   top: 30%;
   left: 20%;
   background-color: #fff;
+  z-index: 22;
 }
 
 </style>

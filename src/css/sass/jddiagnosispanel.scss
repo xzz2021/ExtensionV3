@@ -1,0 +1,139 @@
+// vxe-modal诊断面板部分
+@import 'vxeCommon';
+
+
+.jddiagnosismodal{
+
+  .mytitle {
+    height: 60px;
+    margin: 0 auto;
+    text-align: center;
+
+    a {
+      // @include vxeHeaderB;
+    }
+  }
+.headerSec {
+  background: #ff9712;
+  border-radius: 6px 6px 0px 0px;
+  // position: relative;
+
+  .mybtn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: absolute;
+    padding: 0 10px ;
+    top: 14px;
+    left: 14px;
+    height: 30px;
+    width: 86px;
+    // width: 100px;
+    background: rgb(255, 255, 255);
+    border: 1px solid #EEEEEE;
+    border-radius: 4px;
+    cursor: pointer;
+    &:active {
+      background: rgb(201, 201, 201);
+    }
+    .tip2{
+      width: 64px;
+      height: 22px;
+      font-size: 16px;
+      font-family: Microsoft YaHei;
+      font-weight: 400;
+      line-height: 22px;
+      color: #555555;
+    }
+  }
+  .myProgress{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px ;
+      width: 280px;
+      // width: 300px;
+      height: 30px;
+      align-items: center;
+      position: absolute;
+      top: 14px;
+      left: 138px;
+      background: rgb(255, 255, 255);
+      border: 1px solid #EEEEEE;
+      border-radius: 4px;
+      .tiploading{
+        font-size: 16px;
+      font-family: Microsoft YaHei;
+      font-weight: 400;
+      }
+      .pro{
+        width: 224px;
+      }
+  }
+  .el-button--warning {
+    color: #555555;
+  
+  }
+}
+
+:deep(.vxe-modal--close-btn){
+  top: 22px;
+}
+.tablecontainer{
+
+
+  // 信息汇总表格样式
+  .mySumTable{
+      .sumScoreBox, .sumTitleBox, .sumMainImgBox, 
+      .sumDetailImgBox, .sumCommentBox,
+        .sumServiceBox{
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0 10px;
+      }
+      .sumTitleBox div:first-child{
+          width: 100px;
+          text-align: left;
+      }
+      .sumMainImgBox div:first-child{
+          width: 90px;
+          text-align: left;
+      }
+      .sumScoreBox{
+          padding: 0 30px;
+      }
+  
+  }
+  
+  // 信息详情表格样式
+  .myDetailTable{
+      .mainImgBox, .detailImgBox, .shopBox, .titleBox, .commentDiagnosisBox,.promotionsBox, .commentTagBox{
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0 10px;
+      }
+      .shopBox{
+          .right{
+              padding: 0 5px;
+              text-align: left;
+              @extend %flexColLeft;
+              a{
+                  color: #3355AA;
+              }
+          }
+      }
+      .commentTagBox{
+          .tags{
+              width: 154px;
+              white-space:nowrap;  /* 设置文字在一行显示，不能换行 */  
+              overflow: hidden;    /* 文字长度超出限定宽度，则隐藏超出的内容 */
+              text-overflow: ellipsis;
+              cursor: help;
+          }
+      }
+  
+  }
+  }
+}

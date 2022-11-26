@@ -1,5 +1,5 @@
 <template>
-<vxe-modal  className="jddiagnosismodal" v-model="BUS.dialogShow" width="auto"
+<vxe-modal  className="jddiagnosismodal" v-model="diagnosisStore.show" width="auto"
       @hide="clearDiagnosisData" :position="{ top: 45 }" maskClosable marginSize="-600" resize>
       <template #title>
         <div class="headerSec">
@@ -10,19 +10,19 @@
           <div class="myProgress">
             <div class="tiploading">加载中</div>
             <div class="pro">
-              <el-progress :text-inside="true" :stroke-width="20" :percentage="percentage"></el-progress>
+              <el-progress :text-inside="true" :stroke-width="20" :percentage="diagnosisStore.percentage"></el-progress>
             </div>
           </div>
 
-          <div class="mytitle"> <a icon="el-icon-goods" size="default" :href="BUS.diagnosisData.shopUrl"
-              target="_blank">{{ BUS.diagnosisData.shopName }}</a> </div>
+          <div class="mytitle"> <a icon="el-icon-goods" size="default" :href="diagnosisStore.diagnosisData.shopUrl"
+              target="_blank">{{ diagnosisStore.diagnosisData.shopName }}</a> </div>
         </div>
       </template>
       <div class="tablecontainer">
         <!-- 汇总信息表格 -->
         <div>
-            <vxe-table height="228" class="mySumTable" size="mini" :data="BUS.diagnosisData.sumData" 
-    :loading="BUS.diagnosisData.sumData == 0" stripe align="center" border round>
+      <vxe-table height="228" class="mySumTable" size="mini" :data="diagnosisStore.diagnosisData.sumData" 
+    :loading="diagnosisStore.diagnosisData.sumData == 0" stripe align="center" border round>
         <vxe-colgroup title="数据汇总">
             <vxe-column title="诊断数" width="130px">
                 <template #default="{ row }">
@@ -98,13 +98,13 @@
                 </template>
             </vxe-column>
         </vxe-colgroup>
-    </vxe-table>
+        </vxe-table>
         </div>
         <div style="height: 5px;"></div>
         <!-- 详细信息表格 -->
             <div>
         <vxe-table height="540" class="myDetailTable" size="mini" :row-config="{ height: '170px' }" 
-        :data="BUS.diagnosisData.detailData" :loading="BUS.diagnosisData.detailData.length == 0"  stripe
+        :data="diagnosisStore.diagnosisData.detailData" :loading="diagnosisStore.diagnosisData.detailData.length == 0"  stripe
                    align="center" border round>
             <vxe-colgroup title="详情数据">
                 <vxe-column type="seq" width="50"></vxe-column>
@@ -174,10 +174,10 @@
                                 <div class="commentTagBox" v-for="(item, index) in row.commentTag" :key="index">
                                     <div>{{ item.tagType }}</div>
                                     <div class="tags" v-if="item.msg.length < 18">{{ item.msg }}</div>
-                                    <el-tooltip v-else placement="top">
+                                    <!-- <el-tooltip v-else placement="top">
                                       <div slot="content">{{ item.msg }}</div>
                                         <div class="tags">{{ item.msg }}</div>
-                                    </el-tooltip>
+                                    </el-tooltip> -->
                                     <i v-tip="{ txt: item.desc }" :class="item.isok ? 'xzzicon-isok' : 'xzzicon-notok'"></i>
                                 </div>
                     </template>
@@ -196,41 +196,47 @@
       </div>
     </vxe-modal>
 </template>
-<script>
-export default {
-    name: 'shopDiagnosis',
-    computed: BUS_mapState({ BUS: (state) => state }),
-data() {
-    return {   
-        percentage: 0,
-        tempdiagnosisData: [],
-        DiagnosisNum: null
+<script setup>
 
-    }},
-watch: {
-    tempdiagnosisData:{
-     handler(newV, oldV) {
-      let nvl =  newV.detailData.length
-       this.BUS.diagnosisData.detailData = newV.detailData
-       this.BUS.diagnosisData.shopName = newV.shopName
-    //    console.log('newV: ', newV);
-       if(nvl == 0) return 
-       this.percentage = nvl * 100/this.DiagnosisNum
-       this.BUS.diagnosisData.sumData =  newV.sumData
-       this.BUS.diagnosisData.sumData[0].totalNum =  nvl
-    },
-    deep: true
+const busStore = piniaStore()
+const {userInfo, diagnosisStore } = storeToRefs(busStore)
+
+  // let tempdiagnosisData = reactive({self:[]})
+  // let DiagnosisNum = ref(null)
+
+
+
+// watch(
+//   () => diagnosisStore.diagnosisData, 
+//   (newValue, oldValue) => {
+//     console.log('newValue: ', newValue);
+// })
+// watch: {
+//     tempdiagnosisData:{
+//      handler(newV, oldV) {
+//       let nvl =  newV.detailData.length
+//        this.BUS.diagnosisData.detailData = newV.detailData
+//        this.BUS.diagnosisData.shopName = newV.shopName
+//     //    console.log('newV: ', newV);
+//        if(nvl == 0) return 
+//        this.percentage = nvl * 100/this.DiagnosisNum
+//        this.BUS.diagnosisData.sumData =  newV.sumData
+//        this.BUS.diagnosisData.sumData[0].totalNum =  nvl
+//     },
+//     deep: true
+//     }
+//   },
+
+    const  startDiagnosis = async (num) =>{
+      // console.log('num: ===========', num);
+        await  start(num)
+    //     await jdstorediagnosis({
+    //               shop_name: diagnosisStore.value.diagnosisData.shopName,
+    //               user_id: userInfo.value.userid,
+    //               token: userInfo.value.userToken,
+    //               data: JSON.stringify(diagnosisStore.value.diagnosisData)})
     }
-  },
-methods: {
-    async startDiagnosis(num){
-        this.DiagnosisNum = num
-        await  this.start(num)
-        this.percentage = 100
-        await jdstorediagnosis({shop_name: this.BUS.diagnosisData.shopName,user_id: this.userid,token: this.userToken,data: JSON.stringify(this.BUS.diagnosisData)})
-
-    },
-    async start(num){
+    const start = async (num) =>{
         const getSkuTitle = () => {
         let title = document.getElementsByClassName('sku-name')[0].innerText;
         if (title != undefined) {
@@ -338,41 +344,41 @@ methods: {
         };
 
         // 获取店铺名称
-        let shopName = zxp.getElmText('//*[@id="crumb-wrap"]/div/div[2]/div[2]/div[1]/div/a');
+        let shopName = API.zxp.getElmText('//*[@id="crumb-wrap"]/div/div[2]/div[2]/div[1]/div/a');
         // 获取店铺连接
-        let shopUrl = zxp.getElmHref('//*[@id="crumb-wrap"]/div/div[2]/div[2]/div[1]/div/a', 'https:');
+        let shopUrl = API.zxp.getElmHref('//*[@id="crumb-wrap"]/div/div[2]/div[2]/div[1]/div/a', 'https:');
         // 京东自营标记
-        let JDTag = zxp.getElmText('//*[@id="crumb-wrap"]/div/div[2]/div[1]/em') == undefined ? '非自营' : '自营';
+        let JDTag = API.zxp.getElmText('//*[@id="crumb-wrap"]/div/div[2]/div[1]/em') == undefined ? '非自营' : '自营';
 
         // 获取店铺评分 - 商品评价
-        let shopGoalprt = zxp.getElmText('//*[@id="crumb-wrap"]/div/div[2]/div[2]/div[6]/div/div/div[1]/a[1]/div[2]/em');
+        let shopGoalprt = API.zxp.getElmText('//*[@id="crumb-wrap"]/div/div[2]/div[2]/div[6]/div/div/div[1]/a[1]/div[2]/em');
         if (shopGoalprt == undefined) {
-          shopGoalprt = zxp.getElmText('//*[@id="crumb-wrap"]/div/div[2]/div[2]/div[5]/div/div/div[1]/a[1]/div[2]/em');
+          shopGoalprt = API.zxp.getElmText('//*[@id="crumb-wrap"]/div/div[2]/div[2]/div[5]/div/div/div[1]/a[1]/div[2]/em');
         }
         // 店铺评分 - 商品评价 - 分数
-        let shopGoalprtnum = zrg.check(zrg.numberOne(shopGoalprt, 0));
+        let shopGoalprtnum = API.zrg.check(API.zrg.numberOne(shopGoalprt, 0));
         // 店铺评分 - 商品评价 - 等级
-        let shopGoalprtLevel = zrg.check(zrg.chineseOne(shopGoalprt, 0));
+        let shopGoalprtLevel = API.zrg.check(API.zrg.chineseOne(shopGoalprt, 0));
 
         // 获取店铺评分 - 物流履约
-        let shopGoalcar = zxp.getElmText('//*[@id="crumb-wrap"]/div/div[2]/div[2]/div[6]/div/div/div[1]/a[2]/div[2]/em');
+        let shopGoalcar = API.zxp.getElmText('//*[@id="crumb-wrap"]/div/div[2]/div[2]/div[6]/div/div/div[1]/a[2]/div[2]/em');
         if (shopGoalcar == undefined) {
-          shopGoalcar = zxp.getElmText('//*[@id="crumb-wrap"]/div/div[2]/div[2]/div[5]/div/div/div[1]/a[2]/div[2]/em');
+          shopGoalcar = API.zxp.getElmText('//*[@id="crumb-wrap"]/div/div[2]/div[2]/div[5]/div/div/div[1]/a[2]/div[2]/em');
         }
         // 店铺评分 - 物流履约 - 分数
-        let shopGoalcarnum = zrg.check(zrg.numberOne(shopGoalcar, 0));
+        let shopGoalcarnum = API.zrg.check(API.zrg.numberOne(shopGoalcar, 0));
         // 店铺评分 - 物流履约 - 等级
-        let shopGoalcarLevel = zrg.check(zrg.chineseOne(shopGoalcar, 0));
+        let shopGoalcarLevel = API.zrg.check(API.zrg.chineseOne(shopGoalcar, 0));
 
         // 获取店铺评分 - 售后服务
-        let shopGoalserver = zxp.getElmText('//*[@id="crumb-wrap"]/div/div[2]/div[2]/div[6]/div/div/div[1]/a[3]/div[2]/em');
+        let shopGoalserver = API.zxp.getElmText('//*[@id="crumb-wrap"]/div/div[2]/div[2]/div[6]/div/div/div[1]/a[3]/div[2]/em');
         if (shopGoalserver == undefined) {
-          shopGoalserver = zxp.getElmText('//*[@id="crumb-wrap"]/div/div[2]/div[2]/div[5]/div/div/div[1]/a[3]/div[2]/em');
+          shopGoalserver = API.zxp.getElmText('//*[@id="crumb-wrap"]/div/div[2]/div[2]/div[5]/div/div/div[1]/a[3]/div[2]/em');
         }
         // 店铺评分 - 售后服务 - 分数
-        let shopGoalservernum = zrg.check(zrg.numberOne(shopGoalserver, 0));
+        let shopGoalservernum = API.zrg.check(API.zrg.numberOne(shopGoalserver, 0));
         // 店铺评分 - 售后服务 - 等级
-        let shopGoalserverLevel = zrg.check(zrg.chineseOne(shopGoalserver, 0));
+        let shopGoalserverLevel = API.zrg.check(API.zrg.chineseOne(shopGoalserver, 0));
 
         // 获取搜本店连接
         let typeId = getTypeId();
@@ -385,7 +391,7 @@ methods: {
         [shopName, shopUrl, JDTag, shopGoalprtnum, shopGoalprtLevel, shopGoalcarnum, shopGoalcarLevel, shopGoalservernum, shopGoalserverLevel, shopSbdUrl]
     ) */
 
-        result = zjn.set(result, ['店铺名称', '店铺链接', '京东自营标记', '店铺评分-商品评价-分数', '店铺评分-商品评价-等级', '店铺评分-物流履约-分数', '店铺评分-物流履约-等级', '店铺评分-售后服务-分数', '店铺评分-售后服务-等级', '搜本店链接'], [shopName, shopUrl, JDTag, shopGoalprtnum, shopGoalprtLevel, shopGoalcarnum, shopGoalcarLevel, shopGoalservernum, shopGoalserverLevel, shopSbdUrl]);
+        result = API.zjn.set(result, ['店铺名称', '店铺链接', '京东自营标记', '店铺评分-商品评价-分数', '店铺评分-商品评价-等级', '店铺评分-物流履约-分数', '店铺评分-物流履约-等级', '店铺评分-售后服务-分数', '店铺评分-售后服务-等级', '搜本店链接'], [shopName, shopUrl, JDTag, shopGoalprtnum, shopGoalprtLevel, shopGoalcarnum, shopGoalcarLevel, shopGoalservernum, shopGoalserverLevel, shopSbdUrl]);
         //API.zcl.print('当前店铺信息', result)
         return result;
       };
@@ -414,7 +420,7 @@ methods: {
 
           if (shopSbdUrl != undefined) {
             // 打开搜本店第一页页面
-            let sbdpage1 = await ztab.newTab(shopSbdUrl, false);
+            let sbdpage1 = await API.ztab.newTab(shopSbdUrl, false);
             // 获取页面ID
             let sbdpageid1 = sbdpage1['id'];
             // 等待加载完成
@@ -422,7 +428,7 @@ methods: {
             let tabcount = 0;
             while (tabokflag) {
               tabcount = tabcount + 1;
-              let getstatus = await ztab.getByID(sbdpageid1);
+              let getstatus = await API.ztab.getByID(sbdpageid1);
               let tabstatus = getstatus.status;
               if (tabstatus == 'complete') {
                 tabokflag = false;
@@ -482,7 +488,7 @@ methods: {
         
                 return result
             })()`;
-            let injectJS = await ztab.injectJS(sbdpageid1, injectCode);
+            let injectJS = await API.ztab.injectJS(sbdpageid1, injectCode);
             let skuLinkList = injectJS[0].skuLinkList;
             result['skuLinkList'].push.apply(result['skuLinkList'], skuLinkList);
             // 获取总商品数
@@ -494,7 +500,7 @@ methods: {
             } else {
               break;
             }
-            let getstatus = await ztab.remove(sbdpageid1);
+            let getstatus = await API.ztab.remove(sbdpageid1);
           }
           await sleep(1);
         }
@@ -504,7 +510,7 @@ methods: {
       // 注入SKU页面脚本
       const injectSKUCode = async (pageUrl) => {
         // 打开商品页面
-        let newSkuPage = await ztab.newTab(pageUrl, false);
+        let newSkuPage = await API.ztab.newTab(pageUrl, false);
         // 获取页面ID
         let newSkuPageid = newSkuPage['id'];
         // 注入函数获取当前页面数据
@@ -513,7 +519,7 @@ methods: {
         let tabcount = 0;
         while (tabokflag) {
           tabcount = tabcount + 1;
-          let getstatus = await ztab.getByID(newSkuPageid);
+          let getstatus = await API.ztab.getByID(newSkuPageid);
           let tabstatus = getstatus.status;
           if (tabstatus == 'complete') {
             tabokflag = false;
@@ -670,10 +676,10 @@ methods: {
        
         return result
     })()`;
-        let injectJS = await ztab.injectJS(newSkuPageid, injectCode);
+        let injectJS = await API.ztab.injectJS(newSkuPageid, injectCode);
         // 删除打开的商品详情页
         if (injectJS[0] != null) {
-          let getstatus = await ztab.remove(newSkuPageid);
+          let getstatus = await API.ztab.remove(newSkuPageid);
         }
 
         return injectJS[0];
@@ -823,9 +829,10 @@ methods: {
       // 店铺诊断
       const diagnosisProduct = async (num) => {
         let skumsg1 = '开始诊断' + num + '个商品!';
-        this.$message.success(skumsg1);
-        this.tempdiagnosisData = {
-          time: ztime.ymdhms().toString(),
+        ElMessage.success(skumsg1);
+        diagnosisStore.value.diagnosisData = {
+          // time: ztime.ymdhms().toString(),
+          time: API.dayjs.format('YYYY-MM-DD').toString(),
           shopName: '',
           shopUrl: '暂无数据',
           detailData: [],
@@ -985,36 +992,35 @@ methods: {
         let shopDataobj = getShopData();
 
         // 获取搜本店链接
-        //let sbdUrl = zjn.get(shopDataobj, '搜本店链接')
-        this.tempdiagnosisData['shopName'] = zjn.get(shopDataobj, '店铺名称');
-        this.tempdiagnosisData['shopUrl'] = zjn.get(shopDataobj, '店铺链接');
-        if (zjn.get(shopDataobj, '京东自营标记') == '非自营') {
+        //let sbdUrl = API.zjn.get(shopDataobj, '搜本店链接')
+        diagnosisStore.value.diagnosisData['shopName'] = API.zjn.get(shopDataobj, '店铺名称');
+        diagnosisStore.value.diagnosisData['shopUrl'] = API.zjn.get(shopDataobj, '店铺链接');
+        if (API.zjn.get(shopDataobj, '京东自营标记') == '非自营') {
           // 商品评分
-          this.tempdiagnosisData['sumData'][0]['sumScore'][0]['score'] = zjn.get(shopDataobj, '店铺评分-商品评价-分数');
-          this.tempdiagnosisData['sumData'][0]['sumScore'][0]['desc'] = '比同行业平均水平: ' + zjn.get(shopDataobj, '店铺评分-商品评价-等级');
-          if (zjn.get(shopDataobj, '店铺评分-商品评价-等级').indexOf('高') > -1) {
-            this.tempdiagnosisData['sumData'][0]['sumScore'][0]['isok'] = true;
+          diagnosisStore.value.diagnosisData['sumData'][0]['sumScore'][0]['score'] = API.zjn.get(shopDataobj, '店铺评分-商品评价-分数');
+          diagnosisStore.value.diagnosisData['sumData'][0]['sumScore'][0]['desc'] = '比同行业平均水平: ' + API.zjn.get(shopDataobj, '店铺评分-商品评价-等级');
+          if (API.zjn.get(shopDataobj, '店铺评分-商品评价-等级').indexOf('高') > -1) {
+            diagnosisStore.value.diagnosisData['sumData'][0]['sumScore'][0]['isok'] = true;
           }
           // 物流评分
-          this.tempdiagnosisData['sumData'][0]['sumScore'][1]['score'] = zjn.get(shopDataobj, '店铺评分-物流履约-分数');
-          this.tempdiagnosisData['sumData'][0]['sumScore'][1]['desc'] = '比同行业平均水平: ' + zjn.get(shopDataobj, '店铺评分-物流履约-等级');
-          if (zjn.get(shopDataobj, '店铺评分-物流履约-等级').indexOf('高') > -1) {
-            this.tempdiagnosisData['sumData'][0]['sumScore'][1]['isok'] = true;
+          diagnosisStore.value.diagnosisData['sumData'][0]['sumScore'][1]['score'] = API.zjn.get(shopDataobj, '店铺评分-物流履约-分数');
+          diagnosisStore.value.diagnosisData['sumData'][0]['sumScore'][1]['desc'] = '比同行业平均水平: ' + API.zjn.get(shopDataobj, '店铺评分-物流履约-等级');
+          if (API.zjn.get(shopDataobj, '店铺评分-物流履约-等级').indexOf('高') > -1) {
+            diagnosisStore.value.diagnosisData['sumData'][0]['sumScore'][1]['isok'] = true;
           }
           // 售后评分
-          this.tempdiagnosisData['sumData'][0]['sumScore'][2]['score'] = zjn.get(shopDataobj, '店铺评分-售后服务-分数');
-          this.tempdiagnosisData['sumData'][0]['sumScore'][2]['desc'] = '比同行业平均水平: ' + zjn.get(shopDataobj, '店铺评分-售后服务-等级');
-          if (zjn.get(shopDataobj, '店铺评分-售后服务-等级').indexOf('高') > -1) {
-            this.tempdiagnosisData['sumData'][0]['sumScore'][2]['isok'] = true;
+          diagnosisStore.value.diagnosisData['sumData'][0]['sumScore'][2]['score'] = API.zjn.get(shopDataobj, '店铺评分-售后服务-分数');
+          diagnosisStore.value.diagnosisData['sumData'][0]['sumScore'][2]['desc'] = '比同行业平均水平: ' + API.zjn.get(shopDataobj, '店铺评分-售后服务-等级');
+          if (API.zjn.get(shopDataobj, '店铺评分-售后服务-等级').indexOf('高') > -1) {
+            diagnosisStore.value.diagnosisData['sumData'][0]['sumScore'][2]['isok'] = true;
           }
         }
 
         // 遍历搜本店页面,获取所有商品链接
         let sbdData = await getSbdData(num);
-
         for (let i = 0; i < num; i++) {
           let skuMsgs = '开始诊断第' + (i + 1) + '个商品!';
-          this.$message.success(skuMsgs);
+          tElMessage.success(skuMsgs);
 
           // 默认的商品obj
           let dtlobj = {
@@ -1226,13 +1232,13 @@ methods: {
             if (pageData['dtlPicList'].length >= 5) {
               dtlobj['detailImg']['desc'] = '详情图片数量≥5';
               dtlobj['detailImg']['isok'] = true;
-              this.tempdiagnosisData['sumData'][0]['detailImg']['okNum'] += 1;
+              diagnosisStore.value.diagnosisData['sumData'][0]['detailImg']['okNum'] += 1;
             } else {
-              this.tempdiagnosisData['sumData'][0]['detailImg']['notNum'] += 1;
+              diagnosisStore.value.diagnosisData['sumData'][0]['detailImg']['notNum'] += 1;
             }
             dtlobj['detailImg']['msg'] = '1、详情图片数量: ' + pageData['dtlPicList'].length;
           } else {
-            this.tempdiagnosisData['sumData'][0]['detailImg']['notNum'] += 1;
+            diagnosisStore.value.diagnosisData['sumData'][0]['detailImg']['notNum'] += 1;
           }
           // 主图分辨率
           if (pageData['mainImgUrl'] != '暂无数据') {
@@ -1242,12 +1248,12 @@ methods: {
             if (mainwh.width >= 800 && mainwh.height >= 800) {
               dtlobj['mainImgDiagnosis'][0]['desc'] = '主图分辨率≥800*800';
               dtlobj['mainImgDiagnosis'][0]['isok'] = true;
-              this.tempdiagnosisData['sumData'][0]['sumMainImg'][0]['okNum'] += 1;
+              diagnosisStore.value.diagnosisData['sumData'][0]['sumMainImg'][0]['okNum'] += 1;
             } else {
-              this.tempdiagnosisData['sumData'][0]['sumMainImg'][0]['notNum'] += 1;
+              diagnosisStore.value.diagnosisData['sumData'][0]['sumMainImg'][0]['notNum'] += 1;
             }
           } else {
-            this.tempdiagnosisData['sumData'][0]['sumMainImg'][0]['notNum'] += 1;
+            diagnosisStore.value.diagnosisData['sumData'][0]['sumMainImg'][0]['notNum'] += 1;
           }
           // 主图数量
           if (pageData['mainPicList'].length > 0) {
@@ -1255,12 +1261,12 @@ methods: {
             if (pageData['mainPicList'].length >= 5) {
               dtlobj['mainImgDiagnosis'][1]['desc'] = '图片数量≥5张';
               dtlobj['mainImgDiagnosis'][1]['isok'] = true;
-              this.tempdiagnosisData['sumData'][0]['sumMainImg'][1]['okNum'] += 1;
+              diagnosisStore.value.diagnosisData['sumData'][0]['sumMainImg'][1]['okNum'] += 1;
             } else {
-              this.tempdiagnosisData['sumData'][0]['sumMainImg'][1]['notNum'] += 1;
+              diagnosisStore.value.diagnosisData['sumData'][0]['sumMainImg'][1]['notNum'] += 1;
             }
           } else {
-            this.tempdiagnosisData['sumData'][0]['sumMainImg'][1]['notNum'] += 1;
+            diagnosisStore.value.diagnosisData['sumData'][0]['sumMainImg'][1]['notNum'] += 1;
           }
           // 视频数量
           if (pageData['videoUrl'] != '暂无数据') {
@@ -1268,9 +1274,9 @@ methods: {
             dtlobj['mainImgDiagnosis'][2]['isok'] = true;
             dtlobj['mainImgDiagnosis'][2]['msg'] = '3、主图小视频数量: 1';
             dtlobj['mainImgDiagnosis'][2]['videoUrl'] = pageData['videoUrl'];
-            this.tempdiagnosisData['sumData'][0]['sumMainImg'][2]['okNum'] += 1;
+            diagnosisStore.value.diagnosisData['sumData'][0]['sumMainImg'][2]['okNum'] += 1;
           } else {
-            this.tempdiagnosisData['sumData'][0]['sumMainImg'][2]['notNum'] += 1;
+            diagnosisStore.value.diagnosisData['sumData'][0]['sumMainImg'][2]['notNum'] += 1;
           }
           //视频时长
           if (pageData['videoTime'] != 0) {
@@ -1280,12 +1286,12 @@ methods: {
             if (pt >= 10) {
               dtlobj['mainImgDiagnosis'][3]['desc'] = '主图小视频时长≥10s';
               dtlobj['mainImgDiagnosis'][3]['isok'] = true;
-              this.tempdiagnosisData['sumData'][0]['sumMainImg'][3]['okNum'] += 1;
+              diagnosisStore.value.diagnosisData['sumData'][0]['sumMainImg'][3]['okNum'] += 1;
             } else {
-              this.tempdiagnosisData['sumData'][0]['sumMainImg'][3]['notNum'] += 1;
+              diagnosisStore.value.diagnosisData['sumData'][0]['sumMainImg'][3]['notNum'] += 1;
             }
           } else {
-            this.tempdiagnosisData['sumData'][0]['sumMainImg'][3]['notNum'] += 1;
+            diagnosisStore.value.diagnosisData['sumData'][0]['sumMainImg'][3]['notNum'] += 1;
           }
           // 主图白底图检测
           if (pageData['mainImgUrl'] != '暂无数据') {
@@ -1313,20 +1319,20 @@ methods: {
                 dtlobj['mainImgDiagnosis'][4]['imgUrl'] = pageData['mainImgUrl'];
                 dtlobj['mainImgDiagnosis'][4]['isok'] = false;
                 dtlobj['mainImgDiagnosis'][4]['msg'] = '5、白底图: 否';
-                this.tempdiagnosisData['sumData'][0]['sumMainImg'][4]['notNum'] += 1;
+                diagnosisStore.value.diagnosisData['sumData'][0]['sumMainImg'][4]['notNum'] += 1;
               } else {
                 // 是白底图
                 dtlobj['mainImgDiagnosis'][4]['desc'] = '主图最后一张为白底图';
                 dtlobj['mainImgDiagnosis'][4]['imgUrl'] = pageData['mainImgUrl'];
                 dtlobj['mainImgDiagnosis'][4]['isok'] = true;
                 dtlobj['mainImgDiagnosis'][4]['msg'] = '5、白底图: 是';
-                this.tempdiagnosisData['sumData'][0]['sumMainImg'][4]['okNum'] += 1;
+                diagnosisStore.value.diagnosisData['sumData'][0]['sumMainImg'][4]['okNum'] += 1;
               }
             } else {
-              this.tempdiagnosisData['sumData'][0]['sumMainImg'][4]['notNum'] += 1;
+              diagnosisStore.value.diagnosisData['sumData'][0]['sumMainImg'][4]['notNum'] += 1;
             }
           } else {
-            this.tempdiagnosisData['sumData'][0]['sumMainImg'][4]['notNum'];
+            diagnosisStore.value.diagnosisData['sumData'][0]['sumMainImg'][4]['notNum'];
           }
           // 主图重复图检测
           if (pageData['mainPicList'].length > 0) {
@@ -1355,15 +1361,15 @@ methods: {
               dtlobj['mainImgDiagnosis'][5]['isok'] = jsondata['img_repeat_check']['isok'];
               dtlobj['mainImgDiagnosis'][5]['msg'] = '6、' + jsondata['img_repeat_check']['msg'];
               if (dtlobj['mainImgDiagnosis'][5]['isok'] == true) {
-                this.tempdiagnosisData['sumData'][0]['sumMainImg'][5]['okNum'] += 1;
+                diagnosisStore.value.diagnosisData['sumData'][0]['sumMainImg'][5]['okNum'] += 1;
               } else {
-                this.tempdiagnosisData['sumData'][0]['sumMainImg'][5]['notNum'] += 1;
+                diagnosisStore.value.diagnosisData['sumData'][0]['sumMainImg'][5]['notNum'] += 1;
               }
             } else {
-              this.tempdiagnosisData['sumData'][0]['sumMainImg'][5]['notNum'] += 1;
+              diagnosisStore.value.diagnosisData['sumData'][0]['sumMainImg'][5]['notNum'] += 1;
             }
           } else {
-            this.tempdiagnosisData['sumData'][0]['sumMainImg'][5]['notNum'] += 1;
+            diagnosisStore.value.diagnosisData['sumData'][0]['sumMainImg'][5]['notNum'] += 1;
           }
           //标题诊断
           if (pageData['skuTitle'] != '暂无数据') {
@@ -1388,24 +1394,24 @@ methods: {
             if (pageData['skuTitle'].length >= 60) {
               dtlobj['titleDiagnosis'][0]['desc'] = '标题字符数≥60个';
               dtlobj['titleDiagnosis'][0]['isok'] = true;
-              this.tempdiagnosisData['sumData'][0]['sumTitle'][0]['okNum'] += 1;
+              diagnosisStore.value.diagnosisData['sumData'][0]['sumTitle'][0]['okNum'] += 1;
             } else {
-              this.tempdiagnosisData['sumData'][0]['sumTitle'][0]['notNum'] += 1;
+              diagnosisStore.value.diagnosisData['sumData'][0]['sumTitle'][0]['notNum'] += 1;
             }
 
             // 特殊字符
-            let titlecheck = zrg.checkTSchar(pageData['skuTitle']);
+            let titlecheck = API.zrg.checkTSchar(pageData['skuTitle']);
             dtlobj['titleDiagnosis'][1]['data'] = titlecheck['chars'];
             if (titlecheck['char_count'] > 0) {
               dtlobj['titleDiagnosis'][1]['msg'] = '2、标题特殊符号: 有';
               dtlobj['titleDiagnosis'][1]['isok'] = false;
               dtlobj['titleDiagnosis'][1]['desc'] = '标题含特殊字符: ' + titlecheck['chars'];
-              this.tempdiagnosisData['sumData'][0]['sumTitle'][1]['notNum'] += 1;
+              diagnosisStore.value.diagnosisData['sumData'][0]['sumTitle'][1]['notNum'] += 1;
             } else {
               dtlobj['titleDiagnosis'][1]['msg'] = '2、标题特殊符号: 无';
               dtlobj['titleDiagnosis'][1]['isok'] = true;
               dtlobj['titleDiagnosis'][1]['desc'] = '标题不含特殊字符';
-              this.tempdiagnosisData['sumData'][0]['sumTitle'][1]['okNum'] += 1;
+              diagnosisStore.value.diagnosisData['sumData'][0]['sumTitle'][1]['okNum'] += 1;
             }
 
             // 空格
@@ -1414,14 +1420,14 @@ methods: {
               dtlobj['titleDiagnosis'][2]['desc'] = '标题含空格：' + jsondata['word_space_check']['data'];
               if (jsondata['word_space_check']['data'] == 0) {
                 dtlobj['titleDiagnosis'][2]['isok'] = true;
-                this.tempdiagnosisData['sumData'][0]['sumTitle'][2]['okNum'] += 1;
+                diagnosisStore.value.diagnosisData['sumData'][0]['sumTitle'][2]['okNum'] += 1;
               } else {
                 dtlobj['titleDiagnosis'][2]['isok'] = false;
-                this.tempdiagnosisData['sumData'][0]['sumTitle'][2]['notNum'] += 1;
+                diagnosisStore.value.diagnosisData['sumData'][0]['sumTitle'][2]['notNum'] += 1;
               }
               dtlobj['titleDiagnosis'][2]['msg'] = '3、' + jsondata['word_space_check']['msg'];
             } else {
-              this.tempdiagnosisData['sumData'][0]['sumTitle'][2]['notNum'] += 1;
+              diagnosisStore.value.diagnosisData['sumData'][0]['sumTitle'][2]['notNum'] += 1;
             }
 
             // 重复词
@@ -1430,20 +1436,20 @@ methods: {
               dtlobj['titleDiagnosis'][3]['desc'] = '标题重复词：' + jsondata['word_repeat_check']['data'];
               if (jsondata['word_repeat_check']['isok'] == 1) {
                 dtlobj['titleDiagnosis'][3]['isok'] = true;
-                this.tempdiagnosisData['sumData'][0]['sumTitle'][3]['okNum'] += 1;
+                diagnosisStore.value.diagnosisData['sumData'][0]['sumTitle'][3]['okNum'] += 1;
               } else {
                 dtlobj['titleDiagnosis'][3]['isok'] = false;
-                this.tempdiagnosisData['sumData'][0]['sumTitle'][3]['notNum'] += 1;
+                diagnosisStore.value.diagnosisData['sumData'][0]['sumTitle'][3]['notNum'] += 1;
               }
               dtlobj['titleDiagnosis'][3]['msg'] = '4、' + jsondata['word_repeat_check']['msg'];
             } else {
-              this.tempdiagnosisData['sumData'][0]['sumTitle'][3]['notNum'] += 1;
+              diagnosisStore.value.diagnosisData['sumData'][0]['sumTitle'][3]['notNum'] += 1;
             }
           } else {
-            this.tempdiagnosisData['sumData'][0]['sumTitle'][0]['notNum'] += 1;
-            this.tempdiagnosisData['sumData'][0]['sumTitle'][1]['notNum'] += 1;
-            this.tempdiagnosisData['sumData'][0]['sumTitle'][2]['notNum'] += 1;
-            this.tempdiagnosisData['sumData'][0]['sumTitle'][3]['notNum'] += 1;
+            diagnosisStore.value.diagnosisData['sumData'][0]['sumTitle'][0]['notNum'] += 1;
+            diagnosisStore.value.diagnosisData['sumData'][0]['sumTitle'][1]['notNum'] += 1;
+            diagnosisStore.value.diagnosisData['sumData'][0]['sumTitle'][2]['notNum'] += 1;
+            diagnosisStore.value.diagnosisData['sumData'][0]['sumTitle'][3]['notNum'] += 1;
           }
           // 活动数量
           if (pageData['activities'].length > 0) {
@@ -1472,51 +1478,54 @@ methods: {
           // 好评
           if (pageData['goodComment'] != '暂无数据') {
             if (pageData['goodComment'] > 0) {
-              this.tempdiagnosisData['sumData'][0]['commentNum'][0]['okNum'] += 1;
+              diagnosisStore.value.diagnosisData['sumData'][0]['commentNum'][0]['okNum'] += 1;
             } else {
-              this.tempdiagnosisData['sumData'][0]['commentNum'][0]['notNum'] += 1;
+              diagnosisStore.value.diagnosisData['sumData'][0]['commentNum'][0]['notNum'] += 1;
             }
           } else {
-            this.tempdiagnosisData['sumData'][0]['commentNum'][0]['notNum'] += 1;
+            diagnosisStore.value.diagnosisData['sumData'][0]['commentNum'][0]['notNum'] += 1;
           }
           // 差评
           if (pageData['badComment'] != '暂无数据') {
             if (pageData['badComment'] > 0) {
-              this.tempdiagnosisData['sumData'][0]['commentNum'][1]['okNum'] += 1;
+              diagnosisStore.value.diagnosisData['sumData'][0]['commentNum'][1]['okNum'] += 1;
             } else {
-              this.tempdiagnosisData['sumData'][0]['commentNum'][1]['notNum'] += 1;
+              diagnosisStore.value.diagnosisData['sumData'][0]['commentNum'][1]['notNum'] += 1;
             }
           } else {
-            this.tempdiagnosisData['sumData'][0]['commentNum'][1]['notNum'] += 1;
+            diagnosisStore.value.diagnosisData['sumData'][0]['commentNum'][1]['notNum'] += 1;
           }
 
-          this.tempdiagnosisData['detailData'].push(dtlobj);
+          diagnosisStore.value.diagnosisData['detailData'].push(dtlobj);
         }
 
         // 统计的赋值
-        this.tempdiagnosisData['sumData'][0]['totalNum'] = this.tempdiagnosisData['detailData'].length;
-        //console.log(this.tempdiagnosisData)
+        diagnosisStore.value.diagnosisData['sumData'][0]['totalNum'] = diagnosisStore.value.diagnosisData['detailData'].length;
+        //console.log(diagnosisStore.value.diagnosisData)
       
       };
 
       await diagnosisProduct(num)
 
-    },
-    async downloadExcel() {
-      let url = `http://pddzd.junchenlun.com/?s=Jd.StoreBrowse.export&token=${this.userToken}&user_id=${this.userid}&info_id=${this.BUS.info_id}`
-      await 浏览器_url表格链接下载(url)
-    },
-    clearDiagnosisData() {
-      this.BUS.diagnosisData = {
-            detailData: [],
-            sumData: []
-        }
-      this.percentage = 0
-    },
-},
-mounted() {},
-}
+    }
+    const  downloadExcel = async () => {
+        let url = `http://pddzd.junchenlun.com/?s=Jd.StoreBrowse.export&token=${userInfo.value.userToken}&user_id=${userInfo.value.userid}&info_id=${diagnosisStore.value.info_id}`
+
+      await  API.sendMessage({type: 'downloads', url}) 
+    }
+    const clearDiagnosisData = () => {
+      busStore.$patch((state)=>{
+          state.diagnosisStore = {show: false, percentage: 0, diagnosisData:{}}
+        })
+    }
+
+
+//setup内部的实例对象默认只在内部,外部调用需要手动暴露出去
+    defineExpose({
+      startDiagnosis
+        })
 </script>
+
 <style lang='scss' scoped>
 @import '../../css/sass/jddiagnosispanel.scss'
 
