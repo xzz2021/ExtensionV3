@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-09-15 11:21:04
  * @LastEditors: xzz2021
- * @LastEditTime: 2022-11-26 15:40:57
+ * @LastEditTime: 2022-11-28 10:37:02
  */
 import { defineStore } from 'pinia'
 
@@ -13,8 +13,8 @@ export const piniaStore = defineStore('selfInfo', {
         count: 0,
         info_id: 0,
         diagnosisStore:{
-          show: false,
-          percentage: 0,
+          show: true,
+          percentage: 70,
           info_id: 0,
           diagnosisData: {},
         },

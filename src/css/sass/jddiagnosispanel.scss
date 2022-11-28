@@ -4,136 +4,154 @@
 
 .jddiagnosismodal{
 
+
+  .headerSec{
+      height: 60px;
+      border-radius: 6px 6px 0px 0px;
+      // line-height: 60px;
+      font-size: 18px;
+      position: relative;
   .mytitle {
-    height: 60px;
-    margin: 0 auto;
     text-align: center;
-
+    line-height: 60px;
+    //抵消关闭按钮的占位偏移
+    margin-right: -30px;
     a {
-      // @include vxeHeaderB;
+      cursor: pointer;
+      color: #fff;
     }
   }
-.headerSec {
-  background: #ff9712;
-  border-radius: 6px 6px 0px 0px;
-  // position: relative;
-
-  .mybtn {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: absolute;
-    padding: 0 10px ;
-    top: 14px;
-    left: 14px;
-    height: 30px;
-    width: 86px;
-    // width: 100px;
-    background: rgb(255, 255, 255);
-    border: 1px solid #EEEEEE;
-    border-radius: 4px;
-    cursor: pointer;
-    &:active {
-      background: rgb(201, 201, 201);
-    }
-    .tip2{
-      width: 64px;
-      height: 22px;
-      font-size: 16px;
-      font-family: Microsoft YaHei;
-      font-weight: 400;
-      line-height: 22px;
-      color: #555555;
-    }
-  }
-  .myProgress{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 10px ;
-      width: 280px;
-      // width: 300px;
-      height: 30px;
-      align-items: center;
+  
+  .func {
+      // background: #ff9712;
+      // border-radius: 6px 6px 0px 0px;
+      @extend %flexCen;
+      height: 60px;
+      // position: relative;
       position: absolute;
-      top: 14px;
-      left: 138px;
-      background: rgb(255, 255, 255);
-      border: 1px solid #EEEEEE;
-      border-radius: 4px;
-      .tiploading{
-        font-size: 16px;
-      font-family: Microsoft YaHei;
-      font-weight: 400;
-      }
+      // top: 14px;
+      left: 30px;
+      // .downloadBtn{
+        :deep(.el-button){
+          padding: 0 13px;
+          height: 30px;
+        }
+      // }
+  .myProgress{
+        margin-left: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 10px ;
+        width: 278px;
+        height: 28px;
+        background: rgb(255, 255, 255);
+        border: 1px solid #EEEEEE;
+        border-radius: 4px;
+        .tiploading{
+          font-size: 16px;
+        font-family: Microsoft YaHei;
+        font-weight: 400;
+    }
       .pro{
         width: 224px;
       }
   }
-  .el-button--warning {
-    color: #555555;
+}
+}
+
+// :deep(.vxe-modal--close-btn){
+//   top: 22px;
+// }
+// .tablecontainer{
+
+
+//   // 信息汇总表格样式
+//   .mySumTable{
+//       .sumScoreBox, .sumTitleBox, .sumMainImgBox, 
+//       .sumDetailImgBox, .sumCommentBox,
+//         .sumServiceBox{
+//           display: flex;
+//           justify-content: space-between;
+//           align-items: center;
+//           padding: 0 10px;
+//       }
+//       .sumTitleBox div:first-child{
+//           width: 100px;
+//           text-align: left;
+//       }
+//       .sumMainImgBox div:first-child{
+//           width: 90px;
+//           text-align: left;
+//       }
+//       .sumScoreBox{
+//           padding: 0 30px;
+//       }
   
+//   }
+  
+//   // 信息详情表格样式
+//   .myDetailTable{
+//       .mainImgBox, .detailImgBox, .shopBox, .titleBox, .commentDiagnosisBox,.promotionsBox, .commentTagBox{
+//           display: flex;
+//           justify-content: space-between;
+//           align-items: center;
+//           padding: 0 10px;
+//       }
+//       .shopBox{
+//           .right{
+//               padding: 0 5px;
+//               text-align: left;
+//               @extend %flexColLeft;
+//               a{
+//                   color: #3355AA;
+//               }
+//           }
+//       }
+//       .commentTagBox{
+//           .tags{
+//               width: 154px;
+//               white-space:nowrap;  /* 设置文字在一行显示，不能换行 */  
+//               overflow: hidden;    /* 文字长度超出限定宽度，则隐藏超出的内容 */
+//               text-overflow: ellipsis;
+//               cursor: help;
+//           }
+//       }
+  
+//   }
+//   }
+}
+
+
+// 头部拖拽区范围
+:global(.vxe-modal--header){
+  background-color: #ff9712 !important;
+  padding: 0 !important;
+}
+
+
+// 去除头部拖拽区标题slot内边距
+:global(.vxe-modal--header-title){
+  padding: 0 !important;
+}
+
+
+//关闭按钮样式
+:global(.vxe-modal--header-right){
+  line-height: 60px;
+  padding: 0 !important;
+  i{
+    color: #fff;
+    margin: 0 30px 0 0;
   }
 }
 
-:deep(.vxe-modal--close-btn){
-  top: 22px;
+
+:global(.vxe-modal--close-btn:hover){
+    color: #fff !important;
 }
-.tablecontainer{
 
-
-  // 信息汇总表格样式
-  .mySumTable{
-      .sumScoreBox, .sumTitleBox, .sumMainImgBox, 
-      .sumDetailImgBox, .sumCommentBox,
-        .sumServiceBox{
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 0 10px;
-      }
-      .sumTitleBox div:first-child{
-          width: 100px;
-          text-align: left;
-      }
-      .sumMainImgBox div:first-child{
-          width: 90px;
-          text-align: left;
-      }
-      .sumScoreBox{
-          padding: 0 30px;
-      }
-  
-  }
-  
-  // 信息详情表格样式
-  .myDetailTable{
-      .mainImgBox, .detailImgBox, .shopBox, .titleBox, .commentDiagnosisBox,.promotionsBox, .commentTagBox{
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 0 10px;
-      }
-      .shopBox{
-          .right{
-              padding: 0 5px;
-              text-align: left;
-              @extend %flexColLeft;
-              a{
-                  color: #3355AA;
-              }
-          }
-      }
-      .commentTagBox{
-          .tags{
-              width: 154px;
-              white-space:nowrap;  /* 设置文字在一行显示，不能换行 */  
-              overflow: hidden;    /* 文字长度超出限定宽度，则隐藏超出的内容 */
-              text-overflow: ellipsis;
-              cursor: help;
-          }
-      }
-  
-  }
-  }
+//去除头部边框,因为与主题色不协调
+:global(.vxe-modal--wrapper .vxe-modal--box){
+  border: none;
 }

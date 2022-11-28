@@ -1,199 +1,24 @@
 <template>
-<vxe-modal  className="jddiagnosismodal" v-model="diagnosisStore.show" width="auto"
-      @hide="clearDiagnosisData" :position="{ top: 45 }" maskClosable marginSize="-600" resize>
+<vxe-modal  className="jddiagnosismodal" v-model="diagnosisStore.show" width="1400" height="760"
+      @hide="clearAlldata" :position="{ top: 45 }" maskClosable marginSize="-600" resize>
       <template #title>
         <div class="headerSec">
-          <div class="mybtn" @click="downloadExcel"> <i class="xzzicon2-download"></i>
-            <div class="tip2">表格下载</div>
+          <div class="func">
+              <el-button ><template #icon><svg class="xzzsymbol" aria-hidden="true">
+                <use xlink:href="#xzzicon2-download"></use></svg></template>表格下载</el-button>
+             
+              <div class="myProgress">
+                <div class="tiploading">加载中</div>
+                <div class="pro"><el-progress :text-inside="true" :stroke-width="20" :percentage="diagnosisStore.percentage"/></div>
+              </div>
           </div>
-
-          <div class="myProgress">
-            <div class="tiploading">加载中</div>
-            <div class="pro">
-              <el-progress :text-inside="true" :stroke-width="20" :percentage="diagnosisStore.percentage"></el-progress>
-            </div>
+          <div class="mytitle"> 
+            <a  :href="diagnosisStore.diagnosisData.shopUrl" target="_blank">{{ diagnosisStore.diagnosisData.shopName }}</a> 
           </div>
-
-          <div class="mytitle"> <a icon="el-icon-goods" size="default" :href="diagnosisStore.diagnosisData.shopUrl"
-              target="_blank">{{ diagnosisStore.diagnosisData.shopName }}</a> </div>
         </div>
+
       </template>
-      <div class="tablecontainer">
-        <!-- 汇总信息表格 -->
-        <div>
-      <vxe-table height="228" class="mySumTable" size="mini" :data="diagnosisStore.diagnosisData.sumData" 
-    :loading="diagnosisStore.diagnosisData.sumData == 0" stripe align="center" border round>
-        <vxe-colgroup title="数据汇总">
-            <vxe-column title="诊断数" width="130px">
-                <template #default="{ row }">
-                    <div class="ml-4">诊断数量: {{ row.totalNum }}</div>
-                    <div class="ml-4">{{ row.salesRate }}</div>
-                </template>
-            </vxe-column>
 
-            
-            <vxe-column title="标题" width="350px">
-                <template #default="{ row }">
-                            <div class="sumTitleBox" v-for="(item, index) in row.sumTitle" :key="index">
-                                <div >{{item.msg}}</div>
-                                <i v-tip="{ txt: item.okDesc }" class="xzzicon-isok"></i>
-                                <div style="width: 20px">  {{ item.okNum}}</div>
-                                <i style="width: 16px" v-tip="{ txt: item.notDesc }" :class="item.notNum == 0 ?'33' : 'xzzicon-notok'"></i>
-                                <div style="width: 20px">  {{item.notNum == 0 ?'' : item.notNum }}</div>
-                            </div>
-                </template>
-            </vxe-column>
-
-            <vxe-column title="主图" width="350px">
-                <template #default="{ row }">
-                            <div class="sumMainImgBox" v-for="(item, index) in row.sumMainImg" :key="index">
-                                <div>{{item.msg}}</div>
-                                <i v-tip="{ txt: item.okDesc }" class="xzzicon-isok"></i>
-                                <div style="width: 20px">  {{item.okNum}}</div>
-                                <i style="width: 16px" v-tip="{ txt: item.notDesc }" :class="item.notNum == 0 ?'33' : 'xzzicon-notok'"></i>
-                                <div style="width: 20px">  {{item.notNum == 0 ?'' : item.notNum }}</div>
-                            </div>
-                </template>
-            </vxe-column>
-
-            <vxe-column title="详情图片" width="200px">
-                <template #default="{ row }">
-                            <div class="sumDetailImgBox">
-                                <div class="">{{row.detailImg.msg}}</div>
-                                <i v-tip="{ txt: row.detailImg.okDesc }" class="xzzicon-isok"></i>
-                                <div>{{ row.detailImg.okNum }}</div>
-                                <i v-tip="{ txt: row.detailImg.notDesc }" :class="row.detailImg.notNum == 0 ?'' : 'xzzicon-notok'"></i>
-                                <div>{{ row.detailImg.notNum  == 0 ?'' : row.detailImg.notNum }}</div>
-                            </div>
-                </template>
-            </vxe-column>
-
-            <vxe-column title="评价" width="200px">
-                <template #default="{ row }">
-                            <div class="sumCommentBox" v-for="(item, index) in row.commentNum" :key="index">
-                                <div>{{item.msg}}</div>
-                                <i v-tip="{ txt: item.okDesc }" class="xzzicon-isok"></i>
-                                <div style="width: 20px">{{ item.okNum }}</div>
-                                <i style="width: 16px" v-tip="{ txt: item.notDesc }" :class="item.notNum == 0 ?'' : 'xzzicon-notok'"></i>
-                                <div style="width: 20px">{{ item.notNum  == 0 ?'' : item.notNum}}</div>
-                            </div>
-                </template>
-            </vxe-column>
-            <vxe-column title="店铺动态评分" width="300px">
-                <template #default="{ row }">
-                            <div class="sumScoreBox"  v-for="(item, index) in row.sumScore" :key="index">
-                                <div>{{item.msg}} </div>
-                                <div>{{ item.score }}</div>
-                                <i v-tip="{ txt: item.desc }" :class="item.isok ? 'xzzicon-isok' : 'xzzicon-notok'"></i>
-                            </div>
-                </template>
-            </vxe-column>
-            <vxe-column title="综合服务" width="260px">
-                <template #default="{ row }">
-                            <div class="sumServiceBox" v-for="(item, index) in row.sumService" :key="index">
-                                <div class="">{{item.msg}}</div>
-                                <div class="">{{item.score}}</div>
-                                <i  class="xzzicon-isok"></i>
-                            </div>
-                </template>
-            </vxe-column>
-        </vxe-colgroup>
-        </vxe-table>
-        </div>
-        <div style="height: 5px;"></div>
-        <!-- 详细信息表格 -->
-            <div>
-        <vxe-table height="540" class="myDetailTable" size="mini" :row-config="{ height: '170px' }" 
-        :data="diagnosisStore.diagnosisData.detailData" :loading="diagnosisStore.diagnosisData.detailData.length == 0"  stripe
-                   align="center" border round>
-            <vxe-colgroup title="详情数据">
-                <vxe-column type="seq" width="50"></vxe-column>
-
-                <vxe-column title="商品图片" width="400px">
-                    <template #default="{ row }">
-                        <div class="shopBox">
-                            <div><img :src="row.commodityInfo.mainImg" style="width: 80px" /></div>
-                            <div class="right">
-                                <div>
-                                    <a :href="row.commodityInfo.url" target="_blank">{{row.commodityInfo.title}}</a>
-                                </div>
-                                <div class="">商品ID: {{ row.commodityInfo.productId }}</div>
-                                <div class="">价格: {{ row.commodityInfo.price }}</div>
-                                <div>{{ row.commodityInfo.discount }}</div>
-                                <div>{{ row.commodityInfo.floorPrice }}</div>
-                                <div>{{ row.commodityInfo.topPrice }}</div>
-                            </div>
-                        </div>
-                    </template>
-                </vxe-column>
-
-                <vxe-column title="月销量" width="80px">
-                    <template #default="{ row }">
-                      <div >{{ row.monthSales }}</div>
-                    </template>
-                </vxe-column>
-
-                <vxe-column title="标题诊断" width="200px">
-                    <template #default="{ row }">
-                            <div class="titleBox" v-for="(item, index) in row.titleDiagnosis" :key="index">
-                                <div>{{ item.msg }}</div>
-                                <i v-tip="{ txt: item.desc }" :class="item.isok ? 'xzzicon-isok' : 'xzzicon-notok'"></i>
-                            </div>
-                    </template>
-                </vxe-column>
-
-                <vxe-column title="主图诊断" width="230px">
-                    <template #default="{ row }">
-                            <div class="mainImgBox" v-for="(item, index) in row.mainImgDiagnosis" :key="index">
-                                <div>{{ item.msg }}</div>
-                                <i v-tip="{ txt: item.desc }" :class="item.isok ? 'xzzicon-isok' : 'xzzicon-notok'"></i>
-                            </div>
-                    </template>
-                </vxe-column>
-
-                <vxe-column title="详情图片诊断" width="180px">
-                    <template #default="{ row }">
-                        <div class="detailImgBox">
-                                <div>{{ row.detailImg.msg }}</div>
-                                <i v-tip="{ txt: row.detailImg.desc }" :class="row.detailImg.isok ? 'xzzicon-isok' : 'xzzicon-notok'"></i>
-                        </div>
-                    </template>
-                </vxe-column>
-
-                <vxe-column title="评价诊断" width="200px">
-                    <template #default="{ row }">
-                            <div class="commentDiagnosisBox" v-for="(item, index) in row.commentDiagnosis" :key="index">
-                                <div>{{ item.msg }}</div>
-                                <i v-tip="{ txt: item.desc }" :class="item.isok ? 'xzzicon-isok' : 'xzzicon-notok'"></i>
-                            </div>
-                    </template>
-                </vxe-column>
-
-                <vxe-column title="评价标签" width="291px">
-                    <template #default="{ row }">
-                                <div class="commentTagBox" v-for="(item, index) in row.commentTag" :key="index">
-                                    <div>{{ item.tagType }}</div>
-                                    <div class="tags" v-if="item.msg.length < 18">{{ item.msg }}</div>
-                                    <!-- <el-tooltip v-else placement="top">
-                                      <div slot="content">{{ item.msg }}</div>
-                                        <div class="tags">{{ item.msg }}</div>
-                                    </el-tooltip> -->
-                                    <i v-tip="{ txt: item.desc }" :class="item.isok ? 'xzzicon-isok' : 'xzzicon-notok'"></i>
-                                </div>
-                    </template>
-                </vxe-column>
-                  <vxe-column title="活动诊断" width="180px">
-                    <template #default="{ row }">
-                            <div class="promotionsBox" v-for="(item, index) in row.promotionsDiagnosis" :key="index">
-                                <div>{{ item.msg }}</div>
-                                <i v-tip="{ txt: item.desc }" :class="item.isok ? 'xzzicon-isok' : 'xzzicon-notok'"></i>
-                            </div>
-                    </template>
-                </vxe-column>
-            </vxe-colgroup>
-        </vxe-table>
-    </div>
-      </div>
     </vxe-modal>
 </template>
 <script setup>
@@ -1513,7 +1338,7 @@ const {userInfo, diagnosisStore } = storeToRefs(busStore)
 
       await  API.sendMessage({type: 'downloads', url}) 
     }
-    const clearDiagnosisData = () => {
+    const clearAlldata = () => {
       busStore.$patch((state)=>{
           state.diagnosisStore = {show: false, percentage: 0, diagnosisData:{}}
         })
@@ -1527,7 +1352,5 @@ const {userInfo, diagnosisStore } = storeToRefs(busStore)
 </script>
 
 <style lang='scss' scoped>
-@import '../../css/sass/jddiagnosispanel.scss'
-
-
+@import '../../css/sass/jddiagnosispanel.scss';
 </style>

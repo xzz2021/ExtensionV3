@@ -3,17 +3,16 @@
 // @use 'variable';
 
 
-@mixin vxeTitle {
-  height: 40px;
-  // margin: 0 auto;
-  background: #ff9712;
-  border-radius: 6px 6px 0px 0px;
-  color: #fff;
-  text-align: center;
-  line-height: 40px;
-  font-size: 18px;
-
-}
+// %vxeTitle {
+//   // height: 40px;
+//   // margin: 0 auto;
+//   // background: #ff9712;
+//   border-radius: 6px 6px 0px 0px;
+//   color: #fff;
+//   text-align: center;
+//   line-height: 40px;
+//   font-size: 18px;
+// }
 
 
 %flexCen {
@@ -31,66 +30,4 @@
   display: flex;
   flex-direction: column;
   align-items: left;
-}
-
-// 混入会重复编译   混入更适合带自定义变量传参使用
-// @mixin myBtn {
-//   width: 88px;
-//   height: 34px;
-//   cursor: pointer;
-//   background: $jclbg;
-//   border-radius: 4px;
-//   font-family: MicrosoftYaHei;
-//   color: #ffffff;
-//   text-align: center;
-//   font-size: 16px;
-//   &:active {
-//     background: rgba(255, 151, 18, 0.39);
-//   }
-// }
-
-// 继承会将拥有共同样式的类放一起编译一次
-%myBtn {
-  width: 88px;
-  height: 34px;
-  cursor: pointer;
-  background: #ff9712;
-  border-radius: 4px;
-  font-family: MicrosoftYaHei;
-  color: #fff;
-  text-align: center;
-  font-size: 16px;
-  &:active {
-    background: rgba(255, 151, 18, 0.39);
-  }
-}
-@mixin vxeHeaderA {
-      text-decoration: none;
-      height: 26px;
-      font-size: 17px;
-      font-weight: bold;
-      line-height: 40px;
-      color: #fff;
-  }
-:deep( .vxe-modal--header) {
-    background: #ff9712;
-    padding: 0 !important;
-  }
-  :deep( .vxe-modal--box) {
-    border: none !important;
-}
-
-:deep( .vxe-modal--close-btn){
-  top: 12px ;
-  color: #fff;
-  &:hover{
-    color: #fff;
-  }
-}
-
-:deep(.el-dropdown-menu__item){
-  &:hover{
-    background-color: #ffa9391f;
-    color: #ff9712;
-  }
 }

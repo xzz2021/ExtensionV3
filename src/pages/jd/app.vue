@@ -161,7 +161,7 @@ const commentOptionNoPic = reactive([{value: 20}, {value: 50}, {value: 100}, {va
 
 //店铺诊断及历史记录
 const OneClickDiagnosis = async(num) =>{
-  console.log('num: ', num);
+  // console.log('num: ', num);
   if(num =='scanRecord') return scanRecordRef.value.getScanData(num)
   // diagnosisProduct(num)
   shopDiagnosisRef.value.startDiagnosis(num)
