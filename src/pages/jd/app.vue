@@ -16,23 +16,97 @@
       <Transition name="fade">
     <!-- <el-collapse-transition> -->
     <main class="jclmain" v-show="showMain">
-      <div>
-        <el-dropdown  placement="right-start"  @command="OneClickDiagnosis">
+        <div>
+        <el-dropdown placement="right-start" ref="subDropdown2" >
           <span class="el-dropdown-link">
-            <div class="jclicon"><i class="xzzicon3-dianpu"></i></div>
-            <div class="title">店铺诊断</div>
+            <div class="jclicon"><i class="xzzicon3-tupian"></i></div>
+            <div class="title" >下载工具</div>
             <div class="arrow-right-czp"><i class="xzzicon3-youjt"></i></div>
           </span>
+
           <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item v-for="item in diagnosisOption" :key="item.value" :command="item.value">销售前{{ item.value }}商品
+             <el-dropdown-menu class="el-dropdown-menu2">
+              <!-- 二级菜单开始 -->
+              <el-dropdown-item class="el-dropdown-item2">
+                <el-dropdown  placement="right-start" @command="downLoadJDPicVue" >
+                      <span class="el-dropdown-link2">
+                        <div class="title2">图片下载</div>
+                        <i class="xzzicon3-youjt"></i>
+                      </span>
+                  <template #dropdown>
+                    <el-dropdown-menu  @mouseenter.enter="() => { $refs.subDropdown2.handleOpen() }"
+                        @mouseleave.enter="() => { $refs.subDropdown2.handleClose() }">
+                    <el-dropdown-item :command="item.arg" v-for="item in pictureOption" :key="item.value">
+                      <div class="">
+                        {{ item.value }}
+                      </div>
+                    </el-dropdown-item>
+                    </el-dropdown-menu>
+                  </template>
+                </el-dropdown>
               </el-dropdown-item>
-              <el-dropdown-item command="scanRecord"><div style="text-align: center;">浏览记录</div></el-dropdown-item>
+                <!-- 二级菜单结束 -->
+
+                 <!-- 二级菜单开始 -->
+              <el-dropdown-item class="el-dropdown-item2">
+                <el-dropdown placement="right-start" @command="downLoadJDcommentPicVue">
+                      <!-- <div class="title2">有图评价下载</div> -->
+                      <span class="el-dropdown-link2">
+                        <div class="title2">有图评价下载</div>
+                        <i class="xzzicon3-youjt"></i>
+                      </span>
+                  <template #dropdown>
+                    <el-dropdown-menu  @mouseenter.enter="() => { $refs.subDropdown2.handleOpen() }"
+                        @mouseleave.enter="() => { $refs.subDropdown2.handleClose() }">
+                    <el-dropdown-item :command="item.value" v-for="item in commentOptionPic" :key="item.value">
+                      <div>{{ item.value }}</div>
+                    </el-dropdown-item>
+                    </el-dropdown-menu>
+                  </template>
+                </el-dropdown>
+              </el-dropdown-item>
+                <!-- 二级菜单结束 -->
+
+                   <!-- 二级菜单开始 -->
+              <el-dropdown-item class="el-dropdown-item2">
+                <el-dropdown placement="right-start" @command="downLoadJDcommentNoPicVue">
+                      <!-- <div class="title2">无图评价下载</div> -->
+                      <span class="el-dropdown-link2">
+                        <div class="title2">无图评价下载</div>
+                        <i class="xzzicon3-youjt"></i>
+                      </span>
+                  <template #dropdown>
+                    <el-dropdown-menu  @mouseenter.enter="() => {$refs.subDropdown2.handleOpen() }"
+                        @mouseleave.enter="() => { $refs.subDropdown2.handleClose() }">
+                    <el-dropdown-item :command="item.value" v-for="item in commentOptionNoPic" :key="item.value">
+                      <div class="">
+                        {{ item.value }}
+                      </div>
+                    </el-dropdown-item>
+                    </el-dropdown-menu>
+                  </template>
+                </el-dropdown>
+              </el-dropdown-item>
+                <!-- 二级菜单结束 -->
+
+              <el-dropdown-item  class="el-dropdown-item2" @click.enter="downLoadJDVideoVue">
+                <span class="el-dropdown-link2">
+                  <div class="title2" >视频下载</div>
+                </span>
+              </el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
       </div>
-    
+          <div>
+        <el-dropdown>
+          <span class="el-dropdown-link" @click.capture="try33">
+            <div class="jclicon"><i class="xzzicon3-spbj"></i></div>
+            <div class="title">商品搬家</div>
+            <div class="arrow-right-czp"><i class=""></i></div>
+          </span>
+        </el-dropdown>
+      </div>
         <div v-if="userid">
           <el-dropdown placement="right-start"  @command="accountManagement">
             <span class="el-dropdown-link">
@@ -74,8 +148,10 @@
     </VueDragResize>
     </div>
     <loginPanel ref="loginref" />
+    <taskProgress ref="taskProgressRef" />
+    <operateHistory ref="operateHistoryRef" />
     <jdScanRecord ref="ScanRecordRef"/>
-    <jdShopDiagnosis ref="shopDiagnosisRef" />
+    <!-- <jdShopDiagnosis ref="shopDiagnosisRef" /> -->
     <!-- <oneClickDiagnosis /> -->
     <!-- <MyProgress :show="progressVisible" :percentage="percentage" /> -->
     <!-- <imageDownload ref="imageDownloadRef"/>
@@ -85,7 +161,6 @@
     <div class="test">
       <el-button type="primary" @click="test1">test1</el-button>
       <el-button type="primary" @click="test2">test2</el-button>
-      <!-- <el-button type="primary" @click="test3">test3</el-button> -->
     </div>
     <jdChildComponent />
 </template>
@@ -121,15 +196,15 @@ const version = VERSION
 const userid = ref('')
 const userPhone = ref('')
 
+const try33 = () => {
+  console.log('--------我执行了-----77777777777------------')
+}
 const test1 = async () => {
-  //v3可以直接滚动
-  // API.scroll.stepEase(800,4)
-  //  let url = "https://video3.pddpic.com/i1/2022-04-21/d2dd68e9f8ca0d10be126a5980ea40fc.mp4.f30.mp4"
-  // let aaa =  await API.getVideoInfo(url)
-  // console.log('a: ', aaa)
+  API.emitter.emit('addTask', {filetype: 'zip',taskname: '店铺信息汇总2.zip',size: 158753, progress: 60})
 }
 const test2 = () => {
-  API.scroll.goToBottomEase()
+  // API.scroll.goToBottomEase()
+   API.emitter.emit('addTask', {filetype: 'video',taskname: '视频.zip',size: 1528753, progress: 30})
 }
 
 
@@ -316,10 +391,25 @@ const logout = () => {
   loginref.value.checkPhone = false
   ElMessage.success('账号退出成功!')
 }
-
+const stopEvent = async (e) => {
+  console.log('---------我执行了---111111111---------')
+  console.log('e: ', e);
+    // e.stopImmediatePropagation()
+    
+  // e.cancelBubble = true;
+  e.stopPropagation()
+  // e.preventDefault()
+  loginref.value.loginShow = true
+}
 const getUserInfo = async () => {
 let userInfoStore  =  await  API.getUserinfo()
-  if(userInfoStore == {}) return 
+  if(userInfoStore.userid == undefined) {
+    $(document).on('click','.dragbox main',(e) => stopEvent(e))
+    // $('.dragbox main').css('pointer-events', 'none')
+    // $(document).on('click','.el-dropdown-link',(e) => stopEvent(e))
+    // $(document).on('click','.el-dropdown',(e) => stopEvent(e))
+    return }
+    console.log('---------我没有执行------------')
   busStore.$patch((state)=>{
       state.userInfo = userInfoStore
     })
@@ -331,13 +421,13 @@ let userInfoStore  =  await  API.getUserinfo()
 //------账号管理菜单函数-----------
  const accountManagement = async (arg) => {
       switch(arg){
-        case 'operate': this.$myBus.$emit('openOperateHistory')
+        case 'operate': API.emitter.emit('openOperateHistory')
           break
-        case 'progress': this.openTaskprogress()
+        case 'progress': API.emitter.emit('openTaskprogress')
           break
-        case 'exchange': loginref.value.loginShow = true
+        case 'exchange':   loginref.value.loginShow = true;console.log('---------我执行了---222---------')
           break
-        case 'logout': this.logout()
+        case 'logout': logout()
           break
         // case 'operate': this.$myBus.$emit('openOperateHistory')
         //   break

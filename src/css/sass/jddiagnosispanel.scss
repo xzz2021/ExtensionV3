@@ -15,7 +15,7 @@
     text-align: center;
     line-height: 60px;
     //抵消关闭按钮的占位偏移
-    margin-right: -30px;
+    
     a {
       cursor: pointer;
       color: #fff;
@@ -123,35 +123,14 @@
 }
 
 
-// 头部拖拽区范围
-:global(.vxe-modal--header){
-  background-color: #ff9712 !important;
-  padding: 0 !important;
-}
 
 
-// 去除头部拖拽区标题slot内边距
-:global(.vxe-modal--header-title){
-  padding: 0 !important;
-}
 
-
-//关闭按钮样式
-:global(.vxe-modal--header-right){
+//诊断面板抵消全局默认的40px
+:deep(.vxe-modal--header-right){
   line-height: 60px;
-  padding: 0 !important;
-  i{
-    color: #fff;
-    margin: 0 30px 0 0;
-  }
 }
-
-
-:global(.vxe-modal--close-btn:hover){
-    color: #fff !important;
-}
-
-//去除头部边框,因为与主题色不协调
-:global(.vxe-modal--wrapper .vxe-modal--box){
-  border: none;
+:deep(.vxe-modal--header-title){
+  line-height: 60px;
+  margin-right: -30px;
 }
