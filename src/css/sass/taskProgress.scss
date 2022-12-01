@@ -53,7 +53,6 @@
             margin-right: 10px;
             svg{
             font-size: 30px;
-              // margin-bottom: 3px;
             }
           }
           .detailInfo{
@@ -86,12 +85,12 @@
           }
         }
         &:hover{
-        .deleteSvg{
-          width: 20px;
-          height: 20px;
-          cursor: pointer;
-          color: #FF9712;
-          }
+          .deleteSvg{
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            color: #FF9712;
+            }
         }
       }
     }

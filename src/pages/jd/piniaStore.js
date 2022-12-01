@@ -25,6 +25,10 @@ export const piniaStore = defineStore('selfInfo', {
           userPhone: '',
           timeStamp: ''
         },
+        proBar: {
+          show: false,
+          percentage: 0
+        }
         // userList: [{
         //   userid: '',
         //   userToken: '',

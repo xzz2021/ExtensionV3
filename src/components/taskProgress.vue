@@ -1,7 +1,7 @@
 <!--
  * @Date: 2022-11-12 09:56:46
  * @LastEditors: xzz2021
- * @LastEditTime: 2022-11-29 14:48:04
+ * @LastEditTime: 2022-11-30 17:54:48
 -->
 <template>
   <vxe-modal className="taskProgressPanel"  v-model="taskShow" width="600" :position="{ top: 100 }" @hide="closeModal">
@@ -28,6 +28,7 @@
           <div class="detailBox">
             <div class="taskSymbol"> <svg class="xzzsymbol" aria-hidden="true"> 
                 <use :xlink:href="`#xzzicon2-${item.filetype}`"></use>
+                <!-- <use xlink:href="#xzzicon2-zip"></use> -->
                 </svg>
             </div>
             <div class="detailInfo">
@@ -42,7 +43,8 @@
             </div>
           </div>
           <div class="deleteSvg" @click="deleteData(item.timeStamp,index)"> 
-            <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-029747aa=""><path fill="currentColor" d="M764.288 214.592 512 466.88 259.712 214.592a31.936 31.936 0 0 0-45.12 45.12L466.752 512 214.528 764.224a31.936 31.936 0 1 0 45.12 45.184L512 557.184l252.288 252.288a31.936 31.936 0 0 0 45.12-45.12L557.12 512.064l252.288-252.352a31.936 31.936 0 1 0-45.12-45.184z"></path></svg></div>
+            <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-029747aa=""><path fill="currentColor" d="M764.288 214.592 512 466.88 259.712 214.592a31.936 31.936 0 0 0-45.12 45.12L466.752 512 214.528 764.224a31.936 31.936 0 1 0 45.12 45.184L512 557.184l252.288 252.288a31.936 31.936 0 0 0 45.12-45.12L557.12 512.064l252.288-252.352a31.936 31.936 0 1 0-45.12-45.184z"></path></svg>
+        </div>
         </div>
     </div>
     <div v-else>
@@ -113,7 +115,7 @@
     })
     // setTimeout(() => {
     //   addTask({filetype: 'zip',taskname: '店铺信息汇总2.zip',size: 158753, progress: 60})
-    //   addTask({filetype: 'video',taskname: '视频总66.zip',size: 1583253, progress: 30})
+    //   addTask({filetype: 'video',taskname: '视频总66.mp4',size: 1583253, progress: 30})
     // }, 3000);
 
     taskData.self =  JSON.parse(await API.Storage.get('taskData')) || []

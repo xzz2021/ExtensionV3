@@ -1,13 +1,13 @@
 <!--
  * @Date: 2022-10-31 14:36:13
  * @LastEditors: xzz2021
- * @LastEditTime: 2022-11-29 16:07:27
+ * @LastEditTime: 2022-12-01 11:33:31
 -->
 <template>
 
   <div class="operateHistory">
     <vxe-modal v-model="Visible" width="600px" @close="closeHistory" height="560px" :position="{ top: 45 }" maskClosable
-      marginSize="-600" center>
+      marginSize="-600" >
       <template #title>
         <!-- <div class="mytitle" @click="$myBus.$emit('summary', $event)">操作记录</div> -->
         <div class="mytitle">操作记录</div>
@@ -148,6 +148,35 @@
     // })
     // await getUserinfo()
     // await getDatabase(1)
+    //
+    $(document).ready(() => {  //页面文档加载完再执行查询
+      let node = $('.addOperateRecord')  //拿到所有标的项
+      node.each(function(){
+        //监听点击事件
+        $(this).on('click',function(){
+          //得到对应class值
+          console.log('$(this)[0].classList[1]: ', $(this)[0].classList[1]);
+
+        })
+      })
+      // for(let i=0; i<node.length; i++){
+      //   // node[i]
+      //   console.log('node[i]: ', node[i]);
+      // }
+      // node.on('click',function(e) {
+        // console.log('e: ', e);
+      //   // this.classList
+      //   console.log('this.classList: ', this);
+      // })
+    //   console.log('node: ', node);
+    //  for(let i=0; i<node.length; i++){
+    //     console.log('node[i]: ', node[i].attr('class'));
+
+    //   // node[i].addEventListener('click',()=> {
+    //   //   console.log('node[i]: ', node[i]);
+    //   // })
+    // }
+   })
   })
 
 </script>

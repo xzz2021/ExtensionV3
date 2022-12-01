@@ -162,7 +162,8 @@ const comconfig = {
                     // },
                     {
                         test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,   //实现其他文件类型整合在js里而不是带hash输出独立文件
-                        type: 'asset',
+                        // type: 'asset',  //-------估计因为后期项目体积过大-----导致会自动改成输出文件形式输出图标------但是独立文件可能要另外配置索引---不然会失效--------
+                        type: 'asset/inline',
                         // use: 'url-loader?limit=16941'
                     }
                     

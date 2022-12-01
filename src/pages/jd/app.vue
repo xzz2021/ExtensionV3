@@ -36,7 +36,7 @@
                   <template #dropdown>
                     <el-dropdown-menu  @mouseenter.enter="() => { $refs.subDropdown2.handleOpen() }"
                         @mouseleave.enter="() => { $refs.subDropdown2.handleClose() }">
-                    <el-dropdown-item :command="item.arg" v-for="item in pictureOption" :key="item.value">
+                    <el-dropdown-item :class="`addOperateRecord 图片下载/${item.value}`" :command="item.arg" v-for="item in pictureOption" :key="item.value">
                       <div class="">
                         {{ item.value }}
                       </div>
@@ -89,7 +89,7 @@
               </el-dropdown-item>
                 <!-- 二级菜单结束 -->
 
-              <el-dropdown-item  class="el-dropdown-item2" @click.enter="downLoadJDVideoVue">
+              <el-dropdown-item  class="addOperateRecord 下载工具/视频下载 el-dropdown-item2" @click.enter="downLoadJDVideoVue">
                 <span class="el-dropdown-link2">
                   <div class="title2" >视频下载</div>
                 </span>
@@ -100,7 +100,7 @@
       </div>
           <div>
         <el-dropdown>
-          <span class="el-dropdown-link" @click.capture="try33">
+          <span class="addOperateRecord 商品搬家/商品搬家 el-dropdown-link" @click="try33" >
             <div class="jclicon"><i class="xzzicon3-spbj"></i></div>
             <div class="title">商品搬家</div>
             <div class="arrow-right-czp"><i class=""></i></div>
@@ -116,8 +116,8 @@
             </span>
             <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item command="operate">操作记录</el-dropdown-item>
-              <el-dropdown-item command="progress">任务进程</el-dropdown-item>
+              <el-dropdown-item class="addOperateRecord 账号管理/操作记录" command="operate">操作记录</el-dropdown-item>
+              <el-dropdown-item class="addOperateRecord 账号管理/任务进程" command="progress">任务进程</el-dropdown-item>
               <el-dropdown-item command="exchange">切换账号</el-dropdown-item>
               <el-dropdown-item command="logout">退出登录</el-dropdown-item>
             </el-dropdown-menu>
@@ -152,17 +152,19 @@
     <operateHistory ref="operateHistoryRef" />
     <jdScanRecord ref="ScanRecordRef"/>
     <!-- <jdShopDiagnosis ref="shopDiagnosisRef" /> -->
-    <!-- <oneClickDiagnosis /> -->
     <!-- <MyProgress :show="progressVisible" :percentage="percentage" /> -->
     <!-- <imageDownload ref="imageDownloadRef"/>
     <commentDownload ref="commentDownloadRef" />
-    <keywordRanking ref="zrss" />
-    <shopDiagnosis ref="shopDiagnosisRef"/> -->
+    <keywordRanking ref="zrss" /> -->
     <div class="test">
-      <el-button type="primary" @click="test1">test1</el-button>
+      <div class="test1" @click="test1">
+      <el-button type="primary" >test1</el-button>
+      </div>
       <el-button type="primary" @click="test2">test2</el-button>
     </div>
     <jdChildComponent />
+    <!-- 通过将props动态值绑定到pinia上,可以全局实时更改调用,且不需要公共组件的pinia引入 不再需要$ref的定义及调用-->
+    <progressBar :visible="proBar.show" :percentage="proBar.percentage"/>
 </template>
 
 <script setup>
@@ -181,13 +183,23 @@ const { location } = storeToRefs(userstore)
 //平台状态store
 const busStore = piniaStore()
 //storeToRefs增加响应性,使用了proxy,所以需要用.value拿到值
-const { info_id, scanData, scanShow, currentHref2 } = storeToRefs(busStore) 
+const { proBar,info_id, scanData, scanShow, currentHref2 } = storeToRefs(busStore) 
 
 
 // const { proxy } = getCurrentInstance()
 //---------------单纯字符串变量不可使用reactive---------
 //-----ref定义的数据：操作数据需要.value，读取数据时模板中直接读取不需要
 
+// const proBarPer = ref(30)
+// const proBarShow = ref(true)
+const test1 = async () => {
+  proBar.value.show = true
+  setInterval(() => {
+    proBar.value.percentage += 6
+    
+  }, 1000);
+
+}
 
 let currentHref = ref('')
 let curCookies  = ref('')
@@ -199,12 +211,21 @@ const userPhone = ref('')
 const try33 = () => {
   console.log('--------我执行了-----77777777777------------')
 }
-const test1 = async () => {
-  API.emitter.emit('addTask', {filetype: 'zip',taskname: '店铺信息汇总2.zip',size: 158753, progress: 60})
+// const test1 = async () => {
+//   console.log('--------我执行了-----test1------test1------')
+
+// }
+const add3 = (e) => {
+  console.log('-------我是新增事件--------------')
+        //三种方式兼容不同浏览器
+        e.stopImmediatePropagation()
+        e.cancelBubble = true //IE
+        e.stopPropagation()
 }
 const test2 = () => {
+  let dom = $('.test1')[0]
+  dom.removeEventListener('click', add3, 'useCapture')
   // API.scroll.goToBottomEase()
-   API.emitter.emit('addTask', {filetype: 'video',taskname: '视频.zip',size: 1528753, progress: 30})
 }
 
 
@@ -391,25 +412,43 @@ const logout = () => {
   loginref.value.checkPhone = false
   ElMessage.success('账号退出成功!')
 }
-const stopEvent = async (e) => {
-  console.log('---------我执行了---111111111---------')
-  console.log('e: ', e);
-    // e.stopImmediatePropagation()
-    
-  // e.cancelBubble = true;
+//监听添加移除的公共事件
+const targetEvent= (e) => {
+  //三种方式兼容不同浏览器
+  e.stopImmediatePropagation()
+  e.cancelBubble = true //IE
   e.stopPropagation()
-  // e.preventDefault()
   loginref.value.loginShow = true
+}
+//未登录时的添加拦截事件
+const addEvent = async () => {
+    let item = $('.el-dropdown')
+    let item2 = $('.el-dropdown-menu')
+     for(let i=0; i<item.length; i++){
+      item[i].addEventListener('click',targetEvent,'capture')
+    }
+    for(let i=0; i<item2.length; i++){
+      item2[i].addEventListener('click',targetEvent,'capture')
+    }
+}
+//登录后的移除拦截事件
+const removeEvent = () => {
+    let item = $('.el-dropdown')
+    let item2 = $('.el-dropdown-menu')
+     for(let i=0; i<item.length; i++){
+      item[i].removeEventListener('click', targetEvent, 'useCapture')
+    }
+    for(let i=0; i<item2.length; i++){
+      item2[i].removeEventListener('click', targetEvent, 'useCapture')
+    }
 }
 const getUserInfo = async () => {
 let userInfoStore  =  await  API.getUserinfo()
   if(userInfoStore.userid == undefined) {
-    $(document).on('click','.dragbox main',(e) => stopEvent(e))
-    // $('.dragbox main').css('pointer-events', 'none')
-    // $(document).on('click','.el-dropdown-link',(e) => stopEvent(e))
-    // $(document).on('click','.el-dropdown',(e) => stopEvent(e))
-    return }
-    console.log('---------我没有执行------------')
+    addEvent()
+    return }else{
+      removeEvent()
+    }
   busStore.$patch((state)=>{
       state.userInfo = userInfoStore
     })
@@ -443,8 +482,6 @@ let userInfoStore  =  await  API.getUserinfo()
 onMounted(() => {
 currentHref = window.location.href
 curCookies.value = document.cookie
-//curCookies.value = "{'" + document.cookie + "'}"
-// store.getUserinfo()
 })
 
 onBeforeMount(async () => {
