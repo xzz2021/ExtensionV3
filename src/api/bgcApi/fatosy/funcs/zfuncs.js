@@ -61,6 +61,7 @@ const getJDSKULink = (skunum) => {
     return result
 }
 
+// 注入京东商品页获取页面数据 
 const injectJDSkuPageData = async() => {
     let result = {
         "skuTitle" : '暂无数据',
@@ -79,7 +80,9 @@ const injectJDSkuPageData = async() => {
         "goodCommentTagList" : [],
         "goodCommentRate" : '暂无数据',
         "commentNum" : '暂无数据',
-        'commentPicNum': '暂无数据'
+        'commentPicNum': '暂无数据',
+        'badComment': '暂无数据',
+        'goodComment': '暂无数据'
     }
     
     // 获取商品ID
@@ -92,6 +95,7 @@ const injectJDSkuPageData = async() => {
     if(document.getElementsByClassName('sku-name')[0] != undefined){
         result['skuTitle'] = document.getElementsByClassName('sku-name')[0].innerText;
     }
+    
     // 获取商品价格
     if(result['skuID'] != '暂无数据'){
         let pcn = 'price J-p-' + result['skuID']

@@ -173,7 +173,8 @@ import {downLoadJDcommentPic, downLoadJDcommentNoPic} from './js/JDcomments.js'
 import { getMainImg, getSkuImg, packageImages, packageSkuImages, downloadDtlImg, downloadAllImg, getMainImgPhone, getSkuImgPhone, getDtlImgPhone, getAllImgPhone } from './js/JDPCPicture.js'
 import { getOrderList, setOrderList } from './js/JDorderTag.js'
 import { getVideoTitle, getSkuId, diagnosisProduct} from './js/JDDetailData.js'
-
+import {dwdJDPCMainPics, dwdJDPCSkuPics, dwdJDPCDtlPics, dwdJDPCallPics, dwdJDPCallPicsDir} from './js/JDImage.js'
+import {dwdJDYDMainPics, dwdJDYDskuPics, dwdJDYDdtlPics, dwdJDYDallPics, dwdJDYDallPicsDir} from './js/JDImage.js'
 
 //各平台持久化的store数据
 const userstore = userStore()
@@ -240,10 +241,12 @@ const shopDiagnosisRef = ref(null)
 
 const diagnosisOption = reactive([{value: 2}, {value: 5}, {value: 10}, {value: 20}])
 const pictureOption  = reactive([
+    {value: 'PC端-全部下载(带文件夹)', arg: 'pc_all_Dir'},
     {value: 'PC端-全部下载', arg: 'pc_all'},
     {value: 'PC端-主图下载', arg: 'pc_main'},
     {value: 'PC端-SKU图下载', arg: 'pc_sku'},
     {value: 'PC端-详情图下载', arg: 'pc_detail'},
+    {value: '移动端-全部下载(带文件夹)', arg: 'phone_all_Dir'},
     {value: '移动端-全部下载', arg: 'phone_all'},
     {value: '移动端-主图下载', arg: 'phone_main'},
     {value: '移动端-SKU图下载', arg: 'phone_sku'},
@@ -261,6 +264,7 @@ const OneClickDiagnosis = async(num) =>{
   if(num =='scanRecord') return scanRecordRef.value.getScanData(num)
   // diagnosisProduct(num)
   shopDiagnosisRef.value.startDiagnosis(num)
+
 }
 
 // 图片下载 start
@@ -269,64 +273,82 @@ const downLoadJDPicVue = async (type) => {
         ElMessage.success({ message:"PC端-图片全部下载开始"});
         let skd = getSkuId(currentHref)
         downloadAllImg(skd);
+
+    }
+    if(type == 'pc_all_Dir'){
+      ElMessage.success({ message:"PC端-图片全部下载(带文件夹)开始"});
+        /* let skd = getSkuId(currentHref)
+        downloadAllImg(skd); */
+        dwdJDPCallPicsDir();
     }
     if ( type == "pc_main"){
         ElMessage.success({ message:"PC端-主图下载开始"});
-        let mains = getMainImg();
+        /* let mains = getMainImg();
         let skd = getSkuId(currentHref)
         let timenum = API.ztime.ymd2()
         let filename = timenum + '电脑端-' + skd + '图片主图下载'
-        packageImages(mains, "主图", filename);
+        packageImages(mains, "主图", filename); */
+        dwdJDPCMainPics()
     }
     if ( type == "pc_sku") {
         ElMessage.success({ message:"PC端-SKU图下载开始"});
-        let skus = getSkuImg();
+        /* let skus = getSkuImg();
         let timenum = API.ztime.ymd2()
         let skd = getSkuId(currentHref)
         let filename = timenum + '电脑端-' + skd + '图片SKU图下载'
-        packageSkuImages(skus, filename);
+        packageSkuImages(skus, filename); */
+        dwdJDPCSkuPics()
     }
     if ( type == "pc_detail"){
         ElMessage.success({ message:"PC端-详情图下载开始"});
-        let skd = getSkuId(currentHref)
-        downloadDtlImg(skd);
+        /* let skd = getSkuId(currentHref)
+        downloadDtlImg(skd); */
+        dwdJDPCDtlPics()
     }
 
     if (type == "phone_main"){
         ElMessage.success({ message:"移动端-主图下载开始"});
-        let skd = getSkuId(currentHref)
+        /* let skd = getSkuId(currentHref)
         let phonemains = await getMainImgPhone(skd);
         let timenum = API.ztime.ymd2()
         let filename = timenum + '移动端-' + skd + '图片主图下载'
-        packageImages(phonemains, "主图", filename);
+        packageImages(phonemains, "主图", filename); */
+        await dwdJDYDMainPics();
     }
 
 
     if (type == "phone_sku"){
         ElMessage.success({ message:"移动端-SKU图下载开始"});
-        let skd = getSkuId(currentHref)
+        /* let skd = getSkuId(currentHref)
         let phoneskus = await getSkuImgPhone(skd);
         let timenum = API.ztime.ymd2()
         let filename = timenum + '移动端-' + skd + '图片SKU图下载'
-        packageSkuImages(phoneskus, filename);
+        packageSkuImages(phoneskus, filename); */
+        await dwdJDYDskuPics();
     }
 
     if(type == "phone_detail"){
         ElMessage.success({ message:"移动端-详情图下载开始"});
-        let skd = getSkuId(currentHref)
+        /* let skd = getSkuId(currentHref)
         let phonedtls = await getDtlImgPhone(skd);
         let timenum = API.ztime.ymd2()
         let filename = timenum + '移动端-' + skd + '图片详情图下载'
-        packageImages(phonedtls, "详情图", filename);
+        packageImages(phonedtls, "详情图", filename); */
+        dwdJDYDdtlPics();
     }
 
     if(type == 'phone_all'){
         ElMessage.success({ message:"移动端-图片全部下载开始"});
-        let skd = getSkuId(currentHref)
+        /* let skd = getSkuId(currentHref)
         let picAll = await getAllImgPhone(skd);
         let timenum = API.ztime.ymd2()
         let filename = timenum + '移动端-' + skd + '图片全部下载'
-        packageSkuImages(picAll, filename);
+        packageSkuImages(picAll, filename); */
+        dwdJDYDallPics();
+    }
+    if(type == 'phone_all_Dir'){
+      ElMessage.success({ message:"移动端-图片全部下载（带文件夹）开始"});
+      dwdJDYDallPicsDir();
     }
 }
 // 图片下载 end

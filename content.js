@@ -7,6 +7,7 @@ import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 
 const pinia = createPinia()
+
 // https://github.com/prazdevs/pinia-plugin-persistedstate  //  pinia数据持久化,自动存取localstorage
 pinia.use(piniaPluginPersistedstate)
 //-----------------------------------

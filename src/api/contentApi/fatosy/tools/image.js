@@ -24,23 +24,6 @@ class zImg{
         })
     }
 
-    // 重复图检测
-    async checkRe(urlList){
-        let acmtUrl = 'http://120.25.224.61:9001/main_images_check'
-        let msg = {
-            type: 'myfetch',
-            
-            config: { 
-                method: 'POST',
-                responseType: 'JSON', 
-                data: {
-                    "urls": urlList,
-                },
-                url: acmtUrl
-            }
-        }
-        let jsondata = await API.sendMessage(msg)
-    }
 
    
 }
