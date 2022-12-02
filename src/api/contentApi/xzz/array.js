@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-11-02 14:49:31
  * @LastEditors: xzz2021
- * @LastEditTime: 2022-11-05 11:55:02
+ * @LastEditTime: 2022-11-16 15:20:53
  */
 
 
@@ -125,4 +125,28 @@ const getAttrs = (array,attr) => { arr = array.map((item)=> item[attr])}
 const groupBy = (arr, key) => arr.reduce((acc, item) => ((acc[item[key]] = [...(acc[item[key]] || []), item]), acc), {});
 
 
+// 简单数组按指定个数组合
+const choose = (arr, size) =>  {
+    let allResult = [];
+    (function aa(arr, size, result) {
+        let arrLen = arr.length;
+        if (size > arrLen) {return}
+        if (size == arrLen) {
+            allResult.push([].concat(result, arr))
+        } else {
+            for (const i = 0; i < arrLen; i++) {
+                let newResult = [].concat(result);
+                newResult.push(arr[i]);
+                if (size == 1) {
+                    allResult.push(newResult);
+                } else {
+                    let newArr = [].concat(arr);
+                    newArr.splice(0, i + 1);
+                    aa(newArr, size - 1, newResult);
+                }
+            }
+        }
+    })(arr, size, []);
 
+    return allResult;
+}

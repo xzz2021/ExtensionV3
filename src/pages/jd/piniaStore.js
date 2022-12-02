@@ -1,43 +1,66 @@
 /*
  * @Date: 2022-09-15 11:21:04
  * @LastEditors: xzz2021
- * @LastEditTime: 2022-11-09 09:19:35
+ * @LastEditTime: 2022-11-28 11:01:57
  */
 
 import { defineStore } from 'pinia'
 
 //------------此处可放置任意vue实例变量-------------------------
 export const piniaStore = defineStore('selfInfo', {
-  // arrow function recommended for full type inference
-  state: () => {
-    return {
-      count: 0,
-      diagnosisStatus : 0,
-      // userInfo: {
-      //   userid: '',
-      //   userToken: '',
-      //   userPhone: '',
-      //   timeStamp: ''
-      // },
-      // userList: [{
-      //   userid: '',
-      //   userToken: '',
-      //   userPhone: '',
-      //   timeStamp: ''
-      // }],
-      diagnosisShow: false,
-      diagnosisData: { shopUrl: '', shopName: '', sumData: [], detailData: [], timeTamp: '87234254585' }
-    }
-  },
-  // persist: true, //持久化
-  actions: {  //支持异步
-    increment() {
-      this.count++
+    // arrow function recommended for full type inference
+    state: () => {
+      return {
+        count: 0,
+        info_id: 0,
+        diagnosisStore:{
+          show: false,
+          percentage: 70,
+          info_id: 0,
+          diagnosisData: {},
+        },
+        currentHref2:  window.location.href,
+        userInfo: {
+          userid: '',
+          userToken: '',
+          userPhone: '',
+          timeStamp: ''
+        },
+        proBar: {
+          show: false,
+          percentage: 0
+        }
+        // userList: [{
+        //   userid: '',
+        //   userToken: '',
+        //   userPhone: '',
+        //   timeStamp: ''
+        // }],
+      }
     },
-  },
-  getters: {
-    diagnosisData2: (state) => {
-      return API.isExpired(state.diagnosisData.timeTamp, 5) ? diagnosisData : {}
+    // persist: true, //持久化
+      actions: {  //支持异步
+        increment() {
+          this.count++
+        },
+        // //自动获取当前登录用户信息挂载到store里
+        // async getUserinfo(){
+        //   this.userInfo = await API.Storage.get('userInfo')
+        // },
+        // //自动获取用户信息列表,即历史登录记录并挂载到store里
+        // async getUserlist(){
+        //   this.userList = await API.Storage.get('userList')
+        // },
+        //自动更新当前登录用户信息并挂载到store里,配合账号切换功能
+        // async updateUserinfo(){
+        //   let aaa = await API.Storage.get('userInfooo')
+        //   console.log('aaa: ', aaa == '');
+        // }
+    },
+    getters: {
+      // diagnosisData2: (state) => {
+      //   return API.isExpired(state.diagnosisData.timeTamp, 5) ? diagnosisData : {}
+      // }
     }
   }
 })

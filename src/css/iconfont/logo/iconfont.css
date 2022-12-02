@@ -6,7 +6,7 @@
     url('./iconfont.ttf?t=1663806155400') format('truetype');
 }
 
-i[class*='xzzicon'] {
+i[class*='xzzicon3'] {
   font-family: "iconfont" !important;
   font-size: 16px;
   font-style: normal;
@@ -14,233 +14,55 @@ i[class*='xzzicon'] {
   -moz-osx-font-smoothing: grayscale;
 }
 
-
-.xzzicon-shrink2:before {
-  content: "\e6c1";
+.xzzicon3-home:before {
+  content: "\e6b0";
 }
 
-.xzzicon-shrink:before {
+.xzzicon3-spbj:before {
+  content: "\e6ca";
+}
+
+.xzzicon3-bdgj:before {
+  content: "\e6ba";
+}
+
+.xzzicon3-youjt:before {
+  content: "\e6a5";
+  font-size: 10px;
+}
+
+.xzzicon3-shrink:before {
   content: "\e6b1";
 }
 
-.xzzicon-tishi:before {
-  content: "\e61b";
+.xzzicon3-shrink2:before {
+  content: "\e6c1";
 }
 
-
-.xzzicon-bfb:before {
-  content: "\e682";
-}
-
-.xzzicon-gjczhq:before {
-  content: "\e66d";
-}
-
-.xzzicon-logout:before {
-  content: "\e68a";
-}
-
-.xzzicon-login:before {
-  content: "\e61f";
-}
-
-.xzzicon-exchange:before {
-  content: "\e693";
-}
-
-
-.xzzicon-xiazai:before {
-  content: "\e616";
-}
-
-.xzzicon-yxcg:before {
-  content: "\e619";
-}
-
-.xzzicon-spxz:before {
-  content: "\e95c";
-}
-
-.xzzicon-pinglun:before {
-  content: "\e6c2";
-}
-
-.xzzicon-youjt:before {
-  content: "\e6a5";
-}
-
-.xzzicon-shouye:before {
-  content: "\e8a6";
-}
-
-.xzzicon-dianpu:before {
+.xzzicon3-dianpu:before {
   content: "\e621";
 }
 
-.xzzicon-pingjia:before {
-  content: "\e624";
-}
-
-.xzzicon-dingdan:before {
-  content: "\e6315";
-}
-
-.xzzicon-tupian:before {
+.xzzicon3-tupian:before {
   content: "\e626";
 }
 
-.xzzicon-liulan:before {
-  content: "\e680";
-}
-
-.xzzicon-zhenduan:before {
-  content: "\e609";
-}
-
-.xzzicon-wuliu:before {
+.xzzicon3-wuliu:before {
   content: "\e60a";
 }
 
-.xzzicon-zhibiao:before {
-  content: "\e60c";
-}
-
-.xzzicon-biaoti:before {
+.xzzicon3-biaoti:before {
   content: "\e60d";
 }
 
-.xzzicon-guanbi:before {
-  content: "\e60f";
+.xzzicon3-spxz:before {
+  content: "\e95c";
 }
 
-/* 特殊项 */
-
-.xzzicon-close:before {
-  content: "\eaf2";
-  font-size: 30px;
+.xzzicon3-login:before {
+  content: "\e61f";
 }
 
-.xzzicon-ppsb:before {
-  content: "\eaf2";
-  color: #FF9712;
-  font-size: 10px;
-}
-
-.xzzicon-ppcg:before {
-  content: "\e61c";
-  color: #7DB356;
-  font-size: 10px;
-}
-
-.xzzicon-isok:before {
-  color: #16B954;
-  content: "\e407";
-}
-
-.xzzicon-notok:before {
-  color: #FF6464;
-  content: "\e6c0";
-}
-
-/* 旗帜开始 */
-.xzzicon-hongqi:before {
-  content: "\e804";
-}
-
-.xzzicon-hongqi1:before {
-  content: "\e804";
-  color: red;
-}
-
-.xzzicon-hongqi2:before {
-  content: "\e804";
-  color: blue;
-}
-
-.xzzicon-hongqi3:before {
-  content: "\e804";
-  color: green;
-}
-
-.xzzicon-hongqi4:before {
-  content: "\e804";
-  color: orange;
-}
-
-.xzzicon-hongqi5:before {
-  content: "\e804";
-  color: purple;
-}
-
-/*6-10为天猫订单备注旗子*/
-.xzzicon-hongqi6:before {
-  content: "\e804";
-  color: red;
-}
-
-.xzzicon-hongqi7:before {
-  content: "\e804";
-  color: yellow;
-}
-
-.xzzicon-hongqi8:before {
-  content: "\e804";
-  color: green;
-}
-
-.xzzicon-hongqi9:before {
-  content: "\e804";
-  color: blue;
-}
-
-.xzzicon-hongqi10:before {
-  content: "\e804";
-  color: purple;
-}
-
-/*11-14为阿里国内订单备注旗子*/
-.xzzicon-hongqi11:before {
-  content: "\e804";
-  color: red;
-}
-
-.xzzicon-hongqi12:before {
-  content: "\e804";
-  color: rgb(70, 131, 201);
-}
-
-.xzzicon-hongqi13:before {
-  content: "\e804";
-  color: rgb(71, 199, 128);
-}
-
-.xzzicon-hongqi14:before {
-  content: "\e804";
-  color: rgb(227, 241, 22);
-}
-
-/*15-19为京东订单备注旗子*/
-.xzzicon-hongqi15:before {
-  content: "\e804";
-  color: red;
-}
-
-.xzzicon-hongqi16:before {
-  content: "\e804";
-  color: rgb(241, 217, 0);
-}
-
-.xzzicon-hongqi17:before {
-  content: "\e804";
-  color: rgb(44, 235, 19);
-}
-
-.xzzicon-hongqi18:before {
-  content: "\e804";
-  color: rgb(72, 134, 226);
-}
-
-.xzzicon-hongqi19:before {
-  content: "\e804";
-  color: rgb(227, 101, 231);
+.xzzicon3-exchange:before {
+  content: "\e693";
 }

@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-10-05 09:17:58
  * @LastEditors: xzz2021
- * @LastEditTime: 2022-10-28 15:16:53
+ * @LastEditTime: 2022-11-25 09:17:37
  */
 const Storage = {
 
@@ -16,12 +16,11 @@ const Storage = {
             for(const key in obj) {
                 if(obj[key] == undefined) return tip = `${key}设定成功失败,值不能为undefined`
                 chrome.storage.local.set({[key]: obj[key]}, ()=> {
-                    console.log(`${l}:${key}设定成功,值为${JSON.stringify(obj[key])}`)
+                    // console.log(`${l}:${key}设定成功,值为${JSON.stringify(obj[key])}`)
                     tip = ` ${l}:${key}设定成功,值为${obj[key]} `
                     l++
                 })
             }
-            console.log('----l---------',l)
             resolve(tip)
         }
     })

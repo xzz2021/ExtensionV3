@@ -33,7 +33,7 @@ import 'vxe-table/lib/style.css'
 
 //引入自定义的所有css入口文件
 import './src/css/style'
-//------------------------
+//----------------------
 
 
 
@@ -47,7 +47,6 @@ import './src/css/style'
         //     })
         //   }
         // })
-        
 
 //-------------------各平台实例引入----------------
 import app1688 from './src/pages/alibaba/app.vue'
@@ -62,13 +61,12 @@ function createEntry(myapp,id){
   const el = document.querySelector('body');
   if (el) {
     //  afterbegin 插入body内部最前面------afterend插入body外部后面
-      el.insertAdjacentHTML('afterend',`<div id="${id}"></div>`)
+    // 必须嵌入body内部,不然面板无法固定
+      el.insertAdjacentHTML('afterbegin',`<div id="${id}"></div>`)
       createApp(myapp).use(pinia).use(VXETable).mount(`#${id}`)
     }
 }
 
-
-let url = location.host
 
 
 //-----popup页面----------
@@ -84,8 +82,8 @@ import popup from './src/popup/app.vue'
 //----------------------------------------------------------------------------------
 
 //-------------------版本2.0----------------------
-let loginUrl = url.match(/login|mms|passport/) != null
-let checkedUrl = url.match(/tmall|taobao|1688|yangkeduo|pinduoduo|alibaba|jd|lemak/)
+let loginUrl = location.host.match(/login|mms|passport/) != null
+let checkedUrl = location.host.match(/tmall|taobao|1688|yangkeduo|pinduoduo|alibaba|jd|lemak/)
 loginUrl? checkedUrl = '': checkedUrl = checkedUrl ? checkedUrl[0] : ''
 //------------------------------------------------
 
@@ -129,3 +127,28 @@ s.onload = function() {
 // import {getShow} from'./show'
 // let aa = getShow(DEBUG)
 // console.log('aa: ', aa);
+
+
+
+
+
+
+
+//class 的引入
+
+/* class app {
+  constructor(name){
+      this.name = name
+  }
+  speak(){
+      return 'my name is ' + this.name
+  }
+}
+
+export default app */
+
+// import app from './class'
+// let a = new app('xzz66666')
+// let ccc = a.speak()
+// console.log('ccc: ', ccc)
+

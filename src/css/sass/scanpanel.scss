@@ -1,0 +1,90 @@
+@import 'vxeCommon';
+
+.scanmodal{
+  z-index: 9999;
+}
+.mytitle {
+  color: #ffffff;
+  text-align: center;
+  height: 40px;
+  width: 500px;
+  line-height: 40px;
+  font-size: 18px;
+  font-family: MicrosoftYaHei;
+  // width: 113%;
+}
+
+.myScanBox {
+
+  .scanDateTitle {
+    width: 460px;
+    height: 32px;
+    background: rgba(248, 248, 249, 0.3900);
+    opacity: 1;
+    border-radius: 4px 4px 0px 0px;
+    font-size: 16px;
+    font-family: MicrosoftYaHei;
+    line-height: 32px;
+    color: #000000;
+  }
+
+  .scanList {
+    // margin: 20px;
+    display: flex;
+    width: 460px;
+    height: 39px;
+    background: rgba(255, 255, 255, 0.3900);
+    text-align: left;
+    border-bottom: 1px solid rgba(238, 238, 238, 0.3900);
+
+    .scanTime {
+      width: 80px;
+      font-size: 14px;
+      line-height: 40px;
+      color: #999999;
+
+    }
+
+    .scanShop {
+      width: 385px;
+      font-size: 14px;
+      font-family: Microsoft YaHei;
+      line-height: 40px;
+      color: #555555;
+      display: flex;
+      justify-content: space-between;
+      cursor: pointer;
+
+      .shopTitle {
+        width: 350px;
+        overflow: hidden;
+      }
+
+      .guanbibtn {
+        text-align: center;
+        font-size: 10px;
+        width: 40px;
+        display: none;
+      }
+    }
+
+    &:hover .scanTime,
+    &:hover .scanShop {
+      background: #ffa9391f;
+      color: #ff9712;
+      font-weight: bold;
+    }
+
+    &:hover .guanbibtn {
+      display: block;
+      font-size: 15px;
+      font-weight: bolder;
+    }
+  }
+}
+
+.emptyImg {
+  margin: 30px 139px 50px 139px;
+  width: 208px;
+  height: 119px;
+}

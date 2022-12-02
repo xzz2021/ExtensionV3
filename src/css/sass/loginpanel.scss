@@ -5,14 +5,21 @@
 :deep(.el-dialog){
   border-radius: 10px;
 }
+//兼容顶部拖拽
 :deep(.el-dialog__header){
-  padding: 0;
+  padding: 8px;
 }
 :deep(.el-dialog__body){
-  padding: 16px;
+  padding: 0 16px 16px 16px;
 }
 
-
+//按蓝湖调整关闭按钮位置
+:deep(.el-dialog__headerbtn) {
+  width: 36px;
+  height: 36px;
+  font-size: 20px;
+  right: 4px;
+}
 
 .el-divider--horizontal{
   margin: 0;
@@ -26,7 +33,6 @@
         width: 372px;
         height: 468px;
       }
-
     }
     .right{
       padding: 50px;
@@ -58,7 +64,7 @@
         .phoneSec{
           position: relative;
           width: 100%;
-          .dropdownBox{
+          .dropBox{
             position: absolute;
             top: 12px;
             right: 12px;
@@ -217,6 +223,7 @@
             color: #000000;
             &:hover{
               cursor: pointer;
+              color: #ff9712;
             }
           }
           .onecolor {
@@ -231,6 +238,7 @@
             line-height: 40px;
             &:hover{
               cursor: pointer;
+              color: #ff9712;
             }
           }
           &:hover .deleteBtn{
