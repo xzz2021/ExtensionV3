@@ -1,5 +1,10 @@
 <template>
 <div class="commentDownload"></div>
+
+ 	<!--excel下载及数据格式 let column = [{title: '名称',key: 'name',type: 'text'},{title: '视频链接',key: 'videourl',type: 'text'},{title: '图片',key: 'imgurl',type: 'image'}]
+   let data = [{name:'试试111',videourl: 'http://weh.wefw.com60buyimg.com/n2/jfs/t1/193336/10/26161/112918/6/wefew.mp4', imgurl: 'https://img13.360buyimg.com/n2/jfs/t1/193336/10/26161/112918/62c55835Ec20d50ad/7ab207e4ed7547d8.jpg'},
+               {name:'试试222', videourl: '', imgurl: ['https://img14.360buyimg.com/n2/jfs/t1/122295/27/18626/340950/6165b043Ed9f958ec/7a4fc3035bca0094.jpg', 'https://img13.360buyimg.com/n2/jfs/t1/193336/10/26161/112918/62c55835Ec20d50ad/7ab207e4ed7547d8.jpg']}]
+ let a = await API.tableToExcel(column,data, '哈哈哈') -->
 </template>
 <script>
 export default {

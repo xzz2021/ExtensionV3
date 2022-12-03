@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-11-29 14:58:05
  * @LastEditors: xzz2021
- * @LastEditTime: 2022-11-29 15:52:11
+ * @LastEditTime: 2022-12-02 17:36:41
  */
 
 //---操作历史记录相关方法------与后端交互,获取和删除数据
@@ -34,7 +34,7 @@ const operateHistory = {
         //   limit: 10
         // }
         let res =  await  API.sendMessage({type: 'myfetch', config:{url: '?s=Dpzd.User_OperatingLog.actlogList',body: obj }})  
-        // console.log('res:------------- ', res);
+        // console.log('res:----operate--------- ', res);
         if (res.ret == undefined) return ElMessage.error({ message: `获取数据失败,后端接口异常,原因:${res}`, duration: 3000, showClose: true })
         if (res.ret == 400) return ElMessage.error({ message: `获取失败,原因:${res.msg}`, duration: 3000, showClose: true })
           

@@ -17,7 +17,7 @@
     <!-- <el-collapse-transition> -->
     <main class="jclmain" v-show="showMain">
         <div>
-        <el-dropdown placement="right-start" ref="subDropdown2" >
+        <el-dropdown placement="right-start" ref="subDropdown2">
           <span class="el-dropdown-link">
             <div class="jclicon"><i class="xzzicon3-tupian"></i></div>
             <div class="title" >下载工具</div>
@@ -28,7 +28,7 @@
              <el-dropdown-menu class="el-dropdown-menu2">
               <!-- 二级菜单开始 -->
               <el-dropdown-item class="el-dropdown-item2">
-                <el-dropdown  placement="right-start" @command="downLoadJDPicVue" >
+                <el-dropdown  placement="right-start" @command="imgDownload" >
                       <span class="el-dropdown-link2">
                         <div class="title2">图片下载</div>
                         <i class="xzzicon3-youjt"></i>
@@ -36,10 +36,9 @@
                   <template #dropdown>
                     <el-dropdown-menu  @mouseenter.enter="() => { $refs.subDropdown2.handleOpen() }"
                         @mouseleave.enter="() => { $refs.subDropdown2.handleClose() }">
-                    <el-dropdown-item :class="`addOperateRecord 图片下载/${item.value}`" :command="item.arg" v-for="item in pictureOption" :key="item.value">
-                      <div class="">
-                        {{ item.value }}
-                      </div>
+                    <el-dropdown-item :class="`addOperateRecord 图片下载-${item.name}`"
+                    :command="item" v-for="item in pictureOption" :key="item.name">
+                        {{ item.name }}
                     </el-dropdown-item>
                     </el-dropdown-menu>
                   </template>
@@ -58,9 +57,9 @@
                   <template #dropdown>
                     <el-dropdown-menu  @mouseenter.enter="() => { $refs.subDropdown2.handleOpen() }"
                         @mouseleave.enter="() => { $refs.subDropdown2.handleClose() }">
-                    <el-dropdown-item :command="item.value" v-for="item in commentOptionPic" :key="item.value">
-                      <div>{{ item.value }}</div>
-                    </el-dropdown-item>
+                        <!-- <el-dropdown-menu  > -->
+                    <el-dropdown-item :command="item.value" v-for="item in commentOptionPic" 
+                    :key="item.value">{{ item.value }}</el-dropdown-item>
                     </el-dropdown-menu>
                   </template>
                 </el-dropdown>
@@ -78,18 +77,16 @@
                   <template #dropdown>
                     <el-dropdown-menu  @mouseenter.enter="() => {$refs.subDropdown2.handleOpen() }"
                         @mouseleave.enter="() => { $refs.subDropdown2.handleClose() }">
-                    <el-dropdown-item :command="item.value" v-for="item in commentOptionNoPic" :key="item.value">
-                      <div class="">
-                        {{ item.value }}
-                      </div>
-                    </el-dropdown-item>
+                    <!-- <el-dropdown-menu  > -->
+                    <el-dropdown-item :command="item.value" v-for="item in commentOptionNoPic" 
+                    :key="item.value">{{ item.value }}</el-dropdown-item>
                     </el-dropdown-menu>
                   </template>
                 </el-dropdown>
               </el-dropdown-item>
                 <!-- 二级菜单结束 -->
 
-              <el-dropdown-item  class="addOperateRecord 下载工具/视频下载 el-dropdown-item2" @click.enter="downLoadJDVideoVue">
+              <el-dropdown-item  class="addOperateRecord 下载工具-视频下载 el-dropdown-item2" @click.enter="downLoadJDVideoVue">
                 <span class="el-dropdown-link2">
                   <div class="title2" >视频下载</div>
                 </span>
@@ -100,7 +97,7 @@
       </div>
           <div>
         <el-dropdown>
-          <span class="addOperateRecord 商品搬家/商品搬家 el-dropdown-link" @click="try33" >
+          <span class="addOperateRecord 商品搬家-商品搬家 el-dropdown-link" @click="try33" >
             <div class="jclicon"><i class="xzzicon3-spbj"></i></div>
             <div class="title">商品搬家</div>
             <div class="arrow-right-czp"><i class=""></i></div>
@@ -116,8 +113,8 @@
             </span>
             <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item class="addOperateRecord 账号管理/操作记录" command="operate">操作记录</el-dropdown-item>
-              <el-dropdown-item class="addOperateRecord 账号管理/任务进程" command="progress">任务进程</el-dropdown-item>
+              <el-dropdown-item class="addOperateRecord 账号管理-操作记录" command="operate">操作记录</el-dropdown-item>
+              <el-dropdown-item class="addOperateRecord 账号管理-任务进程" command="progress">任务进程</el-dropdown-item>
               <el-dropdown-item command="exchange">切换账号</el-dropdown-item>
               <el-dropdown-item command="logout">退出登录</el-dropdown-item>
             </el-dropdown-menu>
@@ -147,14 +144,15 @@
     </div>
     </VueDragResize>
     </div>
-    <loginPanel ref="loginref" />
+    <loginPanel ref="loginRef" />
     <taskProgress ref="taskProgressRef" />
     <operateHistory ref="operateHistoryRef" />
     <jdScanRecord ref="ScanRecordRef"/>
     <!-- <jdShopDiagnosis ref="shopDiagnosisRef" /> -->
     <!-- <MyProgress :show="progressVisible" :percentage="percentage" /> -->
-    <!-- <imageDownload ref="imageDownloadRef"/>
-    <commentDownload ref="commentDownloadRef" />
+    
+      <jdImageDownload ref="imageDownloadRef"/>
+    <!-- <commentDownload ref="commentDownloadRef" />
     <keywordRanking ref="zrss" /> -->
     <div class="test">
       <div class="test1" @click="test1">
@@ -162,7 +160,7 @@
       </div>
       <el-button type="primary" @click="test2">test2</el-button>
     </div>
-    <jdChildComponent />
+    <!-- <jdChildComponent /> -->
     <!-- 通过将props动态值绑定到pinia上,可以全局实时更改调用,且不需要公共组件的pinia引入 不再需要$ref的定义及调用-->
     <progressBar :visible="proBar.show" :percentage="proBar.percentage"/>
 </template>
@@ -183,38 +181,31 @@ const { location } = storeToRefs(userstore)
 //平台状态store
 const busStore = piniaStore()
 //storeToRefs增加响应性,使用了proxy,所以需要用.value拿到值
-const { proBar,info_id, scanData, scanShow, currentHref2 } = storeToRefs(busStore) 
+const { proBar,info_id, scanData, scanShow, currentHref } = storeToRefs(busStore) 
 
 
 // const { proxy } = getCurrentInstance()
 //---------------单纯字符串变量不可使用reactive---------
 //-----ref定义的数据：操作数据需要.value，读取数据时模板中直接读取不需要
 
-// const proBarPer = ref(30)
-// const proBarShow = ref(true)
 const test1 = async () => {
   proBar.value.show = true
   setInterval(() => {
     proBar.value.percentage += 6
-    
   }, 1000);
 
 }
 
-let currentHref = ref('')
 let curCookies  = ref('')
 let showMain  = ref(true)
 const version = VERSION
 const userid = ref('')
 const userPhone = ref('')
 
-const try33 = () => {
-  console.log('--------我执行了-----77777777777------------')
+const try33 = async () => {
+  await API.wait(2)
+  // console.log('--------我执行了-----77777777777------------')
 }
-// const test1 = async () => {
-//   console.log('--------我执行了-----test1------test1------')
-
-// }
 const add3 = (e) => {
   console.log('-------我是新增事件--------------')
         //三种方式兼容不同浏览器
@@ -232,114 +223,57 @@ const test2 = () => {
 //实时响应式获得数据需要直接绑定state的值,解构无法实时获得最新值,虽然可以用来操作,但最好使用$patch方式
 // let {lx, ly} = location.value
 
-let reloadDrag = ref(true)
-// 子组件要声明才能拿到
-const loginref = ref(null)
-const scanRecordRef = ref(null)
-const shopDiagnosisRef = ref(null)
+
+
 
 const diagnosisOption = reactive([{value: 2}, {value: 5}, {value: 10}, {value: 20}])
-const pictureOption  = reactive([
-    {value: 'PC端-全部下载', arg: 'pc_all'},
-    {value: 'PC端-主图下载', arg: 'pc_main'},
-    {value: 'PC端-SKU图下载', arg: 'pc_sku'},
-    {value: 'PC端-详情图下载', arg: 'pc_detail'},
-    {value: '移动端-全部下载', arg: 'phone_all'},
-    {value: '移动端-主图下载', arg: 'phone_main'},
-    {value: '移动端-SKU图下载', arg: 'phone_sku'},
-    {value: '移动端-详情图下载', arg: 'phone_detail'}
-])
 const commentOptionPic = reactive([{value: 20}, {value: 50}, {value: 100}, {value: 200}])
 const commentOptionNoPic = reactive([{value: 20}, {value: 50}, {value: 100}, {value: 200}])
 
 
+//----------------------图片下载------------start----------------------------------
+  const pictureOption  = [
+                      {name: 'PC端_全部下载(带目录)', arg: 'allwith', platform: 'pc'},
+                      {name: 'PC端_全部下载', arg: 'all', platform: 'pc'},
+                      {name: 'PC端_主图下载', arg: 'main', platform: 'pc'},
+                      {name: 'PC端_详情图下载', arg: 'detail', platform: 'pc'},
+                      {name: 'PC端_SKU图下载', arg: 'sku', platform: 'pc'},
+                      {name: '移动端_全部下载(带目录)', arg: 'allwith', platform: 'mobile'},
+                      {name: '移动端_全部下载', arg: 'all', platform: 'mobile'},
+                      {name: '移动端_主图下载', arg: 'main', platform: 'mobile'},
+                      {name: '移动端_详情图下载', arg: 'detail', platform: 'mobile'},
+                      {name: '移动端_SKU图下载', arg: 'sku', platform: 'mobile'}
+                      ]
+  const imageDownloadRef = ref(null)
+  const imgDownload = (item) => {
+    // console.log('item: ', item);
+      imageDownloadRef.value.startDownload(item.arg, item.platform);
+  }
+//-------------------图片下载------------end-------------------------------------------
 
-
-//店铺诊断及历史记录
+//---------------店铺诊断及历史记录----start-----------------
+const scanRecordRef = ref(null)
+const shopDiagnosisRef = ref(null)
 const OneClickDiagnosis = async(num) =>{
-  // console.log('num: ', num);
-  if(num =='scanRecord') return scanRecordRef.value.getScanData(num)
-  // diagnosisProduct(num)
-  shopDiagnosisRef.value.startDiagnosis(num)
+  if(num =='scanRecord') return scanRecordRef.value.getScanData(num)  //调用历史记录模块
+  // shopDiagnosisRef.value.startDiagnosis(num)
 }
-
-// 图片下载 start
-const downLoadJDPicVue = async (type) => {
-    if (type == "pc_all") {
-        ElMessage.success({ message:"PC端-图片全部下载开始"});
-        let skd = getSkuId(currentHref)
-        downloadAllImg(skd);
-    }
-    if ( type == "pc_main"){
-        ElMessage.success({ message:"PC端-主图下载开始"});
-        let mains = getMainImg();
-        let skd = getSkuId(currentHref)
-        let timenum = API.ztime.ymd2()
-        let filename = timenum + '电脑端-' + skd + '图片主图下载'
-        packageImages(mains, "主图", filename);
-    }
-    if ( type == "pc_sku") {
-        ElMessage.success({ message:"PC端-SKU图下载开始"});
-        let skus = getSkuImg();
-        let timenum = API.ztime.ymd2()
-        let skd = getSkuId(currentHref)
-        let filename = timenum + '电脑端-' + skd + '图片SKU图下载'
-        packageSkuImages(skus, filename);
-    }
-    if ( type == "pc_detail"){
-        ElMessage.success({ message:"PC端-详情图下载开始"});
-        let skd = getSkuId(currentHref)
-        downloadDtlImg(skd);
-    }
-
-    if (type == "phone_main"){
-        ElMessage.success({ message:"移动端-主图下载开始"});
-        let skd = getSkuId(currentHref)
-        let phonemains = await getMainImgPhone(skd);
-        let timenum = API.ztime.ymd2()
-        let filename = timenum + '移动端-' + skd + '图片主图下载'
-        packageImages(phonemains, "主图", filename);
-    }
+//---------------店铺诊断及历史记录----end-----------------
 
 
-    if (type == "phone_sku"){
-        ElMessage.success({ message:"移动端-SKU图下载开始"});
-        let skd = getSkuId(currentHref)
-        let phoneskus = await getSkuImgPhone(skd);
-        let timenum = API.ztime.ymd2()
-        let filename = timenum + '移动端-' + skd + '图片SKU图下载'
-        packageSkuImages(phoneskus, filename);
-    }
-
-    if(type == "phone_detail"){
-        ElMessage.success({ message:"移动端-详情图下载开始"});
-        let skd = getSkuId(currentHref)
-        let phonedtls = await getDtlImgPhone(skd);
-        let timenum = API.ztime.ymd2()
-        let filename = timenum + '移动端-' + skd + '图片详情图下载'
-        packageImages(phonedtls, "详情图", filename);
-    }
-
-    if(type == 'phone_all'){
-        ElMessage.success({ message:"移动端-图片全部下载开始"});
-        let skd = getSkuId(currentHref)
-        let picAll = await getAllImgPhone(skd);
-        let timenum = API.ztime.ymd2()
-        let filename = timenum + '移动端-' + skd + '图片全部下载'
-        packageSkuImages(picAll, filename);
-    }
-}
-// 图片下载 end
-
-
-// 视频下载 start
+// ---------------------视频下载 start--------------
 const downLoadJDVideoVue = async () => {
-  let timenum = API.ztime.ymd2()
-  let skd = getSkuId(currentHref)
-  videoDownloadczp(currentHref, skd, timenum)
-
+      if (!(currentHref.value.indexOf('item.jd') > 1)) return alert('请进入商品详情页,再点击开始下载')
+      let regs = currentHref.value.match(/item.jd.com.*?(\d+)/);
+        let skuId = regs.length >= 2 ? regs[1] : undefined;
+        $('.video-icon').click()
+        let url = $('video source').attr('src')
+        if(url == undefined) return  ElMessage.error({ message: '当前商品没有视频',  duration: 1500,})
+        let name = new API.dayjs().format('YYYYMMDD') + '_' + skuId + '_商品视频.mp4'
+      let res = await  API.sendMessage({type: 'downloads', url, name}) 
+      res && ElMessage.success({ message: `视频${res}`, duration: 2500,})
 }
-// 视频下载 end
+// --------------------------视频下载 end-------------------
 
 
 // 评价下载 start
@@ -380,8 +314,8 @@ const setOrderTagJDVue = async () =>{
 }
 // 订单备注 end
 
-
-
+//---------面板拖拽功能------start------------------
+let reloadDrag = ref(true)
 const onDragstop = (e) => {
   let winHeight = window.innerHeight - 60
   let winWidth = window.innerWidth - 200
@@ -391,63 +325,54 @@ const onDragstop = (e) => {
     reloadDrag.value = true
     }, 100)
   }else{
-    userstore.$patch((state)=>{
+    userstore.$patch((state)=>{ //数据存放于持久化的pinia里
       state.location.lx = e.left
       state.location.ly =  e.top
     })
   }
 }
+//---------面板拖拽功能------end------------------
+
+
 
 const  backToHome =  () => {
-  if (userid.value == '') return ElMessage.error({ message: '请登录账号', duration: 1500 })
   window.open('https://www.jd.com/')
 }
 
-const goToLogin = () => {
-  loginref.value.loginShow = true
-}
+//---------登录------start----------------
+const loginRef = ref(null)     // 子组件ref要声明才能拿到
+const goToLogin = () => { loginRef.value.loginShow = true }
+//---------登录------end----------------
 
+
+//---------退出登录------start----------------
 const logout = () => {
   API.Storage.remove('userInfo')
-  loginref.value.checkPhone = false
+  loginRef.value.checkPhone = false
   ElMessage.success('账号退出成功!')
 }
+//---------退出登录------end----------------
+
+
+//-----☆☆☆☆☆☆----------------☆☆☆☆☆☆--------
 //监听添加移除的公共事件
-const targetEvent= (e) => {
-  //三种方式兼容不同浏览器
-  e.stopImmediatePropagation()
-  e.cancelBubble = true //IE
-  e.stopPropagation()
-  loginref.value.loginShow = true
-}
-//未登录时的添加拦截事件
-const addEvent = async () => {
-    let item = $('.el-dropdown')
-    let item2 = $('.el-dropdown-menu')
-     for(let i=0; i<item.length; i++){
-      item[i].addEventListener('click',targetEvent,'capture')
-    }
-    for(let i=0; i<item2.length; i++){
-      item2[i].addEventListener('click',targetEvent,'capture')
-    }
-}
-//登录后的移除拦截事件
-const removeEvent = () => {
-    let item = $('.el-dropdown')
-    let item2 = $('.el-dropdown-menu')
-     for(let i=0; i<item.length; i++){
-      item[i].removeEventListener('click', targetEvent, 'useCapture')
-    }
-    for(let i=0; i<item2.length; i++){
-      item2[i].removeEventListener('click', targetEvent, 'useCapture')
-    }
-}
+ const targetEvent = (e) => {
+    //三种方式兼容不同浏览器
+    e.stopImmediatePropagation()
+    e.cancelBubble = true //IE
+    e.stopPropagation()
+    loginRef.value.loginShow = true  //因为api里拿不到ref所以无法抽离,只能在此处定义
+  }
+//-----☆☆☆☆☆☆----------------☆☆☆☆☆☆--------
+
 const getUserInfo = async () => {
 let userInfoStore  =  await  API.getUserinfo()
+// console.log('userInfoStore: ', userInfoStore);
   if(userInfoStore.userid == undefined) {
-    addEvent()
-    return }else{
-      removeEvent()
+    API.checkLogin.addEvent(targetEvent)  //添加全局登录拦截
+    return 
+    }else{
+      API.checkLogin.removeEvent(targetEvent)  //移除全局登录拦截
     }
   busStore.$patch((state)=>{
       state.userInfo = userInfoStore
@@ -464,7 +389,7 @@ let userInfoStore  =  await  API.getUserinfo()
           break
         case 'progress': API.emitter.emit('openTaskprogress')
           break
-        case 'exchange':   loginref.value.loginShow = true;console.log('---------我执行了---222---------')
+        case 'exchange':   loginRef.value.loginShow = true;console.log('---------我执行了---222---------')
           break
         case 'logout': logout()
           break
@@ -479,9 +404,12 @@ let userInfoStore  =  await  API.getUserinfo()
       ElMessage.error({ message: `功能等待开发中`, duration: 3000, showClose: true });
     }
 
-onMounted(() => {
-currentHref = window.location.href
+onMounted(async () => {
 curCookies.value = document.cookie
+//  	let column = [{title: '名称',key: 'name',type: 'text'},{title: '视频链接',key: 'videourl',type: 'text'},{title: '图片',key: 'imgurl',type: 'image'}]
+//    let data = [{name:'试试111',videourl: 'http://weh.wefw.com60buyimg.com/n2/jfs/t1/193336/10/26161/112918/6/wefew.mp4', imgurl: 'https://img13.360buyimg.com/n2/jfs/t1/193336/10/26161/112918/62c55835Ec20d50ad/7ab207e4ed7547d8.jpg'},
+//                {name:'试试222', videourl: '', imgurl: ['https://img14.360buyimg.com/n2/jfs/t1/122295/27/18626/340950/6165b043Ed9f958ec/7a4fc3035bca0094.jpg', 'https://img13.360buyimg.com/n2/jfs/t1/193336/10/26161/112918/62c55835Ec20d50ad/7ab207e4ed7547d8.jpg']}]
+//  let a = await API.tableToExcel(column,data, '哈哈哈')
 })
 
 onBeforeMount(async () => {

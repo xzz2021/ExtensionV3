@@ -146,7 +146,7 @@ let loginForm = reactive({ phone: null, code: '', keep: ['记住用户名'] })
       loginShow.value = false
       loginForm.value = { phone: null, code: '', keep: ['记住用户名'] }
       checkPhone.value = userInfo.value.userid ? true : false
-      ruleFormRef.resetFields()
+      ruleFormRef.resetFields(["phone", "code"])  //需要传入重置区参数,不然报错
       ruleFormRef.clearValidate()
     }
     //从获取用户信息
@@ -161,6 +161,12 @@ let loginForm = reactive({ phone: null, code: '', keep: ['记住用户名'] })
     }
     onBeforeMount(async () => {
       await getUserInfo()
+    })
+
+    onMounted(() => {
+      // setInterval(() => {
+      //   console.log('ruleFormRef: ', ruleFormRef)
+      // }, 10000);
     })
 
 defineExpose({

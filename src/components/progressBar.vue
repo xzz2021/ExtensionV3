@@ -4,12 +4,11 @@
  * @LastEditTime: 2022-12-01 10:51:19
 -->
 <template>
-  <el-dialog  title="" :modal="true" width="400px" v-model="props.visible" :show-close="false" :modal-append-to-body="false" :close-on-click-modal="false" top="40vh">
+  <el-dialog  title="" :modal="true" width="400px" v-model="props.visible" :show-close="false" :close-on-click-modal="false" top="40vh">
     <div class="pro-container"  style=" display: flex; align-items: center; justify-content: center; text-align: justify">
       <div class="myimg">
         <img src="https://junchenlunoffice.oss-cn-shenzhen.aliyuncs.com/plugs/logo1/coffe_loading.gif" alt="" />
       </div>
-
       <div class="mypro">
         <el-progress :text-inside="true" :stroke-width="20" :percentage="props.percentage" ></el-progress>
         <div></div>

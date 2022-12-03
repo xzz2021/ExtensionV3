@@ -97,7 +97,7 @@
                   
                   <div class="clearBtn" @click="cleanWords">清空</div>
                   <!-- <div class="clearBtn" @click="cleantable">清空列表</div> -->
-<!--                   <div class="searchBtn" v-if="isautoBtnOk" @click="stopSearch">停止查询</div>
+                <!--<div class="searchBtn" v-if="isautoBtnOk" @click="stopSearch">停止查询</div>
                   <div class="searchBtn" v-else
                     :class="userSearchFlag == true && formData.splitword != '' ? 'noclick' : ''" @click="autoSearch"
                     :disabled="userSearchFlag">自动查询</div> -->

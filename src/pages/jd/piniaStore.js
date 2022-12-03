@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-09-15 11:21:04
  * @LastEditors: xzz2021
- * @LastEditTime: 2022-11-28 11:01:57
+ * @LastEditTime: 2022-12-01 14:34:28
  */
 import { defineStore } from 'pinia'
 
@@ -18,7 +18,7 @@ export const piniaStore = defineStore('selfInfo', {
           info_id: 0,
           diagnosisData: {},
         },
-        currentHref2:  window.location.href,
+        currentHref:  window.location.href,
         userInfo: {
           userid: '',
           userToken: '',

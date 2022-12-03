@@ -3,6 +3,7 @@
 
 //---------------引入分文件的所有自定义api-----------
 import { bgcApi as API } from './src/api/bgcApi/index'
+chrome.API = API // 挂载到全局,从而让api内部也能拿到所有函数
 //----------------------------------------------------------
 // console.log(chrome)
 
@@ -14,25 +15,25 @@ import { bgcApi as API } from './src/api/bgcApi/index'
 //-------------------或者摒弃devserver曲线----------直接自己建立一个websocket执行自定义函数-------后期学习改进-----
 //--------------开发阶段---------编译后-------自动刷新runtime------然后自动刷新当前聚焦的tab页---------
 
-//--------------------此处为借助devserver的方案一-----------------------------------------
-chrome.tabs.onUpdated.addListener(
-  (tabId, changeInfo, tab) => {
-    if (tab.title == "xzz2022" && tab.status == "complete") {
-      chrome.tabs.query({ active: true }, ([tab]) => {
-        if (tab.url.match(/tmall|taobao|1688|yangkeduo|pinduoduo|alibaba|jd/)) {
-          chrome.runtime.reload()
-          chrome.tabs.reload()
-        } else {
-          chrome.runtime.reload()
-        }
-      })
-    }
-  })
-//-------------------------------------------------------------------
+//----------☆☆☆☆☆----------此处为借助devserver的方案一--------------☆☆☆☆☆---------------------------
+// chrome.tabs.onUpdated.addListener(
+//   (tabId, changeInfo, tab) => {
+//     if (tab.title == "xzz2022" && tab.status == "complete") {
+//       chrome.tabs.query({ active: true }, ([tab]) => {
+//         if (tab.url.match(/tmall|taobao|1688|yangkeduo|pinduoduo|alibaba|jd/)) {
+//           chrome.runtime.reload()
+//           chrome.tabs.reload()
+//         } else {
+//           chrome.runtime.reload()
+//         }
+//       })
+//     }
+//   })
+//----------☆☆☆☆☆------------------------------☆☆☆☆☆☆☆☆---------------------------
 
 
 
-//------------通过监听storage的变化----------监听登录状态的改变----------------如果改变发送事件----------
+//------☆☆☆☆------通过监听storage的变化----------监听登录状态的改变-----☆☆☆☆-----------如果改变发送事件----------
 let matches = ["https://*.1688.com/*", "https://*.tmall.com/*", "https://*.jd.com/*",
   "https://*.taobao.com/*", "https://*.alibaba.com/*", "https://*.yangkeduo.com/*",
   "https://*.pingduoduo.com/*"]
@@ -49,12 +50,12 @@ chrome.storage.onChanged.addListener(function (changes, namespace) {
     }
   }
 })
-//-----------------------------------------------------------------------
+//-------------------☆☆☆☆☆-----------------☆☆☆☆☆☆-----------------------------------
 
 
 // --------------------约定传送信息类型,根据类型执行相应函数-----------------------
 
-//----------------监听所有发送的信息-----根据信息类别调用引入的函数---------------
+//--------☆☆☆☆☆--------监听所有发送的信息-----根据信息类别调用引入的函数----------☆☆☆☆☆-----
 chrome.runtime.onMessage.addListener(
   (message, sender, sendResponse) => {
     // console.log('----------------message: ----------------', message)
@@ -171,13 +172,10 @@ chrome.runtime.onMessage.addListener(
       // fatosy API end 
 
 
-      case 'myfetch': {
-        (async () => {
-          let res = await API.myfetch(message.config.url, message.config)
-          sendResponse(res)
-        })()
-        return true
-      }
+      case 'myfetch':  { (async () => {
+                       let res =  await API.xzzFetch(message.config.url, message.config)
+                       sendResponse(res)})()
+                        return true}
         break;
       case 'mycookies': {//--------------需调用谷歌cookie api才能设定-------------
         // let currentStamp = Date.parse(new Date())
