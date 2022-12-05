@@ -115,8 +115,8 @@
             <el-dropdown-menu>
               <el-dropdown-item class="addOperateRecord 账号管理-操作记录" command="operate">操作记录</el-dropdown-item>
               <el-dropdown-item class="addOperateRecord 账号管理-任务进程" command="progress">任务进程</el-dropdown-item>
-              <el-dropdown-item command="exchange">切换账号</el-dropdown-item>
-              <el-dropdown-item command="logout">退出登录</el-dropdown-item>
+              <el-dropdown-item class="addOperateRecord 账号管理-切换账号" command="exchange">切换账号</el-dropdown-item>
+              <el-dropdown-item class="addOperateRecord 账号管理-退出登录" command="logout">退出登录</el-dropdown-item>
             </el-dropdown-menu>
             </template>
           </el-dropdown>

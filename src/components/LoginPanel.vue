@@ -146,8 +146,14 @@ let loginForm = reactive({ phone: null, code: '', keep: ['记住用户名'] })
       loginShow.value = false
       loginForm.value = { phone: null, code: '', keep: ['记住用户名'] }
       checkPhone.value = userInfo.value.userid ? true : false
-      ruleFormRef.resetFields(["phone", "code"])  //需要传入重置区参数,不然报错
-      ruleFormRef.clearValidate()
+          // ruleFormRef.resetFields(["phone", "code"])  //需要传入重置区参数,不然报错
+        if(ruleFormRef != undefined){  //没有切换到登录表单时,避免error
+          // ruleFormRef.resetFields() 
+          ruleFormRef.clearValidate()
+        }else{
+          // console.log('ruleFormRef: ', ruleFormRef); //必定undefined
+        }
+
     }
     //从获取用户信息
     const getUserInfo = async () => {
