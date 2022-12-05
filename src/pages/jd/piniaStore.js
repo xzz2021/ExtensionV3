@@ -3,6 +3,7 @@
  * @LastEditors: xzz2021
  * @LastEditTime: 2022-12-01 14:34:28
  */
+
 import { defineStore } from 'pinia'
 
 //------------此处可放置任意vue实例变量-------------------------
@@ -61,37 +62,38 @@ export const piniaStore = defineStore('selfInfo', {
       //   return API.isExpired(state.diagnosisData.timeTamp, 5) ? diagnosisData : {}
       // }
     }
+  
   })
 
-  export const userStore = defineStore('userInfo', {
-    // arrow function recommended for full type inference
-    state: () => {
-      return {
-        count: 0,
-        location: { lx:60, ly:120 },
-        // userInfo: {
-        //   userid: '',
-        //   userToken: '',
-        //   userPhone: '',
-        //   timeStamp: ''
-        // },
-        // userList: [{
-        //   userid: '',
-        //   userToken: '',
-        //   userPhone: '',
-        //   timeStamp: ''
-        // }],
-      }
-    },
-    persist: true, //持久化
-      actions: {  //支持异步
-        increment() {
-          this.count++
-        },
-    },
-    getters: {
+export const userStore = defineStore('userInfo', {
+  // arrow function recommended for full type inference
+  state: () => {
+    return {
+      count: 0,
+      location: { lx: 60, ly: 120 },
+      // userInfo: {
+      //   userid: '',
+      //   userToken: '',
+      //   userPhone: '',
+      //   timeStamp: ''
+      // },
+      // userList: [{
+      //   userid: '',
+      //   userToken: '',
+      //   userPhone: '',
+      //   timeStamp: ''
+      // }],
     }
-  })
+  },
+  persist: true, //持久化
+  actions: {  //支持异步
+    increment() {
+      this.count++
+    },
+  },
+  getters: {
+  }
+})
 
 //--------拿到响应式数据
 //   const store = useUsersStore();
