@@ -37,7 +37,7 @@ const filterDate = (dataArr) => {
 const  getScanData = async (userid,userToken)  => {
       if (!userid) return  console.log('userid不存在');
         let config = {
-        url: 'http://pddzd.junchenlun.com//?s=Jd.StoreBrowse.recordList',
+        url: 'encrypt',
         data: {
           user_id: userId,
           token: userToken,
