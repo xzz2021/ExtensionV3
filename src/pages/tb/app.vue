@@ -298,7 +298,7 @@ const onDragstop = (e) => {
 
             let config3 = {
               method: 'post',
-              url: 'http://pddzd.junchenlun.com//?s=Jd.StoreBrowse.addRecord',
+              url: 'encrypt',
               data: {
                 shop_name: this.BUS.diagnosisData.shopName,
                 user_id: this.userid,
