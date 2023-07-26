@@ -1,4 +1,4 @@
-# 此demo为早期v3重构版本，已隐去接口及oss密匙相关信息，最新版依旧保持private
+# 此demo为早期和zz一起写的v3重构版本（已废弃，重新设计优化了一版最新的，仓库暂时private）
 
 # 全新的框架
 技术栈：vue3.2+scss+element-plus+vxe-table+chromeV3+webpack5
